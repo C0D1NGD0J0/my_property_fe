@@ -5,34 +5,20 @@ import FormInput from "@components/FormElements/Input";
 import FormLabel from "@components/FormElements/Label";
 import FormField from "@components/FormElements/FormField";
 
-export default function Login() {
+export default function Signup() {
   return (
     <>
       <div className="auth-page_content-header">
-        <h2>Login</h2>
+        <h2>Reset Password</h2>
         <p>
-          You dont have an account yet?
-          <Link href="/signup">
-            <strong>Signup</strong>
+          Already have an account?
+          <Link href="/login">
+            <strong>Login</strong>
           </Link>
         </p>
       </div>
       <div className="auth-page_content-body">
         <form className="auth-form" autoComplete="false">
-          <div className="form-fields">
-            <FormField error={null}>
-              <FormInput
-                required
-                name=""
-                value=""
-                type="email"
-                onChange={() => ""}
-                className="form-input"
-              />
-              <FormLabel className="form-label" htmlFor="email" label="Email" />
-            </FormField>
-          </div>
-
           <div className="form-fields">
             <FormField error={null}>
               <FormInput
@@ -47,6 +33,24 @@ export default function Login() {
                 className="form-label"
                 htmlFor="password"
                 label="Password"
+              />
+            </FormField>
+          </div>
+
+          <div className="form-fields">
+            <FormField error={null}>
+              <FormInput
+                required
+                name=""
+                value=""
+                type="cpassword"
+                onChange={() => ""}
+                className="form-input"
+              />
+              <FormLabel
+                className="form-label"
+                htmlFor="cpassword"
+                label="Confirm password"
               />
             </FormField>
           </div>

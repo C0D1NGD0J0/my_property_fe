@@ -5,17 +5,12 @@ import FormInput from "@components/FormElements/Input";
 import FormLabel from "@components/FormElements/Label";
 import FormField from "@components/FormElements/FormField";
 
-export default function Login() {
+export default function ForgotPassword() {
   return (
     <>
       <div className="auth-page_content-header">
-        <h2>Login</h2>
-        <p>
-          You dont have an account yet?
-          <Link href="/signup">
-            <strong>Signup</strong>
-          </Link>
-        </p>
+        <h2>Forgot Password</h2>
+        <p>Enter the email address associated with your account</p>
       </div>
       <div className="auth-page_content-body">
         <form className="auth-form" autoComplete="false">
@@ -32,30 +27,12 @@ export default function Login() {
               <FormLabel className="form-label" htmlFor="email" label="Email" />
             </FormField>
           </div>
-
-          <div className="form-fields">
-            <FormField error={null}>
-              <FormInput
-                required
-                name=""
-                value=""
-                type="password"
-                onChange={() => ""}
-                className="form-input"
-              />
-              <FormLabel
-                className="form-label"
-                htmlFor="password"
-                label="Password"
-              />
-            </FormField>
-          </div>
         </form>
       </div>
       <div className="auth-page_content-footer">
         <p>
-          <Link href="/forgot_password">
-            <strong>Forgot password? </strong>
+          <Link href="/login">
+            <strong>Login </strong>
           </Link>
         </p>
       </div>
