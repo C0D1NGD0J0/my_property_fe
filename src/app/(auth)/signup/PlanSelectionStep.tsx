@@ -1,45 +1,18 @@
 "use client";
-import React from "react";
+import React, { FC } from "react";
+import PricingCard from "@components/Cards/Pricing";
+import { PricingCardProps } from "@interfaces/user.interface";
 
-function PlanSelection() {
+const PlanSelection = (props: any) => {
+  const _plans = props.plans;
   return (
     <div className="pricing-plans">
-      <div className="pricing-plan">
-        <div className="pricing-plan_header">
-          <h1>Individual</h1>
-        </div>
-        <div className="pricing-plan_description">
-          <ul className="features-list">
-            <li className="features-list_item">Feature one</li>
-            <li className="features-list_item">Feature two</li>
-            <li className="features-list_item">Feature three</li>
-          </ul>
-        </div>
-        <div className="pricing-plan_actions">
-          <p className="pricing-plan_price">$70</p>
-          <p className="pricing-plan_frequency">per month</p>
-          <button className="btn btn-outline">Select</button>
-        </div>
-      </div>
-      <div className="pricing-plan">
-        <div className="pricing-plan_header">
-          <h1>Enterprise</h1>
-        </div>
-        <div className="pricing-plan_description">
-          <ul className="features-list">
-            <li className="features-list_item">Standard plan</li>
-            <li className="features-list_item">Feature two</li>
-            <li className="features-list_item">Feature three</li>
-          </ul>
-        </div>
-        <div className="pricing-plan_actions">
-          <p className="pricing-plan_price">$100</p>
-          <p className="pricing-plan_frequency">per month</p>
-          <button className="btn btn-outline">Select</button>
-        </div>
-      </div>
+      {_plans &&
+        _plans.map((plan: PricingCardProps) => {
+          return <PricingCard key={plan.id} {...plan} />;
+        })}
     </div>
   );
-}
+};
 
 export default PlanSelection;

@@ -1,24 +1,28 @@
 "use client";
-import Link from "next/link";
 import React, { useState } from "react";
-import { Button, message, Steps, theme } from "antd";
+import { Button, message, Steps } from "antd";
+import Link from "next/link";
+import useSWR from "swr";
 
+import authService from "@services/auth";
 import UserInfo from "@app/(auth)/signup/UserInfo";
 import PlanSelection from "@app/(auth)/signup/PlanSelectionStep";
 import AccountVerification from "@app/(auth)/signup/AccountVerification";
+import Loading from "./loading";
+import { SWR_KEY } from "@utils/constants";
 
 const steps = [
   {
     title: "Account Type",
-    content: <PlanSelection />,
+    content: (props: any) => <PlanSelection {...props} />,
   },
   {
     title: "Account Details",
-    content: <UserInfo />,
+    content: (props: any) => <UserInfo {...props} />,
   },
   {
     title: "Activation",
-    content: <AccountVerification />,
+    content: (props: any) => <AccountVerification {...props} />,
     description: "Enter account verification code sent to your mailbox.",
   },
 ];
@@ -26,6 +30,10 @@ const steps = [
 export default function Signup() {
   const [currentStep, setCurrentStep] = useState(0);
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
+  const { data, error, isLoading } = useSWR(
+    SWR_KEY.signup,
+    authService.getUserPlans,
+  );
 
   const nextStep = () => {
     setCurrentStep(currentStep + 1);
@@ -60,22 +68,32 @@ export default function Signup() {
           </>
         )}
       </div>
+
       <div className="auth-page_content-body">
         <form className="auth-form" autoComplete="false">
-          {steps[currentStep].content}
+          {isLoading ? (
+            <Loading />
+          ) : (
+            steps[currentStep].content({
+              plans: data && data.plans,
+              userInfo: null,
+            })
+          )}
         </form>
       </div>
+
       <div className="auth-page_content-footer">
         {currentStep > 0 && (
           <Button style={{ margin: "0 8px" }} onClick={() => prevStep()}>
             Previous
           </Button>
         )}
-        {currentStep < steps.length - 1 && (
-          <Button type="primary" onClick={() => nextStep()}>
-            Next
-          </Button>
-        )}
+        {currentStep < steps.length - 1 &&
+          steps[currentStep].title !== "Account Type" && (
+            <Button type="primary" onClick={() => nextStep()}>
+              Next
+            </Button>
+          )}
         {currentStep === steps.length - 1 && (
           <Button
             type="primary"

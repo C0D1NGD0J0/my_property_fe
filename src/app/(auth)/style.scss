@@ -95,7 +95,7 @@ a:hover {
 
 .auth-page {
   z-index: 20;
-  height: 40rem;
+  height: 35rem;
   display: flex;
   max-width: 55rem;
   overflow: hidden;
@@ -199,6 +199,8 @@ a:hover {
 
 .auth-form {
   width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .form-fields {
@@ -347,7 +349,7 @@ a:hover {
   
   .features-list_item {
     margin: 0;
-    font-size: 1rem;
+    font-size: .8rem;
     list-style: none;
     padding-left: 25px;
     position: relative;
