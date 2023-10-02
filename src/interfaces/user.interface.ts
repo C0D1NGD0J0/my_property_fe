@@ -182,5 +182,5 @@ export interface PricingCardProps {
   currency: string;
   recurring: string;
   features: string[];
-  onClick: (id: string) => void;
+  handlePlanSelection: (id: string, name: string) => void;
 }

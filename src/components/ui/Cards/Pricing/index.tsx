@@ -1,3 +1,4 @@
+"use client";
 import React, { FC } from "react";
 import { FormatMoney } from "format-money-js";
 import { PricingCardProps } from "@interfaces/user.interface";
@@ -30,7 +31,7 @@ const PricingCard: FC<PricingCardProps> = (props) => {
         <button
           type="button"
           className="btn btn-outline"
-          onClick={() => props.onClick(props.id)}
+          onClick={() => props.handlePlanSelection(props.id, props.name)}
         >
           Select
         </button>

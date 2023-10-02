@@ -224,10 +224,10 @@ a:hover {
   border: none;
   outline: none;
   display: block;
-  padding: .6rem 0 0 0;
+  font-size: 1rem;
   color: #40414a;
-  font-size: 1.2rem;
   border-radius: .1rem;
+  padding: .6rem 0 0 0;
   background: transparent;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
@@ -427,6 +427,13 @@ a:hover {
   }
   .steps-wrapper > .ant-steps-vertical{
     flex-direction: row !important; 
+  }
+
+  .form-fields {
+    flex: 1;
+    width: 100%;
+    row-gap: 1rem;
+    flex-direction: column;
   }
 }
 

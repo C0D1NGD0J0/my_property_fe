@@ -1,15 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import { Button, message, Steps } from "antd";
+import { useFormik } from "formik";
 import Link from "next/link";
 import useSWR from "swr";
 
+import Loading from "./loading";
 import authService from "@services/auth";
+import { SWR_KEY } from "@utils/constants";
 import UserInfo from "@app/(auth)/signup/UserInfo";
 import PlanSelection from "@app/(auth)/signup/PlanSelectionStep";
 import AccountVerification from "@app/(auth)/signup/AccountVerification";
-import Loading from "./loading";
-import { SWR_KEY } from "@utils/constants";
 
 const steps = [
   {
@@ -29,9 +30,14 @@ const steps = [
 
 export default function Signup() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [signupPlan, setSignupPlan] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
   const { data, error, isLoading } = useSWR(
-    SWR_KEY.signup,
+    SWR_KEY.signupPlans,
     authService.getUserPlans,
   );
 
@@ -41,6 +47,13 @@ export default function Signup() {
 
   const prevStep = () => {
     setCurrentStep(currentStep - 1);
+  };
+
+  const handlePlanSelection = (id: string, name: string) => {
+    setSignupPlan({
+      id,
+      name,
+    });
   };
 
   return (
@@ -75,8 +88,9 @@ export default function Signup() {
             <Loading />
           ) : (
             steps[currentStep].content({
-              plans: data && data.plans,
               userInfo: null,
+              ...(currentStep === 0 ? { plans: data.plans } : null),
+              ...(currentStep === 0 ? { handlePlanSelection } : null),
             })
           )}
         </form>
@@ -88,12 +102,15 @@ export default function Signup() {
             Previous
           </Button>
         )}
-        {currentStep < steps.length - 1 &&
-          steps[currentStep].title !== "Account Type" && (
-            <Button type="primary" onClick={() => nextStep()}>
-              Next
-            </Button>
-          )}
+        {currentStep < steps.length - 1 && (
+          <Button
+            disabled={isLoading || !signupPlan}
+            type="primary"
+            onClick={() => nextStep()}
+          >
+            Next
+          </Button>
+        )}
         {currentStep === steps.length - 1 && (
           <Button
             type="primary"

@@ -93,7 +93,8 @@ function UserInfo(props: any) {
 
 export default UserInfo;
 
-<>
+{
+  /* <>
   <div className="form-fields">
     <div className="form-field">
       <input type="text" className="form-input" placeholder="" required />
@@ -149,4 +150,5 @@ export default UserInfo;
       </label>
     </div>
   </div>
-</>;
+</>; */
+}
