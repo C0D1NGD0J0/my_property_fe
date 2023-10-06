@@ -43,7 +43,7 @@ const FormInput: FC<FormInputProps> = ({
       className={className}
       required={required || false}
       placeholder={placeholder || " "}
-      aria-label={ariaLabel || placeholder || name}
+      aria-label={ariaLabel || name}
     />
   );
 };

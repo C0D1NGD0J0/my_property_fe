@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import FormInput from "@components/ui/FormElements/Input";
-import FormLabel from "@components/ui/FormElements/Label";
+import FormInput from "@components/ui/FormElements/FormInput";
+import FormLabel from "@components/ui/FormElements/FormLabel";
 import FormField from "@components/ui/FormElements/FormField";
 
 export default function Login() {

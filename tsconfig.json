@@ -27,6 +27,7 @@
       "@configs/*": ["src/configs/*"],
       "@hooks/*": ["src/hooks/*"],
       "@utils/*": ["src/utils/*"],
+      "@validations/*": ["src/validations/*"],
       "@root/*": ["./*"],
     }
   },

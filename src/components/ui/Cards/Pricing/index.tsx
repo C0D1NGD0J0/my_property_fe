@@ -31,7 +31,18 @@ const PricingCard: FC<PricingCardProps> = (props) => {
         <button
           type="button"
           className="btn btn-outline"
-          onClick={() => props.handlePlanSelection(props.id, props.name)}
+          onClick={() => {
+            props.setFieldValue("accountType.id", props.id);
+            props.setFieldValue("accountType.name", props.name);
+            props.setFieldValue(
+              "accountType.isEnterpriseAccount",
+              props.name.includes("Enterprise"),
+            );
+
+            if (!props.name.includes("Enterprise")) {
+              props.setFieldValue("companyName", "");
+            }
+          }}
         >
           Select
         </button>

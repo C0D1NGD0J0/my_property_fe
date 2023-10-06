@@ -14,7 +14,7 @@ const PlanSelection = (props: any) => {
             <PricingCard
               key={plan.id}
               {...plan}
-              handlePlanSelection={props.handlePlanSelection}
+              setFieldValue={props.setFieldValue}
             />
           );
         })}

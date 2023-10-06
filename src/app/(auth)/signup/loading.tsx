@@ -12,7 +12,12 @@ function Loading() {
         justifyContent: "center",
       }}
     >
-      <Spin tip="Loading" />
+      <Spin tip="Loading">
+        <Alert
+          description="Please be patience, data incoming...."
+          type="info"
+        />
+      </Spin>
     </div>
   );
 }
