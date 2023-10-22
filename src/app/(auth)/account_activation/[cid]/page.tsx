@@ -1,12 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "antd";
-import { useFormik, FormikProps, FormikValues, FormikHelpers } from "formik";
+import { useFormik, FormikValues, FormikHelpers } from "formik";
 import Link from "next/link";
 
 // import Loading from "../../signup/loading";
 import authService from "@services/auth";
-import { IInitialValues } from "@interfaces/user.interface";
 import FormField from "@components/ui/FormElements/FormField";
 import FormInput from "@components/ui/FormElements/FormInput";
 import FormLabel from "@components/ui/FormElements/FormLabel";
@@ -49,20 +48,16 @@ export default function Signup() {
   return (
     <>
       <div className="auth-page_content-header">
-        <h2>Enter account verification code which was sent to your mailbox.</h2>
-        <p>
-          Alredy have an account?
-          <Link href="/login">
-            <strong>Login</strong>
-          </Link>
-        </p>
+        <h2>Enter account verification code.</h2>
+        <small>check your inbox.</small>
+        <br />
       </div>
 
       <div className="auth-page_content-body">
         <form
-          onSubmit={formik.handleSubmit}
-          className="auth-form"
           autoComplete="false"
+          className="auth-form"
+          onSubmit={formik.handleSubmit}
         >
           <div className="form-fields">
             <FormField

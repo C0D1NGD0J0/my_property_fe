@@ -12,7 +12,7 @@ export default function FormField({
   return (
     <div className="form-field">
       {children}
-      {error.touched && error.msg ? (
+      {error && error.touched && error.msg ? (
         <small className="form-field-error">{error.msg}</small>
       ) : null}
     </div>

@@ -9,12 +9,10 @@ import Loading from "./loading";
 import authService from "@services/auth";
 import { SWR_KEY } from "@utils/constants";
 import UserInfo from "@app/(auth)/signup/UserInfo";
-import PlanSelection from "@app/(auth)/signup/PlanSelectionStep";
+import { useNotification } from "@contexts/notification";
 import authValidation from "@validations/auth.validation";
 import { IInitialValues } from "@interfaces/user.interface";
-import TimedAlert from "@components/ui/Alert";
-import APIError from "@utils/errorHandler";
-import { useNotification } from "@contexts/notification";
+import PlanSelection from "@app/(auth)/signup/PlanSelectionStep";
 
 const steps = [
   {
@@ -52,7 +50,6 @@ export default function Signup() {
       revalidateOnReconnect: false,
     },
   );
-  const ez = true;
 
   const nextStep = () => {
     setCurrentStep(currentStep + 1);
@@ -62,10 +59,7 @@ export default function Signup() {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = async (
-    values: FormikValues,
-    help: FormikHelpers<IInitialValues>,
-  ) => {
+  const handleSubmit = async (values: FormikValues) => {
     try {
       const fd = new FormData();
       for (let key in values) {
@@ -82,6 +76,7 @@ export default function Signup() {
       if (res.success) {
         setIsSuccess(true);
         formik.resetForm();
+        setCurrentStep(0);
       }
       return;
     } catch (e: any) {
@@ -146,7 +141,11 @@ export default function Signup() {
           status="success"
           title="Success, next step involves you checking your inbox for your verification mail."
           extra={[
-            <Button type="primary" key="close">
+            <Button
+              type="primary"
+              key="close"
+              onClick={() => setIsSuccess(false)}
+            >
               <Link href="/signup">Close</Link>
             </Button>,
           ]}
