@@ -5,7 +5,7 @@ import {
 } from "@validations/schema/auth.schema";
 
 class AuthValidation {
-  signup = (signupData: IInitialValues) => {
+  signup = async (signupData: IInitialValues) => {
     const result = SignupValidationSchema.safeParse(signupData);
 
     if (result.success) {
@@ -13,11 +13,11 @@ class AuthValidation {
       return { isValid: true };
     } else {
       // Data is invalid, handle errors
-      console.log(result.error.flatten());
-      // const errors = this.parseZodError(result.error.issues);
-      // return {isValid: false, errors };
+      const errors = this.parseZodError(result.error.issues);
+      return { isValid: false, errors };
     }
   };
+
   // Private TSignupData to parse Zod error issues
   private parseZodError(errors: Array<any>): { [key: string]: string } {
     const parsedErrors: { [key: string]: string } = {};

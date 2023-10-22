@@ -1,5 +1,5 @@
 import axios from "@configs/axios";
-import { SignupDataType } from "@interfaces/user.interface";
+import { TSignupData } from "@validations/schema/auth.schema";
 
 class AuthService {
   private baseUrl;
@@ -20,14 +20,13 @@ class AuthService {
     }
   };
 
-  signup = async (data: SignupDataType) => {
+  signup = async (data: FormData) => {
     try {
-      const res = await axios.post(`${this.baseUrl}/signup`, data);
+      const config = { headers: { "Content-Type": "multipart/form-data" } };
+      const res = await axios.post(`${this.baseUrl}/signup`, data, config);
       return res;
     } catch (error) {
-      if (error instanceof Error) {
-        throw (error as any).response?.data;
-      }
+      throw error;
     }
   };
 }

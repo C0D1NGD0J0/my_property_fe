@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Button, message, Steps } from "antd";
-import { Formik, FormikProps, FormikValues } from "formik";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { Button, Result } from "antd";
+import { useFormik, FormikProps, FormikValues, FormikHelpers } from "formik";
 import Link from "next/link";
 import useSWR from "swr";
 
@@ -11,10 +10,11 @@ import authService from "@services/auth";
 import { SWR_KEY } from "@utils/constants";
 import UserInfo from "@app/(auth)/signup/UserInfo";
 import PlanSelection from "@app/(auth)/signup/PlanSelectionStep";
-import AccountVerification from "@app/(auth)/signup/AccountVerification";
 import authValidation from "@validations/auth.validation";
 import { IInitialValues } from "@interfaces/user.interface";
-import { SignupValidationSchema } from "@validations/schema/auth.schema";
+import TimedAlert from "@components/ui/Alert";
+import APIError from "@utils/errorHandler";
+import { useNotification } from "@contexts/notification";
 
 const steps = [
   {
@@ -24,11 +24,6 @@ const steps = [
   {
     title: "Account Details",
     content: (props: any) => <UserInfo {...props} />,
-  },
-  {
-    title: "Activation",
-    content: (props: any) => <AccountVerification {...props} />,
-    description: "Enter account verification code sent to your mailbox.",
   },
 ];
 
@@ -45,13 +40,19 @@ const initialValues: IInitialValues = {
 };
 
 export default function Signup() {
-  const [showForm, setShowForm] = useState(false);
+  const { openNotification } = useNotification();
+  const [isSuccess, setIsSuccess] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const items = steps.map((item) => ({ key: item.title, title: item.title }));
   const { data, error, isLoading } = useSWR(
-    SWR_KEY.signupPlans,
+    SWR_KEY.getSignupPlans,
     authService.getUserPlans,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   );
+  const ez = true;
 
   const nextStep = () => {
     setCurrentStep(currentStep + 1);
@@ -61,8 +62,31 @@ export default function Signup() {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = (values: FormikValues) => {
-    console.log(values, "====VALUES");
+  const handleSubmit = async (
+    values: FormikValues,
+    help: FormikHelpers<IInitialValues>,
+  ) => {
+    try {
+      const fd = new FormData();
+      for (let key in values) {
+        if (values.hasOwnProperty(key)) {
+          if (key === "accountType") {
+            fd.append(key, JSON.stringify(values[key]));
+          } else {
+            fd.append(key, values[key]);
+          }
+        }
+      }
+
+      const res = await authService.signup(fd);
+      if (res.success) {
+        setIsSuccess(true);
+        formik.resetForm();
+      }
+      return;
+    } catch (e: any) {
+      return openNotification("error", "Signup Error", e.data);
+    }
   };
 
   const renderButton = (
@@ -72,7 +96,11 @@ export default function Signup() {
     return (
       <>
         {currentStep > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={() => prevStep()}>
+          <Button
+            style={{ margin: "0 8px" }}
+            onClick={() => prevStep()}
+            disabled={formik.isSubmitting}
+          >
             Previous
           </Button>
         )}
@@ -81,6 +109,7 @@ export default function Signup() {
             type="primary"
             htmlType="submit"
             disabled={
+              formik.isSubmitting ||
               isLoading ||
               !formik.values.firstName ||
               (!formik.values.lastName && !formik.values.email)
@@ -97,79 +126,71 @@ export default function Signup() {
             Next
           </Button>
         )}
-
-        {currentStep === steps.length - 1 && (
-          <Button
-            type="primary"
-            onClick={() => message.success("Processing complete!")}
-          >
-            Done
-          </Button>
-        )}
       </>
     );
   };
 
+  const formik = useFormik({
+    initialValues,
+    onSubmit: handleSubmit,
+    validate: async (val) => {
+      const res = await authValidation.signup(val);
+      return res.isValid ? {} : res.errors;
+    },
+  });
+
   return (
     <>
-      <div className="auth-page_content-header">
-        {steps[currentStep].description ? (
-          <h2>{steps[currentStep].description}</h2>
-        ) : (
-          <>
-            <h2>Sign Up</h2>
-            <p>
-              Alredy have an account?
-              <Link href="/login">
-                <strong>Login</strong>
-              </Link>
-            </p>
-            <div className="steps-wrapper">
-              <Steps
-                progressDot
-                size="small"
-                current={currentStep}
-                items={items}
-              />
-            </div>
-          </>
-        )}
-      </div>
+      {isSuccess ? (
+        <Result
+          status="success"
+          title="Success, next step involves you checking your inbox for your verification mail."
+          extra={[
+            <Button type="primary" key="close">
+              <Link href="/signup">Close</Link>
+            </Button>,
+          ]}
+        />
+      ) : (
+        <>
+          <div className="auth-page_content-header">
+            <>
+              <h2>Sign Up</h2>
+              <p>
+                Alredy have an account?
+                <Link href="/login">
+                  <strong>Login</strong>
+                </Link>
+              </p>
+            </>
+          </div>
 
-      <div className="auth-page_content-body">
-        <Formik
-          onSubmit={handleSubmit}
-          initialValues={initialValues}
-          validateSchema={toFormikValidationSchema(SignupValidationSchema)}
-        >
-          {(props) => {
-            return (
-              <form
-                onSubmit={props.handleSubmit}
-                className="auth-form"
-                autoComplete="false"
-              >
-                {isLoading ? (
-                  <Loading />
-                ) : (
-                  steps[currentStep].content({
-                    errors: props.errors,
-                    touched: props.touched,
-                    formValues: props.values,
-                    handleChange: props.handleChange,
-                    setFieldValue: props.setFieldValue,
-                    setFieldTouched: props.setFieldTouched,
-                    ...(currentStep === 0 ? { plans: data.plans } : null),
-                  })
-                )}
-                <div className="auth-page_content-footer">
-                  {renderButton(currentStep, props)}
-                </div>
-              </form>
-            );
-          }}
-        </Formik>
-      </div>
+          <div className="auth-page_content-body">
+            <form
+              onSubmit={formik.handleSubmit}
+              className="auth-form"
+              autoComplete="false"
+            >
+              {isLoading ? (
+                <Loading />
+              ) : (
+                steps[currentStep].content({
+                  errors: formik.errors,
+                  touched: formik.touched,
+                  formValues: formik.values,
+                  handleChange: formik.handleChange,
+                  setFieldValue: formik.setFieldValue,
+                  setFieldTouched: formik.setFieldTouched,
+                  ...(currentStep === 0 ? { plans: data.plans } : null),
+                })
+              )}
+              <div className="auth-page_content-footer">
+                {renderButton(currentStep, formik)}
+              </div>
+            </form>
+          </div>
+        </>
+      )}
     </>
   );
 }

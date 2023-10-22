@@ -6,17 +6,14 @@ function Loading() {
     <div
       style={{
         width: "100%",
-        height: "20rem",
+        height: "40rem",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <Spin tip="Loading">
-        <Alert
-          description="Please be patience, data incoming...."
-          type="info"
-        />
+      <Spin>
+        <Alert description="Loading...." type="info" />
       </Spin>
     </div>
   );

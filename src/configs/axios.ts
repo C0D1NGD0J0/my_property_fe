@@ -1,3 +1,4 @@
+import APIError from "@utils/errorHandler";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 interface IAxiosService {
@@ -13,7 +14,6 @@ class AxioService implements IAxiosService {
   constructor() {
     this._axios = axios.create({
       baseURL: "http://localhost:5000",
-      timeout: 25000, // 25 seconds timeout
       headers: {
         "Content-Type": "application/json",
       },
@@ -38,25 +38,38 @@ class AxioService implements IAxiosService {
         // Do something with the response data
         return response;
       },
-      (error) => {
+      async (error) => {
         // Handle errors
-        return Promise.reject(error);
+        const apiError = new APIError().init(error);
+        return Promise.reject(apiError);
       },
     );
   }
 
-  get = async <T = any>(url: string, params?: object): Promise<T> => {
+  get = async <T = any>(
+    url: string,
+    params?: object,
+    config?: AxiosRequestConfig,
+  ): Promise<T> => {
     const response = await this._axios.get<T>(url, { params });
     return response.data;
   };
 
-  post = async <T = any>(url: string, data?: object): Promise<T> => {
-    const response = await this._axios.post<T>(url, data);
+  post = async <T = any>(
+    url: string,
+    data?: object,
+    config?: AxiosRequestConfig,
+  ): Promise<T> => {
+    const response = await this._axios.post<T>(url, data, config);
     return response.data;
   };
 
-  put = async <T = any>(url: string, params?: object): Promise<T> => {
-    const response = await this._axios.put<T>(url, { params });
+  put = async <T = any>(
+    url: string,
+    params?: object,
+    config?: AxiosRequestConfig,
+  ): Promise<T> => {
+    const response = await this._axios.put<T>(url, { params }, config);
     return response.data;
   };
 

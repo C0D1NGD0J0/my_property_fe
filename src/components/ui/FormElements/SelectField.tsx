@@ -1,5 +1,13 @@
-import React, { useState, FC, ReactElement } from "react";
+import React, {
+  useState,
+  FC,
+  ReactElement,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+} from "react";
 import "@components/ui/FormElements/style.scss";
+import { debounce } from "@utils/helperFN";
 
 interface Option {
   label: string;
@@ -32,17 +40,27 @@ const SelectField: FC<FormSelectProps> = ({
   ariaLabel,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [focusedOptionIndex, setFocusedOptionIndex] = useState(0);
 
   const handleOptionClick = (optionValue: any) => {
     onChange(name, optionValue);
     setIsOpen(false);
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === " ") {
+      setIsOpen(!isOpen);
+      return;
+    }
+  };
+
   return (
     <div
+      tabIndex={0}
       style={styles}
+      onKeyDown={debounce(handleKeyDown, 800)}
+      id={id ? id : "custom-dropdown"}
       className={`custom-dropdown ${className ? className : ""}`}
-      id={id ? id : name}
     >
       <div
         className="selected-option"
@@ -58,7 +76,10 @@ const SelectField: FC<FormSelectProps> = ({
             <li
               key={index}
               className="option-item"
-              onClick={() => handleOptionClick(option.value)}
+              aria-selected={index === focusedOptionIndex}
+              onClick={() => {
+                handleOptionClick(option.value);
+              }}
             >
               {option.icon && (
                 <span className="option-icon">{option.icon}</span>

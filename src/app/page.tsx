@@ -1,6 +1,6 @@
-import "@sass/main.scss";
 import { ConfigProvider } from "antd";
 import theme from "../../theme";
+import "@sass/main.scss";
 
 export default function Home() {
   return (

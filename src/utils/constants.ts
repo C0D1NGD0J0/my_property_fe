@@ -1,6 +1,7 @@
 // SWR KEYS
 export const SWR_KEY = {
-  signupPlans: "getSignupPlans",
+  getSignupPlans: "getSignupPlans",
+  register: "signup",
 };
 
 export const stripeSupportedCountries = [
