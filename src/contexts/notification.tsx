@@ -1,13 +1,14 @@
 "use client";
-import { notification } from "antd";
+import { Button, notification } from "antd";
 import React, { createContext, useContext } from "react";
 
-type NotificationInstance = "info" | "warning" | "error" | "success";
+type NotificationInstance = "info" | "warning" | "error" | "success" | "open";
 type NotificationContextType = {
   openNotification: (
     type: NotificationInstance,
     title: string,
     message: string,
+    opts?: { btnText: string; onClose?: () => void },
   ) => void;
 };
 
@@ -36,7 +37,28 @@ export const NotificationProvider = ({
     type: NotificationInstance,
     title: string,
     description: string,
+    opts?: { btnText: string; onClose?: () => void },
   ) => {
+    if (type === "open" && opts) {
+      const key = `open${Date.now()}`;
+      const btn = (
+        <Button type="primary" size="small" onClick={() => api.destroy(key)}>
+          {opts?.btnText}
+        </Button>
+      );
+
+      api[type as NotificationInstance]({
+        message: title,
+        placement: "topRight",
+        btn,
+        key,
+        duration: 0,
+        onClick: opts.onClose,
+        description: description,
+      });
+      return;
+    }
+
     api[type as NotificationInstance]({
       message: title,
       placement: "topRight",

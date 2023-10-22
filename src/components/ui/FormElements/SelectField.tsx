@@ -6,7 +6,6 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import "@components/ui/FormElements/style.scss";
 import { debounce } from "@utils/helperFN";
 
 interface Option {

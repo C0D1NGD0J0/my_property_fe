@@ -1,4 +1,5 @@
 import axios from "@configs/axios";
+import { IVerificationInitValues } from "@interfaces/user.interface";
 import { TSignupData } from "@validations/schema/auth.schema";
 
 class AuthService {
@@ -24,6 +25,29 @@ class AuthService {
     try {
       const config = { headers: { "Content-Type": "multipart/form-data" } };
       const res = await axios.post(`${this.baseUrl}/signup`, data, config);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  validateToken = async (cid: string, data: IVerificationInitValues) => {
+    try {
+      const res = await axios.post(
+        `${this.baseUrl}/account_activation/${cid}`,
+        data,
+      );
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
+  resendActivationLink = async (cid: string, token: string) => {
+    try {
+      const res = await axios.post(`${this.baseUrl}/resend_activation_link`, {
+        token,
+        cid,
+      });
       return res;
     } catch (error) {
       throw error;

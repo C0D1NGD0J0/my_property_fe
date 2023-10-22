@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert, Space, Spin } from "antd";
 
-function Loading() {
+const Loading = (props: { description?: string }) => {
   return (
     <div
       style={{
@@ -13,10 +13,13 @@ function Loading() {
       }}
     >
       <Spin>
-        <Alert description="Loading...." type="info" />
+        <Alert
+          description={props.description ? props.description : "Loading...."}
+          type="info"
+        />
       </Spin>
     </div>
   );
-}
+};
 
 export default Loading;

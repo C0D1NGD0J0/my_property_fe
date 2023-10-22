@@ -1,8 +1,6 @@
+import { z } from "zod";
 import { IInitialValues } from "@interfaces/user.interface";
-import {
-  SignupValidationSchema,
-  TSignupData,
-} from "@validations/schema/auth.schema";
+import { SignupValidationSchema } from "@validations/schema/auth.schema";
 
 class AuthValidation {
   signup = async (signupData: IInitialValues) => {
@@ -16,6 +14,21 @@ class AuthValidation {
       const errors = this.parseZodError(result.error.issues);
       return { isValid: false, errors };
     }
+  };
+
+  signupToken = async (tokenData: { accountCode: string }) => {
+    const schema = z.object({
+      accountCode: z.string().length(64, "Invalid token provided."),
+    });
+
+    const result = schema.safeParse(tokenData);
+    if (!result.success) {
+      const errors = this.parseZodError(result.error.issues);
+      return { isValid: false, errors };
+    }
+
+    // Data is valid, proceed with logic
+    return { isValid: true };
   };
 
   // Private TSignupData to parse Zod error issues

@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { Button, Result } from "antd";
-import { useFormik, FormikProps, FormikValues, FormikHelpers } from "formik";
+import { useFormik, FormikProps, FormikValues } from "formik";
 import Link from "next/link";
 import useSWR from "swr";
 
-import Loading from "./loading";
 import authService from "@services/auth";
 import { SWR_KEY } from "@utils/constants";
 import UserInfo from "@app/(auth)/signup/UserInfo";
@@ -13,6 +12,7 @@ import { useNotification } from "@contexts/notification";
 import authValidation from "@validations/auth.validation";
 import { IInitialValues } from "@interfaces/user.interface";
 import PlanSelection from "@app/(auth)/signup/PlanSelectionStep";
+import Loading from "@components/ui/Loading";
 
 const steps = [
   {

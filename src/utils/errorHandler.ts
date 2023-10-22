@@ -57,5 +57,13 @@ export default class APIError extends Error {
         };
       }
     }
+
+    if (errorObj.type === "serviceError") {
+      const data = errorObj.error.data;
+      return {
+        success: false,
+        data,
+      };
+    }
   };
 }

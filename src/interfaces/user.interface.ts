@@ -24,3 +24,7 @@ export interface IInitialValues {
   companyName?: string;
   businessIdNumber?: string;
 }
+
+export interface IVerificationInitValues {
+  accountCode: string | null;
+}
