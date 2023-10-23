@@ -17,7 +17,7 @@ interface FormInputProps {
 }
 
 const FormInput: FC<FormInputProps> = ({
-  id = "",
+  id,
   type = "text",
   name,
   value,
@@ -32,7 +32,7 @@ const FormInput: FC<FormInputProps> = ({
 }) => {
   return (
     <input
-      id={id || name}
+      id={`_${name}_`}
       name={name}
       type={type}
       value={value}
@@ -43,7 +43,7 @@ const FormInput: FC<FormInputProps> = ({
       className={className}
       required={required || false}
       placeholder={placeholder || " "}
-      aria-label={ariaLabel || placeholder || name}
+      aria-label={ariaLabel || name}
     />
   );
 };

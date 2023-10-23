@@ -1,152 +1,206 @@
 "use client";
-import React from "react";
+import React, { FC } from "react";
 
-function UserInfo(props: any) {
+import { stripeSupportedCountries } from "@utils/constants";
+import FormField from "@components/ui/FormElements/FormField";
+import FormInput from "@components/ui/FormElements/FormInput";
+import FormLabel from "@components/ui/FormElements/FormLabel";
+import SelectField from "@components/ui/FormElements/SelectField";
+
+interface UserDetailsFormProps {
+  errors: any;
+  touched: any;
+  formValues: { [key: string]: any };
+  setFieldTouched: (field: string) => void;
+  setFieldValue: (field: string, value: any) => void;
+  handleChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => void;
+}
+
+const UserDetailsForm: FC<UserDetailsFormProps> = ({
+  handleChange,
+  setFieldValue,
+  formValues,
+  touched,
+  errors,
+  setFieldTouched,
+}) => {
   return (
     <>
       <div className="form-fields">
-        <div className="form-field">
-          <input type="text" className="form-input" placeholder="" required />
-          <label className="form-label" htmlFor="fname">
-            First name
-          </label>
-        </div>
+        <FormField
+          error={{ msg: errors.firstName, touched: !!touched.firstName }}
+        >
+          <FormInput
+            required
+            type="text"
+            name="firstName"
+            className="form-input"
+            onChange={(e) => {
+              setFieldTouched("firstName");
+              handleChange(e);
+            }}
+            value={formValues.firstName}
+          />
+          <FormLabel
+            className="form-label"
+            htmlFor="firstName"
+            label="First name"
+          />
+        </FormField>
 
-        <div className="form-field">
-          <input type="text" className="form-input" placeholder="" required />
-          <label className="form-label" htmlFor="lname">
-            Last name
-          </label>
-        </div>
+        <FormField
+          error={{ msg: errors.lastName, touched: !!touched.lastName }}
+        >
+          <FormInput
+            required
+            type="text"
+            name="lastName"
+            className="form-input"
+            onChange={(e) => {
+              setFieldTouched("lastName");
+              handleChange(e);
+            }}
+            value={formValues.lastName}
+          />
+          <FormLabel
+            className="form-label"
+            htmlFor="lastName"
+            label="Last name"
+          />
+        </FormField>
       </div>
 
-      {props.isEnterpriseAccount ? (
-        <div className="form-fields">
-          <div className="form-field">
-            <input type="text" className="form-input" placeholder="" required />
-            <label className="form-label" htmlFor="cname">
-              Company name
-            </label>
+      {formValues.accountType?.isEnterpriseAccount ? (
+        <>
+          <div className="form-fields">
+            <FormField
+              error={{
+                msg: errors.companyName,
+                touched: !!touched.companyName,
+              }}
+            >
+              <FormInput
+                required
+                type="text"
+                name="companyName"
+                className="form-input"
+                onChange={(e) => {
+                  setFieldTouched("companyName");
+                  handleChange(e);
+                }}
+                value={formValues.companyName}
+              />
+              <FormLabel
+                className="form-label"
+                htmlFor="companyName"
+                label="Legal entity name"
+              />
+            </FormField>
           </div>
-
-          <div className="form-field">
-            <input type="text" className="form-input" placeholder="" required />
-            <label className="form-label" htmlFor="lname">
-              Legal Entity Name
-            </label>
-          </div>
-        </div>
+        </>
       ) : null}
 
       <div className="form-fields">
-        <div className="form-field">
-          <input type="email" className="form-input" placeholder=" " required />
-          <label className="form-label" htmlFor="email">
-            Email
-          </label>
-        </div>
+        <FormField error={{ msg: errors.email, touched: !!touched.email }}>
+          <FormInput
+            required
+            type="email"
+            name="email"
+            className="form-input"
+            onChange={(e) => {
+              setFieldTouched("email");
+              handleChange(e);
+            }}
+            value={formValues.email}
+          />
+          <FormLabel className="form-label" htmlFor="email" label="Email" />
+        </FormField>
 
-        <div className="form-field">
-          <input type="text" className="form-input" placeholder="" required />
-          <label className="form-label" htmlFor="phone">
-            Contact number
-          </label>
-        </div>
+        <FormField
+          error={{ msg: errors.location, touched: !!touched.location }}
+        >
+          <SelectField
+            name="location"
+            value={formValues.location}
+            onChange={(name: string, value: any) => {
+              setFieldTouched(name);
+              setFieldValue("location", value);
+            }}
+            options={stripeSupportedCountries}
+          />
+        </FormField>
       </div>
 
       <div className="form-fields">
-        <div className="form-field">
-          <input type="text" className="form-input" placeholder="" required />
-          <label className="form-label" htmlFor="location">
-            Location
-          </label>
-        </div>
+        <FormField
+          error={{ msg: errors.phoneNumber, touched: !!touched.phoneNumber }}
+        >
+          <FormInput
+            required
+            type="text"
+            name="phoneNumber"
+            className="form-input"
+            onChange={(e) => {
+              setFieldTouched("phoneNumber");
+              handleChange(e);
+            }}
+            value={formValues.phoneNumber}
+          />
+          <FormLabel
+            className="form-label"
+            htmlFor="phoneNumber"
+            label="Contact number"
+          />
+        </FormField>
       </div>
 
       <div className="form-fields">
-        <div className="form-field">
-          <input
-            type="password"
-            className="form-input"
-            placeholder=""
+        <FormField
+          error={{ msg: errors.password, touched: !!touched.password }}
+        >
+          <FormInput
             required
-          />
-          <label className="form-label" htmlFor="password">
-            Password
-          </label>
-        </div>
-        <div className="form-field">
-          <input
             type="password"
+            name="password"
             className="form-input"
-            placeholder=""
-            required
+            onChange={(e) => {
+              setFieldTouched("password");
+              handleChange(e);
+            }}
+            value={formValues.password}
           />
-          <label className="form-label" htmlFor="cpassword">
-            Confirm password
-          </label>
-        </div>
+          <FormLabel
+            className="form-label"
+            htmlFor="password"
+            label="Password"
+          />
+        </FormField>
+
+        <FormField
+          error={{ msg: errors.cpassword, touched: !!touched.cpassword }}
+        >
+          <FormInput
+            required
+            type="password"
+            name="cpassword"
+            className="form-input"
+            onChange={(e) => {
+              setFieldTouched("cpassword");
+              handleChange(e);
+            }}
+            value={formValues.cpassword}
+          />
+          <FormLabel
+            className="form-label"
+            htmlFor="cpassword"
+            label="Confirm password"
+          />
+        </FormField>
       </div>
     </>
   );
-}
+};
 
-export default UserInfo;
-
-<>
-  <div className="form-fields">
-    <div className="form-field">
-      <input type="text" className="form-input" placeholder="" required />
-      <label className="form-label" htmlFor="cname">
-        Company name
-      </label>
-    </div>
-
-    <div className="form-field">
-      <input type="text" className="form-input" placeholder="" required />
-      <label className="form-label" htmlFor="lname">
-        Legal Entity Name
-      </label>
-    </div>
-  </div>
-
-  <div className="form-fields">
-    <div className="form-field">
-      <input type="email" className="form-input" placeholder=" " required />
-      <label className="form-label" htmlFor="email">
-        Email
-      </label>
-    </div>
-
-    <div className="form-field">
-      <input type="text" className="form-input" placeholder="" required />
-      <label className="form-label" htmlFor="phone">
-        Contact number
-      </label>
-    </div>
-  </div>
-
-  <div className="form-fields">
-    <div className="form-field">
-      <input type="text" className="form-input" placeholder="" required />
-      <label className="form-label" htmlFor="location">
-        Business location
-      </label>
-    </div>
-  </div>
-
-  <div className="form-fields">
-    <div className="form-field">
-      <input type="password" className="form-input" placeholder="" required />
-      <label className="form-label" htmlFor="password">
-        Password
-      </label>
-    </div>
-    <div className="form-field">
-      <input type="password" className="form-input" placeholder="" required />
-      <label className="form-label" htmlFor="cpassword">
-        Confirm password
-      </label>
-    </div>
-  </div>
-</>;
+export default UserDetailsForm;

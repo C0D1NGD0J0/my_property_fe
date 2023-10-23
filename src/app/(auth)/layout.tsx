@@ -1,5 +1,4 @@
 "use client";
-import "./style.scss";
 import React from "react";
 import { Layout } from "antd";
 const { Content } = Layout;

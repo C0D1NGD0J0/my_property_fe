@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import FormInput from "@components/FormElements/Input";
-import FormLabel from "@components/FormElements/Label";
-import FormField from "@components/FormElements/FormField";
+import FormInput from "@components/ui/FormElements/FormInput";
+import FormLabel from "@components/ui/FormElements/FormLabel";
+import FormField from "@components/ui/FormElements/FormField";
 
 export default function Login() {
   return (
@@ -17,10 +17,11 @@ export default function Login() {
           </Link>
         </p>
       </div>
+
       <div className="auth-page_content-body">
         <form className="auth-form" autoComplete="false">
           <div className="form-fields">
-            <FormField error={null}>
+            {/* <FormField error={null}>
               <FormInput
                 required
                 name=""
@@ -28,6 +29,21 @@ export default function Login() {
                 type="email"
                 onChange={() => ""}
                 className="form-input"
+              />
+              <FormLabel className="form-label" htmlFor="email" label="Email" />
+            </FormField>
+             */}
+            <FormField error={null}>
+              <FormInput
+                required
+                type="email"
+                name="email"
+                className="form-input"
+                onChange={(e) => {
+                  // setFieldTouched("email");
+                  // handleChange(e);
+                }}
+                value={"formValues.email"}
               />
               <FormLabel className="form-label" htmlFor="email" label="Email" />
             </FormField>
@@ -52,6 +68,7 @@ export default function Login() {
           </div>
         </form>
       </div>
+
       <div className="auth-page_content-footer">
         <p>
           <Link href="/forgot_password">

@@ -1,4 +1,3 @@
-import "@sass/main.scss";
 import { ConfigProvider } from "antd";
 import theme from "../../theme";
 
