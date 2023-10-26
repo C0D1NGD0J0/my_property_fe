@@ -16,12 +16,27 @@ class AuthValidation {
     }
   };
 
-  signupToken = async (tokenData: { accountCode: string }) => {
+  accountValidationToken = async (tokenData: { accountCode: string }) => {
     const schema = z.object({
       accountCode: z.string().length(64, "Invalid token provided."),
     });
 
     const result = schema.safeParse(tokenData);
+    if (!result.success) {
+      const errors = this.parseZodError(result.error.issues);
+      return { isValid: false, errors };
+    }
+
+    // Data is valid, proceed with logic
+    return { isValid: true };
+  };
+
+  forgotPassword = async (data: { email: string }) => {
+    const schema = z.object({
+      email: z.string().email("Please provide a valid email address."),
+    });
+
+    const result = schema.safeParse(data);
     if (!result.success) {
       const errors = this.parseZodError(result.error.issues);
       return { isValid: false, errors };

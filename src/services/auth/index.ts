@@ -53,6 +53,17 @@ class AuthService {
       throw error;
     }
   };
+
+  forgotPassword = async (email: string) => {
+    try {
+      const res = await axios.post(`${this.baseUrl}/forgot_password`, {
+        email,
+      });
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 export default new AuthService();

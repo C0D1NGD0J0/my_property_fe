@@ -8,8 +8,13 @@ type NotificationContextType = {
     type: NotificationInstance,
     title: string,
     message: string,
-    opts?: { btnText: string; onClose?: () => void },
+    opts?: NotificationContextMetaType,
   ) => void;
+};
+type NotificationContextMetaType = {
+  btnText?: string;
+  onClose?: () => void;
+  duration?: number | null;
 };
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
@@ -37,7 +42,7 @@ export const NotificationProvider = ({
     type: NotificationInstance,
     title: string,
     description: string,
-    opts?: { btnText: string; onClose?: () => void },
+    opts?: NotificationContextMetaType,
   ) => {
     if (type === "open" && opts) {
       const key = `open${Date.now()}`;
@@ -60,6 +65,7 @@ export const NotificationProvider = ({
     }
 
     api[type as NotificationInstance]({
+      duration: opts?.duration || 4,
       message: title,
       placement: "topRight",
       description: description,

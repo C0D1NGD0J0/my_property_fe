@@ -34,8 +34,15 @@ class AxioService implements IAxiosService {
     );
 
     this._axios.interceptors.response.use(
-      (response: AxiosResponse) => {
-        // Do something with the response data
+      async (response: AxiosResponse) => {
+        // format response data to be uniform
+        if (response.data.hasOwnProperty("msg")) {
+          response.data = {
+            ...response.data,
+            data: response.data.msg,
+          };
+          delete response.data.msg;
+        }
         return response;
       },
       async (error) => {
