@@ -51,12 +51,12 @@ $icon-margin-right: 8px;
 // .form-input:not(:placeholder-shown) ~ .form-label
 .form-input:focus ~ .form-label {
   top: 12px;
-  opacity: .3;
+  opacity: .8;
   transition: all 0.3s ease-in-out;
 }
 
 .form-input:not(:placeholder-shown) ~ .form-label {
-  top: -12px;
+  top: -18px;
   opacity: 0.3;
   transition: all 0.3s ease-in-out;
 }
@@ -68,9 +68,18 @@ $icon-margin-right: 8px;
   transition: all 0.3s ease-in-out;
 }
 
-.form-input:valid {
-  transition: all 0.3s ease-in-out;
+.form-input.untouched {
+  border-bottom: 2px solid initial; /* or any default color */
+}
+
+.form-input:not(.untouched):valid {
+  transition: all 0.2s ease-in-out;
   border-bottom: 2px solid green;
+}
+
+.form-input:not(.untouched):invalid {
+  transition: all 0.2s ease-in-out;
+  border-bottom: 2px solid red;
 }
 
 .form-field-error {

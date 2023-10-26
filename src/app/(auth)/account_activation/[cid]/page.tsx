@@ -1,21 +1,20 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { Button, Result } from "antd";
 import { useFormik, FormikValues } from "formik";
 import { useSearchParams, useParams } from "next/navigation";
 
 import authService from "@services/auth";
+import Loading from "@components/ui/Loading";
+import { useNotification } from "@contexts/notification";
+import authValidation from "@validations/auth.validation";
 import FormField from "@components/ui/FormElements/FormField";
 import FormInput from "@components/ui/FormElements/FormInput";
 import FormLabel from "@components/ui/FormElements/FormLabel";
-import authValidation from "@validations/auth.validation";
 import { IVerificationInitValues } from "@interfaces/user.interface";
-import Loading from "@components/ui/Loading";
-import { useNotification } from "@contexts/notification";
-import Link from "next/link";
 
 export default function AccountActivation() {
-  const [hasError, setHasError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { openNotification } = useNotification();

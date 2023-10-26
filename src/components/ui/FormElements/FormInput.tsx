@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, FC } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 
 interface FormInputProps {
   id?: string;
@@ -30,9 +30,15 @@ const FormInput: FC<FormInputProps> = ({
   placeholder,
   ariaLabel,
 }) => {
+  const [isTouched, setIsTouched] = useState(false);
+
+  const handleFocus = () => {
+    setIsTouched(!isTouched);
+  };
+
   return (
     <input
-      id={`_${name}_`}
+      id={`_${id || name}_`}
       name={name}
       type={type}
       value={value}
@@ -40,10 +46,11 @@ const FormInput: FC<FormInputProps> = ({
       onChange={onChange}
       disabled={disabled || false}
       maxLength={maxLength}
-      className={className}
+      className={`${className} ${isTouched ? "" : "untouched"}`}
       required={required || false}
       placeholder={placeholder || " "}
       aria-label={ariaLabel || name}
+      onFocus={handleFocus}
     />
   );
 };
