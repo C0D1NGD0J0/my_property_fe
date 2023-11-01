@@ -49,7 +49,9 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
             label="First name"
           />
         </FormField>
+      </div>
 
+      <div className="form-fields">
         <FormField
           error={{ msg: errors.lastName, touched: !!touched.lastName }}
         >
@@ -117,12 +119,15 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
           />
           <FormLabel className="form-label" htmlFor="email" label="Email" />
         </FormField>
+      </div>
 
+      <div className="form-fields">
         <FormField
           error={{ msg: errors.location, touched: !!touched.location }}
         >
           <SelectField
             name="location"
+            placeholder="Location"
             value={formValues.location}
             onChange={(name: string, value: any) => {
               setFieldTouched(name);
@@ -131,9 +136,6 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
             options={stripeSupportedCountries}
           />
         </FormField>
-      </div>
-
-      <div className="form-fields">
         <FormField
           error={{ msg: errors.phoneNumber, touched: !!touched.phoneNumber }}
         >

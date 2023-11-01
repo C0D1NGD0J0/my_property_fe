@@ -60,7 +60,7 @@ export default function AccountActivation() {
         });
       }
 
-      openNotification("error", "Account verification Error", e.data);
+      return openNotification("error", "Account verification Error", e.data);
     }
   };
 
@@ -68,7 +68,7 @@ export default function AccountActivation() {
     onSubmit: handleSubmit,
     initialValues: { accountCode: "" },
     validate: async (val) => {
-      const res = await authValidation.signupToken(val);
+      const res = await authValidation.accountValidationToken(val);
       return res.isValid ? {} : res.errors;
     },
   });

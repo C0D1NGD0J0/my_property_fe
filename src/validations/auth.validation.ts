@@ -46,6 +46,44 @@ class AuthValidation {
     return { isValid: true };
   };
 
+  resetPassword = async (data: { password: string; cpassword: string }) => {
+    const schema = z
+      .object({
+        password: z
+          .string()
+          .min(7, "Password too short (minimum 7 characters)")
+          .max(20, "Password too long.")
+          .refine(
+            (pwd) => {
+              return (
+                /[A-Z]/.test(pwd) &&
+                /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(pwd)
+              );
+            },
+            {
+              message:
+                "Password must contain at least one uppercase letter and one special character.",
+            },
+          ),
+        cpassword: z
+          .string()
+          .min(7, "Password too short (minimum 7 characters)"),
+      })
+      .refine((data) => data.password === data.cpassword, {
+        message: "Passwords do not match",
+        path: ["cpassword"],
+      });
+
+    const result = schema.safeParse(data);
+    if (!result.success) {
+      const errors = this.parseZodError(result.error.issues);
+      return { isValid: false, errors };
+    }
+
+    // Data is valid, proceed with logic
+    return { isValid: true };
+  };
+
   // Private TSignupData to parse Zod error issues
   private parseZodError(errors: Array<any>): { [key: string]: string } {
     const parsedErrors: { [key: string]: string } = {};
