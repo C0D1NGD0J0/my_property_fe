@@ -64,6 +64,17 @@ class AuthService {
       throw error;
     }
   };
+  resetPassword = async (token: string, password: string) => {
+    try {
+      const res = await axios.put(`${this.baseUrl}/reset_password`, {
+        resetToken: token,
+        password,
+      });
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 export default new AuthService();

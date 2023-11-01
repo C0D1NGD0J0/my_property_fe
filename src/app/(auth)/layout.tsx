@@ -67,7 +67,7 @@ const routeToBoxOrder: BoxOrderMapping = {
     },
   },
 };
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const LeftBox: React.FC<LeftBoxProps> = ({ meta }) => (
     <div className="auth-page_left-box">
@@ -113,4 +113,4 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default Layout;
+export default AuthLayout;

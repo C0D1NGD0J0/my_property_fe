@@ -21,9 +21,7 @@ export default function ForgotPassword() {
       if (res.success) {
         formik.resetForm();
         formik.setSubmitting(false);
-        return openNotification("success", "Password Reset", res.data, {
-          duration: null,
-        });
+        return openNotification("success", "Password Reset", res.data);
       }
     } catch (e: any) {
       return openNotification("error", "Password Reset Error", e.data);

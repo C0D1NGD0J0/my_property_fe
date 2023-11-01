@@ -73,10 +73,10 @@ class AxioService implements IAxiosService {
 
   put = async <T = any>(
     url: string,
-    params?: object,
+    data?: object,
     config?: AxiosRequestConfig,
   ): Promise<T> => {
-    const response = await this._axios.put<T>(url, { params }, config);
+    const response = await this._axios.put<T>(url, data, config);
     return response.data;
   };
 

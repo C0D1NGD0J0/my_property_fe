@@ -16,3 +16,7 @@ export const debounce = <F extends Procedure>(
     }, delay);
   };
 };
+
+export const uuidRegex =
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}[0-9a-fA-F]?$/i;
+export const hex64Regex = /^[0-9a-fA-F]{64}$/i;

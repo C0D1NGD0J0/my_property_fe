@@ -32,7 +32,7 @@ const FormInput: FC<FormInputProps> = ({
 }) => {
   const [isTouched, setIsTouched] = useState(false);
 
-  const handleFocus = () => {
+  const handleBlur = () => {
     setIsTouched(!isTouched);
   };
 
@@ -50,7 +50,7 @@ const FormInput: FC<FormInputProps> = ({
       required={required || false}
       placeholder={placeholder || " "}
       aria-label={ariaLabel || name}
-      onFocus={handleFocus}
+      onBlur={handleBlur}
     />
   );
 };
