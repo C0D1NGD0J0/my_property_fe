@@ -16,7 +16,7 @@ const PricingCard: FC<PricingCardProps> = (props) => {
       </div>
       <div className="pricing-plan_description">
         <ul className="features-list">
-          {props.features.map((item, idx) => {
+          {props.features?.map((item, idx) => {
             return (
               <li key={`${idx}-item`} className="features-list_item">
                 {item}
