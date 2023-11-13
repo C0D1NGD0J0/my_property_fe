@@ -35,7 +35,7 @@ export const SignupValidationSchema = z
       .max(15, "Password must be at most 15 characters"),
     cpassword: z.string(),
     accountType: z.object({
-      id: z.string(),
+      planId: z.string(),
       name: z.enum(["Individual", "Enterprise"]),
       isEnterpriseAccount: z.boolean(),
     }),

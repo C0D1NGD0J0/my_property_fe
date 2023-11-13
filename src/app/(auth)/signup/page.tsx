@@ -130,6 +130,7 @@ export default function Signup() {
     onSubmit: handleSubmit,
     validate: async (val) => {
       const res = await authValidation.signup(val);
+      console.log(res);
       return res.isValid ? {} : res.errors;
     },
   });

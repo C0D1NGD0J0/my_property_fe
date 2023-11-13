@@ -18,7 +18,7 @@ export interface IInitialValues {
   cpassword: string;
   accountType: null | {
     name: string;
-    id: string;
+    planId: string;
     isEnterpriseAccount: boolean;
   };
   companyName?: string;

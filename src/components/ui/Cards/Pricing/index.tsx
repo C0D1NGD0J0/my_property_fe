@@ -32,7 +32,7 @@ const PricingCard: FC<PricingCardProps> = (props) => {
           type="button"
           className="btn btn-outline"
           onClick={() => {
-            props.setFieldValue("accountType.id", props.id);
+            props.setFieldValue("accountType.planId", props.id);
             props.setFieldValue("accountType.name", props.name);
             props.setFieldValue(
               "accountType.isEnterpriseAccount",
