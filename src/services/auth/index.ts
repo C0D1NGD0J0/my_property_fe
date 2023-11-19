@@ -20,7 +20,6 @@ class AuthService {
       }
     }
   };
-
   signup = async (data: FormData) => {
     try {
       const config = { headers: { "Content-Type": "multipart/form-data" } };
@@ -30,7 +29,14 @@ class AuthService {
       throw error;
     }
   };
-
+  login = async (data: { email: string; password: string }) => {
+    try {
+      const res = await axios.post(`${this.baseUrl}/login`, data);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
   validateToken = async (cid: string, data: IVerificationInitValues) => {
     try {
       const res = await axios.post(
@@ -53,7 +59,6 @@ class AuthService {
       throw error;
     }
   };
-
   forgotPassword = async (email: string) => {
     try {
       const res = await axios.post(`${this.baseUrl}/forgot_password`, {
