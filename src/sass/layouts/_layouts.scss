@@ -1,0 +1,29 @@
+.container {
+  gap: $gap-sm;
+  display: grid;
+  margin: 0 auto;
+  height: 100vh;
+  height: 100svh;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  grid-template-rows: auto;
+  grid-template-columns: 250px auto; 
+  grid-template-areas: "sidebar main";
+}
+
+.main {
+  width: 100%;
+  grid-area: main;
+  position: relative;
+  padding-bottom: 2rem;
+  border: 1px solid red;
+}
+
+aside {
+  width: 100%;
+  min-height: 100%;
+  position: absolute;
+  grid-area: sidebar;
+  background: hsl($primary-color...);
+}

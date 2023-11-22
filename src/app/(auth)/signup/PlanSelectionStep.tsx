@@ -5,15 +5,17 @@ import { PricingCardProps } from "@interfaces/user.interface";
 
 const PlanSelection = (props: any) => {
   const _plans = props.plans;
+  const PricingCardMemo = React.memo(PricingCard);
 
   return (
     <div className="pricing-plans">
       {_plans &&
         _plans.map((plan: PricingCardProps) => {
           return (
-            <PricingCard
+            <PricingCardMemo
               key={plan.id}
               {...plan}
+              selectedPlan={props.formValues.accountType}
               setFieldValue={props.setFieldValue}
             />
           );

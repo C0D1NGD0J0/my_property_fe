@@ -83,8 +83,9 @@ export default function Login() {
       ) : (
         <>
           <div className="auth-page_content-header">
-            <h2>Login</h2>
-            <p>
+            <h2 className="header-title">Login</h2>
+            <hr className="titleBar-sm" />
+            <p className="header-subtitle">
               You dont have an account yet?
               <Link href="/signup">
                 <strong>Signup</strong>
@@ -154,7 +155,7 @@ export default function Login() {
                   />
                 </FormField>
               </div>
-              <div className="auth-page_content-footer">
+              <div className="action-fields">
                 <Button
                   type="primary"
                   htmlType="submit"
@@ -166,11 +167,15 @@ export default function Login() {
             </form>
           </div>
 
-          <div style={{ width: "100%", textAlign: "center" }}>
+          <div className="auth-page_content-footer">
             <p>
               <Link href="/forgot_password">
                 <strong>Forgot password? </strong>
               </Link>
+            </p>
+            <p className="termsAgreement">
+              By continuing, you agree to accept our{" "}
+              <a href="#!">Privacy & Terms of Service</a>
             </p>
           </div>
         </>

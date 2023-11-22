@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&family=Source+Sans+Pro:wght@200;400&display=swap");
+@import url('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css');
+
+h1, h2, 
+h3, h4, h5{
+	margin: 0;
+	padding: 0;
+  font-weight: normal;
+}
+
+p {
+  font-size: $fs-base;
+  line-height: 1.5rem;
+  color: hsl($primary-color...);
+}
+
+.small {
+  font-size: $fs-xsm;
+}
+
+.mute {
+  color: hsl($grey-color...);
+  font-weight: $fw-200;
+}
+
+.hr {
+  width: 20%;
+  border: 2px solid hsl($primary-color...);
+}

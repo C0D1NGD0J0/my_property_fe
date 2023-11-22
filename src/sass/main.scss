@@ -2,9 +2,14 @@
 @import 'base/base';
 @import 'base/typography';
 
-@import 'utils/utils';
-@import 'components/form-elements';
-
 @import 'layouts/navbar';
 @import 'layouts/footer';
 @import 'layouts/layouts';
+
+@import 'utils/utils';
+
+@import 'components/button';
+@import 'components/form-elements';
+
+@import 'pages/pricing';
+@import 'pages/auth';

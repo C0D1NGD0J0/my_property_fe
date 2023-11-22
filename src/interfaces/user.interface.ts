@@ -5,6 +5,11 @@ export interface PricingCardProps {
   currency: string;
   recurring: string;
   features: string[];
+  selectedPlan: {
+    name: string;
+    planId: string;
+    isEnterpriseAccount: boolean;
+  };
   setFieldValue: (fieldName: string, value: any) => void;
 }
 

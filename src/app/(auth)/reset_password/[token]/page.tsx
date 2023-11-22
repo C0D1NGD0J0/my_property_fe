@@ -79,8 +79,9 @@ export default function ResetPassword() {
   return (
     <>
       <div className="auth-page_content-header">
-        <h2>Reset Password</h2>
-        <p>
+        <h2 className="header-title">Reset Password</h2>
+        <hr className="titleBar-sm" />
+        <p className="header-subtitle">
           Already have an account?
           <Link href="/login">
             <strong>Login</strong>
