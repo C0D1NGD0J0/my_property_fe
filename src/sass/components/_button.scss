@@ -1,0 +1,21 @@
+a, a:active {
+	outline: transparent;
+	font-size: $fs-sm;
+	color: hsl($black-color...);
+	font-weight: $fw-200;
+	text-decoration: none;
+	transition: $transition;
+	-webkit-transition: $transition;
+	-moz-transition: $transition;
+	-ms-transition: $transition;
+	-o-transition: $transition;
+  
+  &:focus {
+    outline: 1px solid hsl($primary-color...);
+  }
+
+  &:hover {
+    text-decoration: transparent;
+    color: darken(hsl($black-color...), 10%); 
+  }
+}

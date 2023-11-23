@@ -16,6 +16,22 @@ class AuthValidation {
     }
   };
 
+  login = async (data: { email: string; password: string }) => {
+    const schema = z.object({
+      password: z.string().max(21, "Password too long."),
+      email: z.string().email("Please provide a valid email address."),
+    });
+
+    const result = schema.safeParse(data);
+    if (!result.success) {
+      const errors = this.parseZodError(result.error.issues);
+      return { isValid: false, errors };
+    }
+
+    // Data is valid, proceed with logic
+    return { isValid: true };
+  };
+
   accountValidationToken = async (tokenData: { accountCode: string }) => {
     const schema = z.object({
       accountCode: z.string().length(64, "Invalid token provided."),

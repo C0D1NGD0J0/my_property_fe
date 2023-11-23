@@ -92,7 +92,8 @@ export default function AccountActivation() {
       ) : (
         <>
           <div className="auth-page_content-header">
-            <h2>Enter account verification code.</h2>
+            <h2 className="header-title">Enter account verification code.</h2>
+            <hr className="titleBar-sm" />
             <small>check your inbox.</small>
             <br />
           </div>

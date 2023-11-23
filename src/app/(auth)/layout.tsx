@@ -1,4 +1,5 @@
 "use client";
+// import "./style.scss";
 import React from "react";
 import { Layout } from "antd";
 import { usePathname } from "next/navigation";
@@ -101,12 +102,12 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Layout>
       <Content>
-        <div className="container">
-          <main className="auth-page">
+        <div className="auth-container">
+          <div className="auth-page">
             {boxOrder.map((boxKey, index) => (
               <React.Fragment key={index}>{boxes[boxKey]}</React.Fragment>
             ))}
-          </main>
+          </div>
         </div>
       </Content>
     </Layout>

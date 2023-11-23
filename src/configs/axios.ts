@@ -14,6 +14,7 @@ class AxioService implements IAxiosService {
   constructor() {
     this._axios = axios.create({
       baseURL: "http://localhost:5000",
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },

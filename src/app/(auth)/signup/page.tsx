@@ -45,7 +45,7 @@ export default function Signup() {
     SWR_KEY.getSignupPlans,
     authService.getUserPlans,
     {
-      revalidateIfStale: false,
+      revalidateIfStale: true,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     },
@@ -153,15 +153,23 @@ export default function Signup() {
       ) : (
         <>
           <div className="auth-page_content-header">
-            <>
-              <h2>Sign Up</h2>
-              <p>
-                Alredy have an account?
-                <Link href="/login">
-                  <strong>Login</strong>
-                </Link>
-              </p>
-            </>
+            {currentStep === 0 ? (
+              <>
+                <h2 className="header-title">Select Account Plan</h2>
+                <hr className="titleBar-sm" />
+              </>
+            ) : (
+              <>
+                <h2 className="header-title">Sign Up</h2>
+                <hr className="titleBar-sm" />
+                <p className="header-subtitle">
+                  Alredy have an account?
+                  <Link href="/login">
+                    <strong>Login</strong>
+                  </Link>
+                </p>
+              </>
+            )}
           </div>
 
           <div className="auth-page_content-body">
@@ -180,7 +188,7 @@ export default function Signup() {
                   handleChange: formik.handleChange,
                   setFieldValue: formik.setFieldValue,
                   setFieldTouched: formik.setFieldTouched,
-                  ...(currentStep === 0 ? { plans: data.plans } : null),
+                  ...(currentStep === 0 ? { plans: data?.plans } : null),
                 })
               )}
               <div className="auth-page_content-footer">

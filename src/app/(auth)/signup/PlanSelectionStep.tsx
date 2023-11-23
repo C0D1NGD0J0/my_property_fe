@@ -14,6 +14,7 @@ const PlanSelection = (props: any) => {
             <PricingCard
               key={plan.id}
               {...plan}
+              selectedPlan={props.formValues.accountType}
               setFieldValue={props.setFieldValue}
             />
           );
