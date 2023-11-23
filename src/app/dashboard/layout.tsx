@@ -25,9 +25,9 @@ export default function DashboardLayout({
 
   return (
     <div className="container">
-      {/* <Sidebar /> */}
+      <Sidebar />
       <main className="main">
-        {/* <Navbar /> */}
+        <Navbar />
         <Content>{children}</Content>
       </main>
     </div>

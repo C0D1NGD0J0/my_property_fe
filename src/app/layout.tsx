@@ -1,11 +1,8 @@
 import "@sass/main.scss";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import StyledComponentsRegistry from "../../lib/AntdRegistry";
 import { NotificationProvider } from "../contexts/notification";
-
-const inter = Inter({ subsets: ["latin"] });
-type NotificationType = "success" | "info" | "warning" | "error";
+import "./preload-resources";
 
 export const metadata: Metadata = {
   title: "My Property",

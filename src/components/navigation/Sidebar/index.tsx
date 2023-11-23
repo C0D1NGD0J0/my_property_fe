@@ -7,7 +7,7 @@ const Index = () => {
     <aside className="sidebar">
       <div className="sidebar-brand">
         <div className="logo">
-          <img src="./imgs/logo.png" alt="Logo" className="logo-img" />
+          <img src="./img/logo.png" alt="Logo" className="logo-img" />
           <h2>
             Something<span className="danger">Weird</span>
           </h2>
