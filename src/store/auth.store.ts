@@ -15,20 +15,23 @@ export const useAuthStore = create<AuthState>((set) => {
     user: null,
     isLoggedIn: false,
     setUser: (data: ICurrentUser | null) =>
-      set(() => {
+      set((state) => {
         return {
+          ...state,
           user: data,
           isLoggedIn: !!data,
         };
       }),
-    logout: () => {
-      // clear saved cookie
-      CookieManager.removeCookie("cid");
-      return {
-        user: null,
-        isLoggedIn: false,
-      };
-    },
+    logout: () =>
+      set((state) => {
+        // clear saved cookie
+        CookieManager.removeCookie("cid");
+        return {
+          ...state,
+          user: null,
+          isLoggedIn: false,
+        };
+      }),
   };
 });
 

@@ -35,12 +35,13 @@ export interface IVerificationInitValues {
 }
 
 export interface ICurrentUser {
-  cid: string;
-  email: string;
-  fullname: string;
   id: string;
-  isActive: boolean;
-  isSubscriptionActive: boolean;
-  role: string;
   uid: string;
+  cid: string;
+  role: string;
+  email: string;
+  isActive: boolean;
+  linkedAccounts: { cid: string; name: string }[];
+  fullname: string | null;
+  isSubscriptionActive?: boolean;
 }

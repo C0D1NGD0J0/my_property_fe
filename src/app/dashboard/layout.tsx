@@ -33,7 +33,6 @@ export default function DashboardLayout({
         setLoading(false);
       } catch (error: unknown) {
         const err = error as ErrorResponse;
-        console.log(error);
         if (err?.data) {
           openNotification("error", err.data, "Please login to proceed.");
         }
@@ -42,7 +41,19 @@ export default function DashboardLayout({
         setLoading(false);
       }
     };
-    getUser();
+
+    if (cid) {
+      getUser();
+    } else {
+      logout();
+      openNotification("error", "Access denied.", "Please login to proceed.");
+      push("/login");
+      setLoading(false);
+    }
+
+    return () => {
+      console.log("Cleanup---");
+    };
   }, [cid]);
 
   if (loading || !cid) {
