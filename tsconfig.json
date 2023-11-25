@@ -20,7 +20,7 @@
       }
     ],
     "paths": {
-      "@app/*": ["./src/app/*"],
+      "@store/*": ["src/store/*"],
       "@services/*": ["./src/services/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@components/*": ["src/components/*"],
@@ -30,6 +30,7 @@
       "@contexts/*": ["src/contexts/*"],
       "@sass/*": ["src/sass/*"],
       "@validations/*": ["src/validations/*"],
+      "@app/*": ["./src/app/*"],
       "@root/*": ["./*"],
     }
   },

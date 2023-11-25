@@ -1,6 +1,12 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import authService from "@services/auth";
 import { usePathname } from "next/navigation";
+import { useAuthStore } from "@store/auth.store";
+import CookieManager from "@utils/cookieManager";
 
 const links: {
   pathname: string;
@@ -20,7 +26,21 @@ const links: {
 ];
 
 function Index() {
+  const { push } = useRouter();
   const urlPath = usePathname();
+  const { user, logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    try {
+      const res = await authService.logout();
+      if (res.success) {
+        logout();
+        push("/login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <header className="header">
@@ -52,7 +72,7 @@ function Index() {
 
         <li className="header-menu_item hasSubmenu">
           <a href="#!" className="username">
-            Johnson
+            {user?.fullname}
           </a>
           <div className="submenu-box">
             <ul className="submenu">
@@ -73,10 +93,10 @@ function Index() {
                 </Link>
               </li>
               <hr />
-              <li className="danger-color">
-                <Link href="!#">
+              <li className="danger">
+                <span onClick={handleLogout}>
                   <i className="bx bx-log-out"></i>Logout
-                </Link>
+                </span>
               </li>
             </ul>
           </div>
