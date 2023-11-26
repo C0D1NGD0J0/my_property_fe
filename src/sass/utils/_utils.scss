@@ -31,3 +31,12 @@
 .danger {
   color: hsl($danger-color...);
 }
+
+.show {
+  display: block;
+  position: relative;
+}
+
+.hide {
+  display: none;
+}
