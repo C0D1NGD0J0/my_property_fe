@@ -77,7 +77,11 @@ function Index() {
           <div className="submenu-box">
             <ul className="submenu">
               {user?.linkedAccounts.map((item) => {
-                return <li key={item.cid}>{item.name}</li>;
+                if (item.cid !== user.cid) {
+                  return <li key={item.cid}>{item.name}</li>;
+                }
+
+                return null;
               })}
               <li>
                 <Link
