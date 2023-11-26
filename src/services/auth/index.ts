@@ -37,6 +37,14 @@ class AuthService {
       throw error;
     }
   };
+  logout = async () => {
+    try {
+      const res = await axios.delete(`${this.baseUrl}/logout`);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
   validateToken = async (cid: string, data: IVerificationInitValues) => {
     try {
       const res = await axios.post(
@@ -75,6 +83,14 @@ class AuthService {
         resetToken: token,
         password,
       });
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
+  refreshToken = async () => {
+    try {
+      const res = await axios.get(`${this.baseUrl}/refresh_token`);
       return res;
     } catch (error) {
       throw error;

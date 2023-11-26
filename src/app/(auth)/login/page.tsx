@@ -68,7 +68,7 @@ export default function Login() {
                     <li
                       key={item.name}
                       onClick={() => {
-                        CookieManager.setCookie("clientId", item.cid);
+                        CookieManager.setCookie("cid", item.cid);
                         push("/dashboard");
                       }}
                       style={{ padding: ".8rem", cursor: "pointer" }}

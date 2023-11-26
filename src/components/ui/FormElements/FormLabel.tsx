@@ -15,7 +15,7 @@ const FormLabel: React.FC<FormLabelProps> = ({
   required = false,
 }) => {
   return (
-    <label htmlFor={htmlFor} className={className}>
+    <label htmlFor={`_${htmlFor}_`} className={className}>
       {label}
       {required && <span aria-hidden="true">*</span>}
     </label>

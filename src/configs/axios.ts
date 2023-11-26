@@ -1,5 +1,6 @@
 import APIError from "@utils/errorHandler";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import AuthService from "@services/auth";
 
 interface IAxiosService {
   get<T = any>(url: string, params?: object): Promise<T>;
@@ -44,9 +45,19 @@ class AxioService implements IAxiosService {
           };
           delete response.data.msg;
         }
+
         return response;
       },
       async (error) => {
+        const originalRequest = error.config;
+        if (error.response.status === 419 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          if (originalRequest.url !== "/api/v1/auth/refresh_token") {
+            const res = await AuthService.refreshToken();
+
+            return Promise.resolve(this._axios(originalRequest));
+          }
+        }
         // Handle errors
         const apiError = new APIError().init(error);
         return Promise.reject(apiError);
@@ -59,8 +70,12 @@ class AxioService implements IAxiosService {
     params?: object,
     config?: AxiosRequestConfig,
   ): Promise<T> => {
-    const response = await this._axios.get<T>(url, { params });
-    return response.data;
+    try {
+      const response = await this._axios.get<T>(url, { params });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 
   post = async <T = any>(

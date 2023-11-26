@@ -6,7 +6,16 @@ interface ApiErrorObject {
 }
 
 type ApiErrorData = string | ApiErrorObject[];
+export type ErrorResponse = {
+  success: boolean;
+  data: any;
+};
 
+type RequestErrorObj = {
+  success: boolean;
+  type: string;
+  error: { data: ApiErrorData };
+};
 export default class APIError extends Error {
   constructor() {
     super("Api Error: ");
@@ -29,7 +38,7 @@ export default class APIError extends Error {
     }
   }
 
-  private parseSystemError = (e: Error) => {
+  private parseSystemError = (e: Error): ErrorResponse => {
     console.log(`System Error: ${e.name}`);
     return {
       success: false,
@@ -37,11 +46,9 @@ export default class APIError extends Error {
     };
   };
 
-  private parseApiError = (errorObj: {
-    success: boolean;
-    type: string;
-    error: { data: ApiErrorData };
-  }) => {
+  private parseApiError = (
+    errorObj: RequestErrorObj,
+  ): ErrorResponse | undefined => {
     // Handle the error based on its type and data
     if (errorObj.type === "validationError") {
       const data = errorObj.error.data;
@@ -58,7 +65,7 @@ export default class APIError extends Error {
       }
     }
 
-    if (errorObj.type === "serviceError") {
+    if (["serviceError", "authError"].includes(errorObj.type)) {
       const data = errorObj.error.data;
       return {
         success: false,

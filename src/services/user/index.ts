@@ -12,7 +12,6 @@ class UserService {
       if (!cid) {
         throw new Error("cid is required");
       }
-
       const res = await axios.get(`${this.baseUrl}/${cid}/currentuser`);
       return res;
     } catch (error) {

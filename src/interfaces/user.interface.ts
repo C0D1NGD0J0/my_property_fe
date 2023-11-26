@@ -33,3 +33,15 @@ export interface IInitialValues {
 export interface IVerificationInitValues {
   accountCode: string | null;
 }
+
+export interface ICurrentUser {
+  id: string;
+  uid: string;
+  cid: string;
+  role: string;
+  email: string;
+  isActive: boolean;
+  linkedAccounts: { cid: string; name: string }[];
+  fullname: string | null;
+  isSubscriptionActive?: boolean;
+}
