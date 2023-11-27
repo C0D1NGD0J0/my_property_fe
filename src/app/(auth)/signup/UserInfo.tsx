@@ -2,10 +2,10 @@
 import React, { FC } from "react";
 
 import { stripeSupportedCountries } from "@utils/constants";
-import FormField from "@components/ui/FormElements/FormField";
-import FormInput from "@components/ui/FormElements/FormInput";
-import FormLabel from "@components/ui/FormElements/FormLabel";
-import SelectField from "@components/ui/FormElements/SelectField";
+import FormField from "@components/FormElements/FormField";
+import FormInput from "@components/FormElements/FormInput";
+import FormLabel from "@components/FormElements/FormLabel";
+import SelectField from "@components/FormElements/SelectField";
 
 interface UserDetailsFormProps {
   errors: any;

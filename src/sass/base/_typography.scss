@@ -10,9 +10,9 @@ h3, h4, h5{
 }
 
 p {
-  font-size: $fs-base;
   line-height: 1.5rem;
   color: hsl($primary-color...);
+  font-size: clamp($fs-sm, 30vw, $fs-base);
 }
 
 .small {

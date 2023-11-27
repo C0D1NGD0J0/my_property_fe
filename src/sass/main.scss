@@ -10,6 +10,10 @@
 
 @import 'components/button';
 @import 'components/form-elements';
+@import 'components/pageHeader';
 
-@import 'pages/pricing';
-@import 'pages/auth';
+@import 'pages/auth/pricing';
+@import 'pages/auth/auth';
+@import 'pages/account/settings';
+
+@import 'media-query/layout';

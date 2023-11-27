@@ -106,16 +106,18 @@ function Index() {
               })}
               <li>
                 <Link
-                  href="/profile"
-                  className={urlPath === "/profile" ? "active" : ""}
+                  href="/dashboard/profile"
+                  className={urlPath === "/dashboard/profile" ? "active" : ""}
                 >
                   <i className="bx bx-user"></i>Profile
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/settings"
-                  className={urlPath === "/settings" ? "active" : ""}
+                  href="/dashboard/user_settings"
+                  className={
+                    urlPath === "/dashboard/user_settings" ? "active" : ""
+                  }
                 >
                   <i className="bx bx-cog"></i>Settings
                 </Link>

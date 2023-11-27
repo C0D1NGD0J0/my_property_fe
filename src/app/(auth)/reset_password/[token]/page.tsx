@@ -10,9 +10,9 @@ import Loading from "@components/ui/Loading";
 import { hex64Regex } from "@utils/helperFN";
 import { useNotification } from "@contexts/notification";
 import authValidation from "@validations/auth.validation";
-import FormInput from "@components/ui/FormElements/FormInput";
-import FormLabel from "@components/ui/FormElements/FormLabel";
-import FormField from "@components/ui/FormElements/FormField";
+import FormInput from "@components/FormElements/FormInput";
+import FormLabel from "@components/FormElements/FormLabel";
+import FormField from "@components/FormElements/FormField";
 
 export default function ResetPassword() {
   const [inputType, setInputType] = useState("password");

@@ -9,9 +9,9 @@ import authService from "@services/auth";
 import Loading from "@components/ui/Loading";
 import { useNotification } from "@contexts/notification";
 import authValidation from "@validations/auth.validation";
-import FormField from "@components/ui/FormElements/FormField";
-import FormInput from "@components/ui/FormElements/FormInput";
-import FormLabel from "@components/ui/FormElements/FormLabel";
+import FormField from "@components/FormElements/FormField";
+import FormInput from "@components/FormElements/FormInput";
+import FormLabel from "@components/FormElements/FormLabel";
 import { IVerificationInitValues } from "@interfaces/user.interface";
 
 export default function AccountActivation() {

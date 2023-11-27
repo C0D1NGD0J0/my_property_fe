@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 
 import authService from "@services/auth";
 import { useNotification } from "@contexts/notification";
-import FormInput from "@components/ui/FormElements/FormInput";
-import FormLabel from "@components/ui/FormElements/FormLabel";
-import FormField from "@components/ui/FormElements/FormField";
+import FormInput from "@components/FormElements/FormInput";
+import FormLabel from "@components/FormElements/FormLabel";
+import FormField from "@components/FormElements/FormField";
 import authValidation from "@validations/auth.validation";
 import { Button, Result } from "antd";
 import CookieManager from "@utils/cookieManager";

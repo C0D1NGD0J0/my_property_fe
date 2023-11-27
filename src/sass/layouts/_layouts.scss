@@ -14,9 +14,22 @@
 
 .main {
   width: 100%;
+  display: grid;
+  height: 100vh;
+  height: 100svh;
   grid-area: main;
   position: relative;
   padding-bottom: 2rem;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: 
+    "navbar"
+    "content";
+}
+
+.main-content {
+  grid-area: content; /* Assigns the content area */
+  overflow-y: auto;
+  grid-row: 2 / 3;
 }
 
 aside {
