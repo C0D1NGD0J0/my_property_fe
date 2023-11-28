@@ -80,7 +80,7 @@ export default function ResetPassword() {
     <>
       <div className="auth-page_content-header">
         <h2 className="header-title">Reset Password</h2>
-        <hr className="titleBar-sm" />
+        <hr className="titleBar-sm center" />
         <p className="header-subtitle">
           Already have an account?
           <Link href="/login">

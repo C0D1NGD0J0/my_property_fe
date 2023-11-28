@@ -49,9 +49,7 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
             label="First name"
           />
         </FormField>
-      </div>
 
-      <div className="form-fields">
         <FormField
           error={{ msg: errors.lastName, touched: !!touched.lastName }}
         >
@@ -123,20 +121,6 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
 
       <div className="form-fields">
         <FormField
-          error={{ msg: errors.location, touched: !!touched.location }}
-        >
-          <SelectField
-            name="location"
-            placeholder="Location"
-            value={formValues.location}
-            onChange={(name: string, value: any) => {
-              setFieldTouched(name);
-              setFieldValue("location", value);
-            }}
-            options={stripeSupportedCountries}
-          />
-        </FormField>
-        <FormField
           error={{ msg: errors.phoneNumber, touched: !!touched.phoneNumber }}
         >
           <FormInput
@@ -154,6 +138,24 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
             className="form-label"
             htmlFor="phoneNumber"
             label="Contact number"
+          />
+        </FormField>
+      </div>
+
+      <div className="form-fields">
+        <FormField
+          error={{ msg: errors.location, touched: !!touched.location }}
+        >
+          <SelectField
+            name="location"
+            className="custom-dropdown"
+            placeholder="Location"
+            value={formValues.location}
+            onChange={(name: string, value: any) => {
+              setFieldTouched(name);
+              setFieldValue("location", value);
+            }}
+            options={stripeSupportedCountries}
           />
         </FormField>
       </div>
@@ -179,7 +181,8 @@ const UserDetailsForm: FC<UserDetailsFormProps> = ({
             label="Password"
           />
         </FormField>
-
+      </div>
+      <div className="form-fields">
         <FormField
           error={{ msg: errors.cpassword, touched: !!touched.cpassword }}
         >

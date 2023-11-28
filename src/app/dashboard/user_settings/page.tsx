@@ -5,7 +5,9 @@ import Form from "@components/FormElements/Form";
 import FormField from "@components/FormElements/FormField";
 import FormInput from "@components/FormElements/FormInput";
 import FormLabel from "@components/FormElements/FormLabel";
+import SelectField from "@components/FormElements/SelectField";
 import CheckboxWithLabel from "@components/FormElements/Checkbox";
+import { stripeSupportedCountries } from "@utils/constants";
 
 const UserSettings = () => {
   return (
@@ -114,25 +116,22 @@ const UserSettings = () => {
                   />
                 </FormField>
 
-                <FormField
-                  error={{
-                    msg: "",
-                    touched: false,
-                  }}
-                >
+                <FormField error={{ msg: "", touched: false }}>
                   <FormLabel
                     className="form-label"
                     htmlFor="location"
-                    label="location"
+                    label="Location"
                   />
-                  <FormInput
-                    required
-                    disabled={false}
-                    type="text"
-                    name="location"
-                    className="form-input"
-                    onChange={(e) => {}}
+                  <SelectField
                     value={""}
+                    name="location"
+                    placeholder="Select your location"
+                    className="form-input_dropdown"
+                    onChange={(name: string, value: any) => {
+                      // setFieldTouched(name);
+                      // setFieldValue("location", value);
+                    }}
+                    options={stripeSupportedCountries}
                   />
                 </FormField>
               </div>

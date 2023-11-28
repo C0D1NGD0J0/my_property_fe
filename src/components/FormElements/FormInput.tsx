@@ -46,11 +46,11 @@ const FormInput: FC<FormInputProps> = ({
       onChange={onChange}
       disabled={disabled || false}
       maxLength={maxLength}
-      className={`${className} ${isTouched ? "" : "untouched"}`}
+      className={`${className} ${isTouched ? "touched" : "untouched"}`}
       required={required || false}
       placeholder={placeholder || " "}
       aria-label={ariaLabel || name}
-      onBlur={handleBlur}
+      onFocus={handleBlur}
     />
   );
 };

@@ -58,8 +58,8 @@ const SelectField: FC<FormSelectProps> = ({
       tabIndex={0}
       style={styles}
       onKeyDown={debounce(handleKeyDown, 800)}
-      id={id ? id : "custom-dropdown"}
-      className={`custom-dropdown ${className ? className : ""}`}
+      id={id ? id : className}
+      className={`${className ? className : ""}`}
     >
       <div
         className="selected-option"

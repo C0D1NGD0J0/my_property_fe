@@ -84,7 +84,7 @@ export default function Login() {
         <>
           <div className="auth-page_content-header">
             <h2 className="header-title">Login</h2>
-            <hr className="titleBar-sm" />
+            <hr className="titleBar-sm center" />
             <p className="header-subtitle">
               You dont have an account yet?
               <Link href="/signup">
