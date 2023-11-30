@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Signup from "@app/(auth)/signup/page";
-import { NotificationProvider } from "@contexts/notification";
+import { NotificationProvider } from "@hooks/notification";
 import { mockPlansData } from "../shared/shared";
 
 const Wrapper = () => {

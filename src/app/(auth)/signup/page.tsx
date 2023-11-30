@@ -9,7 +9,7 @@ import authService from "@services/auth";
 import { SWR_KEY } from "@utils/constants";
 import Loading from "@components/ui/Loading";
 import UserInfo from "@app/(auth)/signup/UserInfo";
-import { useNotification } from "@contexts/notification";
+import { useNotification } from "@hooks/notification";
 import authValidation from "@validations/auth.validation";
 import { IInitialValues } from "@interfaces/user.interface";
 import PlanSelection from "@app/(auth)/signup/PlanSelectionStep";

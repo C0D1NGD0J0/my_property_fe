@@ -2,6 +2,7 @@
 import React, { ReactNode } from "react";
 import { Breadcrumb } from "antd";
 import { usePathname } from "next/navigation";
+import Button from "@components/FormElements/Button";
 
 interface ContentHeaderProps {
   showBtn: boolean;
@@ -25,14 +26,15 @@ export const ContentHeader: React.FC<ContentHeaderProps | null> = (props) => {
       </div>
       {props?.showBtn ? (
         <div className="section-actions">
-          <button
-            onClick={props.onButtonClick}
+          <Button
             type="button"
-            className="btn btn-outline-warning open-btn"
-          >
-            <i className="bx bx-pencil"></i>
-            Update details
-          </button>
+            label="Update details"
+            iconPosition="left"
+            renderChildren={false}
+            onClick={props.onButtonClick ? props.onButtonClick : () => ""}
+            className="btn-outline-warning"
+            icon={<i className="bx bx-pencil"></i>}
+          />
         </div>
       ) : null}
     </div>

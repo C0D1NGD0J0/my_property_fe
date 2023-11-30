@@ -7,7 +7,7 @@ import { useAuthStore } from "@store/auth.store";
 import Navbar from "@components/navigation/Navbar";
 import Sidebar from "@components/navigation/Sidebar";
 import { useRouter } from "next/navigation";
-import { useNotification } from "@contexts/notification";
+import { useNotification } from "@hooks/notification";
 import Loading from "@components/ui/Loading";
 import { ErrorResponse } from "@utils/errorHandler";
 

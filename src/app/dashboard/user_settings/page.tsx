@@ -1,15 +1,71 @@
 "use client";
-import React, { ReactNode } from "react";
-import { ContentHeader } from "@components/PageHeader";
+import React, { ReactNode, useState, useEffect } from "react";
+import { FormikValues, useFormik } from "formik";
+
+import userService from "@services/user";
+import CookieManager from "@utils/cookieManager";
 import Form from "@components/FormElements/Form";
-import FormField from "@components/FormElements/FormField";
-import FormInput from "@components/FormElements/FormInput";
-import FormLabel from "@components/FormElements/FormLabel";
-import SelectField from "@components/FormElements/SelectField";
-import CheckboxWithLabel from "@components/FormElements/Checkbox";
+import { useNotification } from "@hooks/notification";
+import { ContentHeader } from "@components/PageHeader";
+// import userValidation from "@validations/user.validation";
+import {
+  Select as SelectField,
+  FormField,
+  FormInput,
+  FormLabel,
+  Checkbox,
+} from "@components/FormElements";
 import { stripeSupportedCountries } from "@utils/constants";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@components/ui/Loading";
+
+const initialValues = {
+  email: "",
+  firstName: "",
+  lastName: "",
+  location: "",
+  phoneNumber: "",
+  password: "",
+  companyName: "",
+};
 
 const UserSettings = () => {
+  const { openNotification } = useNotification();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["userInfo"],
+    queryFn: async () => await userService.getUserEditInfo(),
+  });
+  const handleSubmit = async (values: FormikValues) => {
+    try {
+      // to do
+    } catch (e: any) {
+      return openNotification("error", "Login Error", e.data);
+    }
+  };
+
+  const formik = useFormik({
+    onSubmit: handleSubmit,
+    initialValues: {
+      email: data?.data.email || "",
+      firstName: data?.data.firstName || "",
+      lastName: data?.data.lastName || "",
+      location: data?.data.location || "",
+      phoneNumber: data?.data.phoneNumber || "",
+      password: data?.data.password || "******",
+      companyName: data?.data.companyName || "",
+    },
+    validate: async (val) => {
+      // const res = await userValidation.login(val);
+      // return res.isValid ? {} : res.errors;
+    },
+    enableReinitialize: true,
+  });
+
+  if (isLoading) {
+    return <Loading description="Loading user data..." />;
+  }
+
+  console.log(formik.values);
   return (
     <>
       <ContentHeader showBtn={true} pageTitle="User Settings" />
@@ -26,8 +82,8 @@ const UserSettings = () => {
               <div className="form-fields">
                 <FormField
                   error={{
-                    msg: "",
-                    touched: false,
+                    msg: formik.errors.firstName,
+                    touched: !!formik.touched.firstName,
                   }}
                 >
                   <FormLabel
@@ -41,15 +97,18 @@ const UserSettings = () => {
                     type="text"
                     name="firstName"
                     className="form-input"
-                    onChange={(e) => {}}
-                    value={""}
+                    onChange={(e) => {
+                      formik.setFieldTouched("firstName");
+                      formik.handleChange(e);
+                    }}
+                    value={formik.values.firstName}
                   />
                 </FormField>
 
                 <FormField
                   error={{
-                    msg: "",
-                    touched: false,
+                    msg: formik.errors.lastName,
+                    touched: !!formik.touched.lastName,
                   }}
                 >
                   <FormLabel
@@ -64,16 +123,19 @@ const UserSettings = () => {
                     name="lastName"
                     placeholder="Enter last name"
                     className="form-input"
-                    onChange={(e) => {}}
-                    value={""}
+                    onChange={(e) => {
+                      formik.setFieldTouched("lastName");
+                      formik.handleChange(e);
+                    }}
+                    value={formik.values.lastName}
                   />
                 </FormField>
               </div>
               <div className="form-fields">
                 <FormField
                   error={{
-                    msg: "",
-                    touched: false,
+                    msg: formik.errors.email,
+                    touched: !!formik.touched.email,
                   }}
                 >
                   <FormLabel
@@ -87,8 +149,11 @@ const UserSettings = () => {
                     type="email"
                     name="email"
                     className="form-input"
-                    onChange={(e) => {}}
-                    value={""}
+                    onChange={(e) => {
+                      formik.setFieldTouched("email");
+                      formik.handleChange(e);
+                    }}
+                    value={formik.values.email}
                   />
                 </FormField>
               </div>
@@ -96,8 +161,8 @@ const UserSettings = () => {
               <div className="form-fields">
                 <FormField
                   error={{
-                    msg: "",
-                    touched: false,
+                    msg: formik.errors.phoneNumber,
+                    touched: !!formik.touched.phoneNumber,
                   }}
                 >
                   <FormLabel
@@ -111,25 +176,33 @@ const UserSettings = () => {
                     type="text"
                     name="phoneNumber"
                     className="form-input"
-                    onChange={(e) => {}}
-                    value={""}
+                    onChange={(e) => {
+                      formik.setFieldTouched("email");
+                      formik.handleChange(e);
+                    }}
+                    value={formik.values.phoneNumber}
                   />
                 </FormField>
 
-                <FormField error={{ msg: "", touched: false }}>
+                <FormField
+                  error={{
+                    msg: formik.errors.location,
+                    touched: !!formik.touched.location,
+                  }}
+                >
                   <FormLabel
                     className="form-label"
                     htmlFor="location"
                     label="Location"
                   />
                   <SelectField
-                    value={""}
+                    value={formik.values.location}
                     name="location"
                     placeholder="Select your location"
                     className="form-input_dropdown"
                     onChange={(name: string, value: any) => {
-                      // setFieldTouched(name);
-                      // setFieldValue("location", value);
+                      formik.setFieldTouched(name);
+                      formik.setFieldValue(name, value);
                     }}
                     options={stripeSupportedCountries}
                   />
@@ -145,11 +218,11 @@ const UserSettings = () => {
 
               <div className="form-fields">
                 <div className="form-field">
-                  <CheckboxWithLabel name="emailNotification" label="Email" />
+                  <Checkbox name="emailNotification" label="Email" />
                 </div>
 
                 <div className="form-field">
-                  <CheckboxWithLabel name="smsNotifications" label="SMS" />
+                  <Checkbox name="smsNotifications" label="SMS" />
                 </div>
               </div>
             </div>
@@ -176,10 +249,13 @@ const UserSettings = () => {
                     required
                     disabled={false}
                     type="password"
-                    name="firstName"
+                    name="password"
                     className="form-input"
-                    onChange={(e) => {}}
-                    value={""}
+                    onChange={(e) => {
+                      formik.setFieldTouched("password");
+                      formik.handleChange(e);
+                    }}
+                    value={formik.values.password}
                   />
                 </FormField>
               </div>

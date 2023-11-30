@@ -5,7 +5,7 @@ import { stripeSupportedCountries } from "@utils/constants";
 import FormField from "@components/FormElements/FormField";
 import FormInput from "@components/FormElements/FormInput";
 import FormLabel from "@components/FormElements/FormLabel";
-import SelectField from "@components/FormElements/SelectField";
+import SelectField from "@components/FormElements/Select";
 
 interface UserDetailsFormProps {
   errors: any;

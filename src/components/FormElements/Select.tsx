@@ -27,7 +27,7 @@ interface FormSelectProps {
   onChange: (name: string, value: any) => void;
 }
 
-const SelectField: FC<FormSelectProps> = ({
+const SelectInput: FC<FormSelectProps> = ({
   id = "",
   name,
   value,
@@ -92,4 +92,4 @@ const SelectField: FC<FormSelectProps> = ({
   );
 };
 
-export default SelectField;
+export default SelectInput;

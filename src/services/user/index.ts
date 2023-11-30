@@ -18,6 +18,15 @@ class UserService {
       throw error;
     }
   };
+
+  getUserEditInfo = async () => {
+    try {
+      const res = await axios.get(`${this.baseUrl}/user_edit_info`);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 export default new UserService();

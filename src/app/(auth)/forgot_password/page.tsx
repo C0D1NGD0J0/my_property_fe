@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import authService from "@services/auth";
 import Loading from "@components/ui/Loading";
-import { useNotification } from "@contexts/notification";
+import { useNotification } from "@hooks/notification";
 import authValidation from "@validations/auth.validation";
 import FormInput from "@components/FormElements/FormInput";
 import FormLabel from "@components/FormElements/FormLabel";
