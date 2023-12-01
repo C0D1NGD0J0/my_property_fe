@@ -45,3 +45,18 @@ export interface ICurrentUser {
   fullname: string | null;
   isSubscriptionActive?: boolean;
 }
+
+export interface IEditUser {
+  email: string;
+  firstName: string;
+  lastName: string;
+  location: string;
+  phoneNumber: string;
+  password: string;
+  companyName: string;
+  newPassword: string;
+  notifications: {
+    sms: boolean;
+    email: boolean;
+  };
+}

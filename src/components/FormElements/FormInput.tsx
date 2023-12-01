@@ -46,7 +46,9 @@ const FormInput: FC<FormInputProps> = ({
       onChange={onChange}
       disabled={disabled || false}
       maxLength={maxLength}
-      className={`${className} ${isTouched ? "touched" : "untouched"}`}
+      className={`${className} ${isTouched ? "touched" : "untouched"} ${
+        disabled ? "input-disabled" : ""
+      }`}
       required={required || false}
       placeholder={placeholder || " "}
       aria-label={ariaLabel || name}

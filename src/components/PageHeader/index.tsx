@@ -7,7 +7,12 @@ import Button from "@components/FormElements/Button";
 interface ContentHeaderProps {
   showBtn: boolean;
   pageTitle: string;
-  onButtonClick?: () => void;
+  btnConfig?: {
+    className: string;
+    label: string;
+    icon: any;
+    onClick?: () => void;
+  };
 }
 
 export const ContentHeader: React.FC<ContentHeaderProps | null> = (props) => {
@@ -28,12 +33,14 @@ export const ContentHeader: React.FC<ContentHeaderProps | null> = (props) => {
         <div className="section-actions">
           <Button
             type="button"
-            label="Update details"
             iconPosition="left"
             renderChildren={false}
-            onClick={props.onButtonClick ? props.onButtonClick : () => ""}
-            className="btn-outline-warning"
-            icon={<i className="bx bx-pencil"></i>}
+            label={props.btnConfig?.label || ""}
+            icon={props.btnConfig?.icon || ""}
+            className={`btn ${props.btnConfig?.className}`}
+            onClick={
+              props.btnConfig?.onClick ? props.btnConfig.onClick : () => null
+            }
           />
         </div>
       ) : null}

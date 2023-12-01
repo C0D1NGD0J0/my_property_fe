@@ -137,11 +137,20 @@ textarea {
       }
     }
   }
+
+  &::placeholder {
+    color: hsla($grey-color...);
+    font-size: $fs-md;
+  }
+
+  &.input-disabled {
+    background-color: transparent !important;
+  }
 }
 
 .form-label {
   display: block;
-  color: hsl($grey-color...);
+  color: hsla($grey-color...);
   text-transform: capitalize;
   font-size: clamp($fs-sm, 10vw, $fs-md);
 }
@@ -320,8 +329,13 @@ textarea {
   & .form-input_select {
     margin-top: 0.4rem;
     border-radius: 0.3rem;
+    // text-transform: capitalize;
     color: hsl($primary-color...);
     border: 1px solid rgba(103, 116, 131, 0.3);
+  }
+
+  & input[type="email"] {
+    text-transform: initial;
   }
 
   & .form-input_file {

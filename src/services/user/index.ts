@@ -1,4 +1,5 @@
 import axios from "@configs/axios";
+import { IEditUser } from "@interfaces/user.interface";
 
 class UserService {
   private baseUrl;
@@ -22,6 +23,18 @@ class UserService {
   getUserEditInfo = async () => {
     try {
       const res = await axios.get(`${this.baseUrl}/user_edit_info`);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  updateUserInfo = async (cid: string, userdata: IEditUser) => {
+    try {
+      const res = await axios.put(
+        `${this.baseUrl}/${cid}/update_account`,
+        userdata,
+      );
       return res;
     } catch (error) {
       throw error;
