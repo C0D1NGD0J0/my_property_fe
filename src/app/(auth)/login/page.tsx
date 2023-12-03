@@ -1,17 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { FormikValues, useFormik } from "formik";
+import { Button, Result } from "antd";
 import { useRouter } from "next/navigation";
+import { FormikValues, useFormik } from "formik";
 
 import authService from "@services/auth";
-import { useNotification } from "@contexts/notification";
-import FormInput from "@components/ui/FormElements/FormInput";
-import FormLabel from "@components/ui/FormElements/FormLabel";
-import FormField from "@components/ui/FormElements/FormField";
-import authValidation from "@validations/auth.validation";
-import { Button, Result } from "antd";
 import CookieManager from "@utils/cookieManager";
+import { useNotification } from "@hooks/notification";
+import { FormField, FormInput, FormLabel } from "@components/FormElements";
+import authValidation from "@validations/auth.validation";
 
 export default function Login() {
   const { push } = useRouter();
@@ -84,7 +82,7 @@ export default function Login() {
         <>
           <div className="auth-page_content-header">
             <h2 className="header-title">Login</h2>
-            <hr className="titleBar-sm" />
+            <hr className="titleBar-sm center" />
             <p className="header-subtitle">
               You dont have an account yet?
               <Link href="/signup">

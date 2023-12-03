@@ -1,21 +1,135 @@
-a, a:active {
-	outline: transparent;
-	font-size: $fs-sm;
-	color: hsl($black-color...);
-	font-weight: $fw-200;
-	text-decoration: none;
-	transition: $transition;
-	-webkit-transition: $transition;
-	-moz-transition: $transition;
-	-ms-transition: $transition;
-	-o-transition: $transition;
-  
+a,
+a:active {
+  outline: transparent;
+  font-size: $fs-sm;
+  color: hsl($black-color...);
+  font-weight: $fw-200;
+  text-decoration: none;
+  transition: $transition;
+  -webkit-transition: $transition;
+  -moz-transition: $transition;
+  -ms-transition: $transition;
+  -o-transition: $transition;
+
   &:focus {
     outline: 1px solid hsl($primary-color...);
   }
 
   &:hover {
     text-decoration: transparent;
-    color: darken(hsl($black-color...), 10%); 
+    color: darken(hsl($black-color...), 10%);
   }
+}
+
+// Base button styles
+.btn,
+.btn:link,
+.btn:visited {
+  border: none;
+  display: flex;
+  cursor: pointer;
+  font-size: $fs-sm;
+  padding: 0.9rem 2.5rem;
+  align-items: center;
+  border-radius: 0.8rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in;
+}
+
+// Icon inside button
+.btn i {
+  font-size: 2rem;
+  margin-right: 0.5rem;
+}
+
+// Hover state for button
+.btn:hover {
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+}
+
+// Small button variant
+.btn.btn-sm {
+  text-align: center;
+  padding: 0.4rem 0.8rem;
+}
+
+// Active and focus states for button
+.btn:active,
+.btn:focus {
+  outline: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+// Outline button variants
+.btn.btn-outline {
+  background-color: hsl($primary-color...);
+  color: hsl($white-color...);
+}
+
+.btn.btn-outline-ghost {
+  background-color: transparent;
+  color: hsl($primary-color...);
+  border: 1px solid hsl($primary-color...);
+}
+
+.btn-outline-warning {
+  background-color: hsl($warning-color...);
+  color: hsl($primary-color...);
+}
+
+.btn-outline:hover {
+  color: hsl($grey-color...);
+}
+
+// Text button variant
+.btn_text:link,
+.btn_text:visited {
+  padding: 5px;
+  display: inline-block;
+  text-decoration: none;
+  color: hsl($primary-color...);
+}
+
+.btn_text:hover {
+  color: hsl($primary-color...);
+  transform: translateY(-0.2rem);
+}
+
+// Block level button variant
+.btn-block {
+  width: 100%;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .btn,
+  .btn-block {
+    padding: 1rem 2rem; // Larger touch targets on mobile
+    font-size: 1.2rem; // Larger font size for better readability
+  }
+}
+
+/* LINK */
+.link {
+  outline: none;
+  font-weight: 300;
+  font-size: $fs-sm;
+  text-decoration: none;
+  transition: $transition;
+  color: hsl($black-color...);
+}
+
+.link:hover,
+.link:focus,
+.link:active,
+.link:visited {
+  outline: 0;
+  text-decoration: none;
+  transition: $transition;
+  color: hsl($primary-color...);
 }

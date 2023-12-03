@@ -1,0 +1,16 @@
+.setting-page {
+  gap: 2rem;
+  height: 100%;
+  display: grid;
+  max-width: 100%;
+  grid-template-rows: 1fr;
+  grid-template-areas: "c1 c2";
+  grid-template-columns: 68% 30%;
+
+  &_content {
+    width: 100%;
+    grid-area: c1;
+    padding: 1rem;
+    background: rgb(255, 255, 255, .8);
+  }
+}

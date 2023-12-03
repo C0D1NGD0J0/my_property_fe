@@ -5,7 +5,7 @@ import CookieManager from "@utils/cookieManager";
 
 interface AuthState {
   isLoggedIn: boolean;
-  user: ICurrentUser | null;
+  user?: ICurrentUser | null;
   setUser: (user: ICurrentUser | null) => void;
   logout: () => void;
 }

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -29,6 +29,27 @@ function Index() {
   const { push } = useRouter();
   const urlPath = usePathname();
   const { user, logout } = useAuthStore();
+
+  const [isHovering, setIsHovering] = useState(false);
+  const submenuRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    const handleMouseOver = () => setIsHovering(true);
+    const handleMouseOut = () => setIsHovering(false);
+
+    // Attach event listeners to the element with the `hasSubmenu` class
+    const submenuElement = submenuRef.current;
+    if (submenuElement) {
+      submenuElement?.addEventListener("mouseover", handleMouseOver);
+      submenuElement.addEventListener("mouseout", handleMouseOut);
+
+      // Cleanup function to remove event listeners
+      return () => {
+        submenuElement.removeEventListener("mouseover", handleMouseOver);
+        submenuElement.removeEventListener("mouseout", handleMouseOut);
+      };
+    }
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -70,11 +91,11 @@ function Index() {
           );
         })}
 
-        <li className="header-menu_item hasSubmenu">
+        <li className="header-menu_item hasSubmenu" ref={submenuRef}>
           <a href="#!" className="username">
             {user?.fullname}
           </a>
-          <div className="submenu-box">
+          <div className={`submenu-box ${isHovering ? "show" : "hide"}`}>
             <ul className="submenu">
               {user?.linkedAccounts.map((item) => {
                 if (item.cid !== user.cid) {
@@ -85,16 +106,18 @@ function Index() {
               })}
               <li>
                 <Link
-                  href="/profile"
-                  className={urlPath === "/profile" ? "active" : ""}
+                  href="/dashboard/profile"
+                  className={urlPath === "/dashboard/profile" ? "active" : ""}
                 >
                   <i className="bx bx-user"></i>Profile
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/settings"
-                  className={urlPath === "/settings" ? "active" : ""}
+                  href="/dashboard/user_settings"
+                  className={
+                    urlPath === "/dashboard/user_settings" ? "active" : ""
+                  }
                 >
                   <i className="bx bx-cog"></i>Settings
                 </Link>

@@ -1,10 +1,11 @@
 import "@sass/main.scss";
 import type { Metadata } from "next";
 import StyledComponentsRegistry from "../../lib/AntdRegistry";
-import { NotificationProvider } from "../contexts/notification";
+import { NotificationProvider } from "@hooks/notification";
+import { RQProvider } from "@hooks/reactQuery";
 import "./preload-resources";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "My Property",
   viewport: "width=device-width, initial-scale=1.0",
   description: "Property management system",
@@ -15,7 +16,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <body>
         <StyledComponentsRegistry>
-          <NotificationProvider>{children}</NotificationProvider>
+          <NotificationProvider>
+            <RQProvider>{children}</RQProvider>
+          </NotificationProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

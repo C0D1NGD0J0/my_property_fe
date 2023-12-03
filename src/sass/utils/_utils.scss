@@ -24,10 +24,22 @@
 
 .titleBar-sm {
   width: 10%;
-  margin: 0 auto;
   border-color: hsl($secondary-color...);
+
+  &.center {
+    margin: 0 auto;
+  }
 }
 
 .danger {
   color: hsl($danger-color...);
+}
+
+.show {
+  display: block;
+  position: relative;
+}
+
+.hide {
+  display: none;
 }

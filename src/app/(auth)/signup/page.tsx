@@ -9,7 +9,7 @@ import authService from "@services/auth";
 import { SWR_KEY } from "@utils/constants";
 import Loading from "@components/ui/Loading";
 import UserInfo from "@app/(auth)/signup/UserInfo";
-import { useNotification } from "@contexts/notification";
+import { useNotification } from "@hooks/notification";
 import authValidation from "@validations/auth.validation";
 import { IInitialValues } from "@interfaces/user.interface";
 import PlanSelection from "@app/(auth)/signup/PlanSelectionStep";
@@ -156,12 +156,12 @@ export default function Signup() {
             {currentStep === 0 ? (
               <>
                 <h2 className="header-title">Select Account Plan</h2>
-                <hr className="titleBar-sm" />
+                <hr className="titleBar-sm center" />
               </>
             ) : (
               <>
                 <h2 className="header-title">Sign Up</h2>
-                <hr className="titleBar-sm" />
+                <hr className="titleBar-sm center" />
                 <p className="header-subtitle">
                   Alredy have an account?
                   <Link href="/login">

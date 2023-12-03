@@ -27,7 +27,7 @@ interface FormSelectProps {
   onChange: (name: string, value: any) => void;
 }
 
-const SelectField: FC<FormSelectProps> = ({
+const SelectInput: FC<FormSelectProps> = ({
   id = "",
   name,
   value,
@@ -58,8 +58,8 @@ const SelectField: FC<FormSelectProps> = ({
       tabIndex={0}
       style={styles}
       onKeyDown={debounce(handleKeyDown, 800)}
-      id={id ? id : "custom-dropdown"}
-      className={`custom-dropdown ${className ? className : ""}`}
+      id={id ? id : className}
+      className={`${className ? className : ""}`}
     >
       <div
         className="selected-option"
@@ -92,4 +92,4 @@ const SelectField: FC<FormSelectProps> = ({
   );
 };
 
-export default SelectField;
+export default SelectInput;

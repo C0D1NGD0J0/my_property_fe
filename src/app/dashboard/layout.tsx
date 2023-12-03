@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Layout } from "antd";
 
 import userService from "@services/user";
 import CookieManager from "@utils/cookieManager";
@@ -8,11 +7,9 @@ import { useAuthStore } from "@store/auth.store";
 import Navbar from "@components/navigation/Navbar";
 import Sidebar from "@components/navigation/Sidebar";
 import { useRouter } from "next/navigation";
-import { useNotification } from "@contexts/notification";
+import { useNotification } from "@hooks/notification";
 import Loading from "@components/ui/Loading";
 import { ErrorResponse } from "@utils/errorHandler";
-
-const { Content } = Layout;
 
 export default function DashboardLayout({
   children,
@@ -65,7 +62,7 @@ export default function DashboardLayout({
       <Sidebar />
       <main className="main">
         <Navbar />
-        <Content>{children}</Content>
+        <div className="main-content">{children}</div>
       </main>
     </div>
   );

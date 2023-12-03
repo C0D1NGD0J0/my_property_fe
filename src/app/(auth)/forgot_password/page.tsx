@@ -6,11 +6,11 @@ import Link from "next/link";
 
 import authService from "@services/auth";
 import Loading from "@components/ui/Loading";
-import { useNotification } from "@contexts/notification";
+import { useNotification } from "@hooks/notification";
 import authValidation from "@validations/auth.validation";
-import FormInput from "@components/ui/FormElements/FormInput";
-import FormLabel from "@components/ui/FormElements/FormLabel";
-import FormField from "@components/ui/FormElements/FormField";
+import FormInput from "@components/FormElements/FormInput";
+import FormLabel from "@components/FormElements/FormLabel";
+import FormField from "@components/FormElements/FormField";
 
 export default function ForgotPassword() {
   const { openNotification } = useNotification();
@@ -41,7 +41,7 @@ export default function ForgotPassword() {
     <>
       <div className="auth-page_content-header">
         <h2 className="header-title">Forgot Password?</h2>
-        <hr className="titleBar-sm" />
+        <hr className="titleBar-sm center" />
         <p className="header-subtitle">
           No worries, we will send your reset instructions to your email.
         </p>

@@ -110,7 +110,9 @@
 .header {
   width: 100%;
   display: flex;
+  grid-row: 1 / 2;
   max-height: 7rem;
+  grid-area: navbar; // check the layout.scss page where its decleared
   align-items: center;
   padding: .6rem 1rem;
   background: hsl($primary-color...);
