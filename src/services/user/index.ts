@@ -20,9 +20,9 @@ class UserService {
     }
   };
 
-  getUserEditInfo = async () => {
+  getUserAccountInfo = async (cid: string) => {
     try {
-      const res = await axios.get(`${this.baseUrl}/user_edit_info`);
+      const res = await axios.get(`${this.baseUrl}/${cid}/account_info`);
       return res;
     } catch (error) {
       throw error;

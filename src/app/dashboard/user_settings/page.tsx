@@ -27,7 +27,7 @@ const UserSettings = () => {
   const { openNotification } = useNotification();
   const { data, isLoading } = useQuery({
     queryKey: ["userDetails", { id: user.id }],
-    queryFn: async () => await userService.getUserEditInfo(),
+    queryFn: async () => await userService.getUserAccountInfo(user.cid),
   });
   const mutation = useMutation({
     mutationFn: async ({
