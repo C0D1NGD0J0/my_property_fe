@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { IEditUser } from "@interfaces/user.interface";
+import { IEditClient, IEditUser } from "@interfaces/user.interface";
 
 class UserValidation {
   editUser = async (userData: IEditUser) => {
@@ -18,6 +18,41 @@ class UserValidation {
       }),
     });
     const result = userSchema.safeParse(userData);
+
+    if (result.success) {
+      // Data is valid, proceed with signup logic
+      return { isValid: true };
+    } else {
+      // Data is invalid, handle errors
+      const errors = this.parseZodError(result.error.issues);
+      return { isValid: false, errors };
+    }
+  };
+
+  editClient = async (clientData: IEditClient) => {
+    const clientSchema = z.object({
+      contactInfo: z.object({
+        email: z.string().email(),
+        address: z.string().optional(),
+        phoneNumber: z.string().optional(),
+        contactPerson: z.string().optional(),
+      }),
+      companyName: z.string().min(1, "Company name is required"),
+      legalEntityName: z.string().min(1, "Legal entity name is required"),
+      identification: z.object({
+        idType: z.string().min(1, "ID type is required"),
+        idNumber: z.string().min(1, "ID number is required"),
+        authority: z.string().min(1, "Authority is required"),
+        issueDate: z.string().min(1, "Issue date is required"),
+        expiryDate: z.string().min(1, "Expiry date is required"),
+        issuingState: z.string().min(1, "Issuing state is required"),
+      }),
+      businessRegistrationNumber: z
+        .string()
+        .min(1, "Business registration number is required"),
+    });
+
+    const result = clientSchema.safeParse(clientData);
 
     if (result.success) {
       // Data is valid, proceed with signup logic

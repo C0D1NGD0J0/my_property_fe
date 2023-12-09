@@ -9,7 +9,7 @@ interface TimedAlertProps {
 }
 
 const TimedAlert: React.FC<TimedAlertProps> = ({
-  duration = 3000,
+  duration,
   type,
   message,
   onClose,
@@ -17,11 +17,18 @@ const TimedAlert: React.FC<TimedAlertProps> = ({
   const [visible, setVisible] = useState<boolean>(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-    }, duration);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    if (duration) {
+      timer = setTimeout(() => {
+        setVisible(false);
+      }, duration);
+    }
 
-    return () => clearTimeout(timer);
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [duration]);
 
   return (
@@ -32,6 +39,7 @@ const TimedAlert: React.FC<TimedAlertProps> = ({
           type={type}
           message={message}
           onClose={onClose}
+          showIcon
           className="timed-alert"
         />
       )}

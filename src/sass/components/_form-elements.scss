@@ -102,7 +102,14 @@ textarea {
       justify-content: space-between; /* Space between the selected option and chevron */
     }
 
+    .selected-value {
+      font-size: $fs-md;
+      color: hsl($primary-color...);
+    }
+
     .selected-chevron {
+      font-size: $fs-lg;
+      top: 0.25rem;
       position: relative; /* Position it relative to the selected-option */
       margin-left: auto; /* Push it to the right */
     }
@@ -119,16 +126,23 @@ textarea {
       border: 1px solid #cccccc; /* Border to match the dropdown */
       border-top: none; /* Remove top border to blend with the selected-option */
       border-radius: 0 0 4px 4px; /* Only round the bottom corners */
-      background-color: #ffffff; /* Background to match the dropdown */
+      background-color: hsl(
+        $white-color...
+      ); /* Background to match the dropdown */
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for depth */
 
       .option-item {
         padding: 10px;
         cursor: pointer;
-        font-weight: 300;
-        background-color: #ffffff; /* Background to match the dropdown */
+        font-size: $fs-md;
+        text-transform: lowercase;
+        background-color: hsl(
+          $white-color...
+        ); /* Background to match the dropdown */
         &:hover {
+          font-weight: bold;
           background-color: #f2f2f2; /* A light grey for hover state */
+          color: hsl($primary-color...);
         }
 
         .option-icon {
@@ -146,12 +160,25 @@ textarea {
   &.input-disabled {
     background-color: transparent !important;
   }
+
+  &.untouched {
+    border-bottom: 2px solid initial; /* or any default color */
+  }
+  &.touched:valid {
+    transition: all 0.2s ease-in-out;
+    border-bottom: 2px solid green;
+  }
+  &:focus.touched:invalid,
+  &:focus.untouched:invalid {
+    transition: all 0.2s ease-in-out;
+    border-bottom: 2px solid red;
+  }
 }
 
 .form-label {
   display: block;
   color: hsla($grey-color...);
-  text-transform: capitalize;
+  // text-transform: capitalize;
   font-size: clamp($fs-sm, 10vw, $fs-md);
 }
 

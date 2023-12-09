@@ -26,8 +26,9 @@ const UserSettings = () => {
   const [isEditMode, setEditMode] = useState(true);
   const { openNotification } = useNotification();
   const { data, isLoading } = useQuery({
-    queryKey: ["userDetails", { id: user.id }],
+    queryKey: ["userDetails", { id: user?.id }],
     queryFn: async () => await userService.getUserAccountInfo(user.cid),
+    enabled: !!user,
   });
   const mutation = useMutation({
     mutationFn: async ({
@@ -52,6 +53,9 @@ const UserSettings = () => {
         queryClient.invalidateQueries({
           queryKey: ["userDetails", { id: user.id }],
         });
+        queryClient.invalidateQueries({
+          queryKey: ["currentuser"],
+        });
       }
     } catch (e: any) {
       return openNotification("error", "Update error", e.data);
@@ -70,8 +74,8 @@ const UserSettings = () => {
       companyName: data?.data.companyName || "",
       newPassword: "",
       notifications: {
-        sms: data?.data?.notifications?.sms,
-        email: data?.data?.notifications?.email,
+        sms: !!data?.data?.notifications?.sms,
+        email: !!data?.data?.notifications?.email,
       },
     },
     validate: async (val) => {
