@@ -60,3 +60,27 @@ export interface IEditUser {
     email: boolean;
   };
 }
+
+interface Identification {
+  idType: string;
+  idNumber: string;
+  authority: string;
+  issueDate: string;
+  expiryDate: string;
+  issuingState: string;
+}
+
+interface ContactInfo {
+  email: string;
+  address: string;
+  phoneNumber: string;
+  contactPerson: string;
+}
+
+export interface IEditClient {
+  contactInfo: ContactInfo;
+  companyName: string;
+  legalEntityName: string;
+  identification: Identification;
+  businessRegistrationNumber: string;
+}

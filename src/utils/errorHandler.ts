@@ -57,10 +57,9 @@ export default class APIError extends Error {
         const valuesArray = (data as ApiErrorObject[]).flatMap((obj) =>
           Object.values(obj),
         );
-        const formattedString = valuesArray.join("\n");
         return {
           success: false,
-          data: formattedString,
+          data: valuesArray,
         };
       }
     }

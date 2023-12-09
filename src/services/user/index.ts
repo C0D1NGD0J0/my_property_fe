@@ -1,5 +1,5 @@
 import axios from "@configs/axios";
-import { IEditUser } from "@interfaces/user.interface";
+import { IEditClient, IEditUser } from "@interfaces/user.interface";
 
 class UserService {
   private baseUrl;
@@ -34,6 +34,38 @@ class UserService {
       const res = await axios.put(
         `${this.baseUrl}/${cid}/update_account`,
         userdata,
+      );
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  getClientAccountInfo = async (cid: string) => {
+    try {
+      const res = await axios.get<{
+        data: {
+          clientInfo: {
+            accountType: {
+              isEnterpriseAccount: boolean;
+            };
+            _id: string;
+            id: string;
+            enterpriseProfile: IEditClient;
+          };
+        };
+      }>(`${this.baseUrl}/${cid}/client_account_info`);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  updateClientInfo = async (cid: string, data: FormData) => {
+    try {
+      const res = await axios.put(
+        `${this.baseUrl}/${cid}/update_client_account`,
+        data,
       );
       return res;
     } catch (error) {

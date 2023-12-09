@@ -1,10 +1,9 @@
 .timed-alert {
-  top: 0;
-  right: 25px;
-  padding: 2rem;
+  top: 6.5rem;
+  right: 23px;
+  padding: 1rem;
+  max-width: 50%;
   position: fixed !important;
-  min-height: 15rem;
-  max-width: 25rem;
 }
 
 .auth-form {
@@ -16,7 +15,7 @@
 .action-fields {
   width: 100%;
   display: flex;
-  padding: .7rem 0;
+  padding: 0.7rem 0;
   column-gap: 1rem;
   align-items: center;
   justify-content: flex-end;

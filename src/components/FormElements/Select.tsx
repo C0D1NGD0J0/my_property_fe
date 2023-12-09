@@ -66,8 +66,12 @@ const SelectInput: FC<FormSelectProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         aria-labelledby={ariaLabel ? ariaLabel : name}
       >
-        <span>{value || placeholder || "Select an option"}</span>
-        <span className="selected-chevron">X</span>
+        <span className="selected-value">
+          {value || placeholder || "Select an option"}
+        </span>
+        <span className="selected-chevron">
+          <i className="bx bxs-chevron-down"></i>
+        </span>
       </div>
       {isOpen && (
         <ul className="options-list">
