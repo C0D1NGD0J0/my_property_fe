@@ -7,7 +7,7 @@ import { FormikValues, useFormik } from "formik";
 
 import authService from "@services/auth";
 import CookieManager from "@utils/cookieManager";
-import { useNotification } from "@hooks/notification";
+import { useNotification } from "@hooks/useNotification";
 import { FormField, FormInput, FormLabel } from "@components/FormElements";
 import authValidation from "@validations/auth.validation";
 

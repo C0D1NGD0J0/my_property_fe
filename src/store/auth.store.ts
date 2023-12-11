@@ -1,7 +1,9 @@
 import { create } from "zustand";
-import { ICurrentUser } from "@interfaces/user.interface";
 import { mountStoreDevtool } from "simple-zustand-devtools";
+
+import authService from "@services/auth";
 import CookieManager from "@utils/cookieManager";
+import { ICurrentUser } from "@interfaces/user.interface";
 
 interface AuthState {
   isLoggedIn: boolean;
@@ -22,16 +24,22 @@ export const useAuthStore = create<AuthState>((set) => {
           isLoggedIn: !!data,
         };
       }),
-    logout: () =>
-      set((state) => {
-        // clear saved cookie
-        CookieManager.removeCookie("cid");
-        return {
-          ...state,
-          user: null,
-          isLoggedIn: false,
-        };
-      }),
+    logout: async () => {
+      try {
+        const res = await authService.logout();
+        set((state) => {
+          // clear saved cookie
+          CookieManager.removeCookie("cid");
+          return {
+            ...state,
+            user: null,
+            isLoggedIn: false,
+          };
+        });
+      } catch (error) {
+        return error;
+      }
+    },
   };
 });
 

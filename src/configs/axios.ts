@@ -57,6 +57,11 @@ class AxioService implements IAxiosService {
 
             return Promise.resolve(this._axios(originalRequest));
           }
+        } else if (
+          originalRequest.url == "/api/v1/auth/refresh_token" &&
+          error.response.status === 401
+        ) {
+          // handle errror if refresh-token is also expired
         }
         // Handle errors
         const apiError = new APIError().init(error);

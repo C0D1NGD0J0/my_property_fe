@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import authService from "@services/auth";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@store/auth.store";
-import CookieManager from "@utils/cookieManager";
 
 const links: {
   pathname: string;
@@ -53,11 +52,8 @@ function Index() {
 
   const handleLogout = async () => {
     try {
-      const res = await authService.logout();
-      if (res.success) {
-        logout();
-        push("/login");
-      }
+      logout();
+      push("/login");
     } catch (error) {
       console.error(error);
     }

@@ -35,6 +35,7 @@ const SelectInput: FC<FormSelectProps> = ({
   onChange,
   className,
   options,
+  disabled = false,
   placeholder,
   ariaLabel,
 }) => {
@@ -63,7 +64,7 @@ const SelectInput: FC<FormSelectProps> = ({
     >
       <div
         className="selected-option"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
         aria-labelledby={ariaLabel ? ariaLabel : name}
       >
         <span className="selected-value">

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import userService from "@services/user";
 import { Loading, Alert } from "@components/ui";
 import { useAuthStore } from "@store/auth.store";
-import { useNotification } from "@hooks/notification";
+import { useNotification } from "@hooks/useNotification";
 import { ContentHeader } from "@components/PageHeader";
 import userValidation from "@validations/user.validation";
 import {
@@ -34,7 +34,7 @@ const ClientSettings = () => {
   });
 
   useEffect(() => {
-    if (user.role !== "admin") {
+    if (user?.role !== "admin") {
       router.push("/dashboard");
     }
   }, []);

@@ -3,6 +3,10 @@ import { Alert, Spin } from "antd";
 
 const Loading = (props: {
   description?: string;
+  type?: string;
+  spinning?: boolean;
+  onClose?: () => void;
+  isCloseable?: boolean;
   size?: "regular" | "fullscreen";
 }) => {
   const styles: {
@@ -33,10 +37,12 @@ const Loading = (props: {
   let style = styles[props.size || "regular"];
   return (
     <div style={style}>
-      <Spin>
+      <Spin size="large" spinning={props.spinning || true}>
         <Alert
           description={props.description ? props.description : "Loading...."}
           type="info"
+          onClose={props.onClose}
+          closable={props.isCloseable || false}
         />
       </Spin>
     </div>

@@ -8,7 +8,7 @@ import { Button } from "antd";
 import authService from "@services/auth";
 import Loading from "@components/ui/Loading";
 import { hex64Regex } from "@utils/helperFN";
-import { useNotification } from "@hooks/notification";
+import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";
 import FormInput from "@components/FormElements/FormInput";
 import FormLabel from "@components/FormElements/FormLabel";

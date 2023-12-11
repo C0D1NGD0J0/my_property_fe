@@ -39,3 +39,18 @@ export const objectToFormData = (
   });
   return form;
 };
+
+// Throttle function definition
+export const throttle = <T extends any[]>(
+  func: (...args: T) => void,
+  limit: number,
+) => {
+  let inThrottle: boolean;
+  return function (this: ThisParameterType<typeof func>, ...args: T) {
+    if (!inThrottle) {
+      func.apply(this, args); // Apply the function
+      inThrottle = true; // Set throttle flag
+      setTimeout(() => (inThrottle = false), limit); // Reset throttle flag after limit
+    }
+  };
+};

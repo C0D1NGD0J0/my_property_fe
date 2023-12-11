@@ -7,17 +7,20 @@ import userService from "@services/user";
 import Loading from "@components/ui/Loading";
 import CookieManager from "@utils/cookieManager";
 import { useAuthStore } from "@store/auth.store";
-import { useNotification } from "@hooks/notification";
+import { useNotification } from "@hooks/useNotification";
+import useActive from "@hooks/useActive";
 
 export default function AuthTemplate({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cid = CookieManager.getCookie("cid");
-  const { openNotification } = useNotification();
-  const { setUser, isLoggedIn, logout } = useAuthStore();
   const { push } = useRouter();
+  const { isIdle } = useActive(300000); //5mins
+  const cid = CookieManager.getCookie("cid");
+  const { setUser, logout } = useAuthStore();
+  const { openNotification } = useNotification();
+  const [isIdleLoading, setIsIdleLoading] = useState(false);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["currentuser", cid],
@@ -33,7 +36,8 @@ export default function AuthTemplate({
   }, [data]);
 
   useEffect(() => {
-    if (error || !cid) {
+    // handle error from getcurrentuser request
+    if (error) {
       const errMessage = error
         ? (error as unknown as any).data
         : "An error occurred";
@@ -41,10 +45,30 @@ export default function AuthTemplate({
       logout();
       push("/login");
     }
-  }, [error, cid]);
+  }, [error]);
 
-  if (isLoading || !cid) {
+  useEffect(() => {
+    // handles user inactivity
+    if (isIdle) {
+      setIsIdleLoading(true);
+      logout();
+      setTimeout(() => {
+        return push("/login");
+      }, 10000); //10000 = 10sec
+    }
+  }, [isIdle]);
+
+  if (isLoading) {
     return <Loading size="fullscreen" description="Authenticating..." />;
+  }
+
+  if (isIdleLoading) {
+    return (
+      <Loading
+        size="fullscreen"
+        description="Signed out due to inactivity..."
+      />
+    );
   }
 
   return <>{children}</>;
