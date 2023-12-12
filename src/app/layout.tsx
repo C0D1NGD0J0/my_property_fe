@@ -1,8 +1,8 @@
 import "@sass/main.scss";
 import type { Metadata } from "next";
 import StyledComponentsRegistry from "../../lib/AntdRegistry";
-import { NotificationProvider } from "@hooks/notification";
-import { RQProvider } from "@hooks/reactQuery";
+import { NotificationProvider } from "@hooks/useNotification";
+import { RQProvider } from "@hooks/useReactQuery";
 import "./preload-resources";
 
 const metadata: Metadata = {

@@ -4,7 +4,7 @@ import { FormikValues, useFormik } from "formik";
 
 import userService from "@services/user";
 import Form from "@components/FormElements/Form";
-import { useNotification } from "@hooks/notification";
+import { useNotification } from "@hooks/useNotification";
 import { ContentHeader } from "@components/PageHeader";
 import {
   Select as SelectField,
@@ -237,8 +237,9 @@ const UserSettings = () => {
                       label="Location"
                     />
                     <SelectField
-                      value={formik.values.location}
                       name="location"
+                      disabled={!isEditMode || formik.isSubmitting}
+                      value={formik.values.location}
                       placeholder="Select your location"
                       className="form-input_dropdown"
                       onChange={(name: string, value: any) => {
