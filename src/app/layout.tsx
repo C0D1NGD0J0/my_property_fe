@@ -4,6 +4,8 @@ import StyledComponentsRegistry from "../../lib/AntdRegistry";
 import { NotificationProvider } from "@hooks/useNotification";
 import { RQProvider } from "@hooks/useReactQuery";
 import "./preload-resources";
+import { motion, AnimatePresence } from "framer-motion";
+import ClientSide from "@utils/ClientSide";
 
 const metadata: Metadata = {
   title: "My Property",
@@ -15,11 +17,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body>
-        <StyledComponentsRegistry>
-          <NotificationProvider>
-            <RQProvider>{children}</RQProvider>
-          </NotificationProvider>
-        </StyledComponentsRegistry>
+        <ClientSide>
+          <StyledComponentsRegistry>
+            <NotificationProvider>
+              <RQProvider>{children}</RQProvider>
+            </NotificationProvider>
+          </StyledComponentsRegistry>
+        </ClientSide>
       </body>
     </html>
   );

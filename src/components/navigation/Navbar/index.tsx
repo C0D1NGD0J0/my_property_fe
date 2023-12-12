@@ -53,6 +53,7 @@ function Index() {
   const handleLogout = async () => {
     try {
       logout();
+      await authService.logout();
       push("/login");
     } catch (error) {
       console.error(error);

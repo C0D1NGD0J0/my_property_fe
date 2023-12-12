@@ -2,23 +2,24 @@ import { throttle } from "@utils/helperFN";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 const useIdleTimer = (
-  idleTime: number, // Time in ms to determine inactivity
+  idleTime: number, // Time in minutes to determine inactivity
   checkInterval: number = 10000, // Interval to check for inactivity
 ) => {
+  const idleTimeInMilliseconds = idleTime * 60000;
   const [isIdle, setIdle] = useState(false); // State to track if user is idle
   const lastActivityTimeRef = useRef(Date.now()); // Ref to store the last activity time
 
   // Function to check inactivity
   const checkInactivity = useCallback(() => {
     // Check if the current time - last activity time is greater than idleTime
-    if (Date.now() - lastActivityTimeRef.current > idleTime) {
+    if (Date.now() - lastActivityTimeRef.current > idleTimeInMilliseconds) {
       if (!isIdle) {
         setIdle(true); // Set user as idle
       }
     } else {
       setIdle(false); // Reset idle state
     }
-  }, [idleTime, isIdle]);
+  }, [idleTimeInMilliseconds, isIdle]);
 
   // Function to update the last activity time
   const updateLastActivityTime = useCallback(() => {
@@ -29,7 +30,7 @@ const useIdleTimer = (
   // Calculate the remaining time
   const getRemainingTime = () => {
     const timeElapsed = Date.now() - lastActivityTimeRef.current;
-    return Math.max(idleTime - timeElapsed, 0);
+    return Math.max(idleTimeInMilliseconds - timeElapsed, 0);
   };
 
   // Effect to set up and clean event listeners and interval
@@ -60,7 +61,7 @@ const useIdleTimer = (
     };
   }, [checkInactivity, updateLastActivityTime, checkInterval]);
 
-  return { isIdle, remainingTime: getRemainingTime() }; // Return the idle state and remianing time left on timer
+  return isIdle; // Return the idle state
 };
 
 export default useIdleTimer;

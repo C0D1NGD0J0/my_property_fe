@@ -1,48 +1,34 @@
 import React from "react";
+import style from "./style.module.css";
 import { Alert, Spin } from "antd";
 
-const Loading = (props: {
+interface Test {
   description?: string;
   type?: string;
   spinning?: boolean;
   onClose?: () => void;
   isCloseable?: boolean;
   size?: "regular" | "fullscreen";
-}) => {
-  const styles: {
-    fullscreen: React.CSSProperties;
-    regular: React.CSSProperties;
-  } = {
-    fullscreen: {
-      zIndex: 99,
-      width: "100%",
-      display: "flex",
-      height: "100dvh",
-      position: "fixed",
-      top: 0,
-      left: 0,
-      backgroundColor: "rgba(239, 239, 239, 1)",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    regular: {
-      width: "100%",
-      height: "40rem",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  };
-
-  let style = styles[props.size || "regular"];
+}
+const Loading = ({
+  size = "regular",
+  description,
+  type,
+  onClose,
+  isCloseable,
+}: Test) => {
   return (
-    <div style={style}>
-      <Spin size="large" spinning={props.spinning || true}>
+    <div
+      className={`${style.custom_loading_style} ${
+        size === "regular" ? "regular" : "fullscreen"
+      }`}
+    >
+      <Spin size={"small"}>
         <Alert
-          description={props.description ? props.description : "Loading...."}
+          description={description ? description : "Loading...."}
           type="info"
-          onClose={props.onClose}
-          closable={props.isCloseable || false}
+          onClose={onClose}
+          closable={isCloseable || false}
         />
       </Spin>
     </div>

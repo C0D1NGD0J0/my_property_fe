@@ -86,7 +86,7 @@ const UserSettings = () => {
   });
 
   if (isLoading) {
-    return <Loading description="Loading user data..." />;
+    return <Loading size="regular" description="Loading user data..." />;
   }
 
   return (
