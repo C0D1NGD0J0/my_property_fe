@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { PersistOptions, createJSONStorage, persist } from "zustand/middleware";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 
 import authService from "@services/auth";
@@ -12,36 +13,44 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => {
-  return {
-    user: null,
-    isLoggedIn: false,
-    setUser: (data: ICurrentUser | null) =>
-      set((state) => {
-        return {
-          ...state,
-          user: data,
-          isLoggedIn: !!data,
-        };
-      }),
-    logout: async () => {
-      try {
-        const res = await authService.logout();
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      isLoggedIn: false,
+      setUser: (data: ICurrentUser | null) =>
         set((state) => {
-          // clear saved cookie
-          CookieManager.removeCookie("cid");
           return {
             ...state,
-            user: null,
-            isLoggedIn: false,
+            user: data,
+            isLoggedIn: !!data,
           };
-        });
-      } catch (error) {
-        return error;
-      }
+        }),
+      logout: async () => {
+        try {
+          set((state) => {
+            // clear saved cookie
+            CookieManager.removeCookie("cid");
+            // Remove the persisted state from sessionStorage
+            sessionStorage.removeItem("auth-storage");
+            return {
+              ...state,
+              user: null,
+              isLoggedIn: false,
+            };
+          });
+        } catch (error) {
+          return error;
+        }
+      },
+    }),
+    {
+      name: "auth-storage", // unique name for the storage (local storage key)
+      storage: createJSONStorage(() => sessionStorage),
+      partialize: (state) => ({ isLoggedIn: state.isLoggedIn }), // persist only isLoggedIn
     },
-  };
-});
+  ),
+);
 
 if (process.env.NODE_ENV === "development") {
   mountStoreDevtool("Store", useAuthStore);

@@ -1,6 +1,7 @@
 "use client";
 import Navbar from "@components/navigation/Navbar";
 import Sidebar from "@components/navigation/Sidebar";
+import PageTransition from "@utils/PageTransition";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Sidebar />
       <main className="main">
         <Navbar />
-        <div className="main-content">{children}</div>
+        <PageTransition>{children}</PageTransition>
       </main>
     </div>
   );

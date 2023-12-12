@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
 import userService from "@services/user";
+import useActive from "@hooks/useActive";
 import Loading from "@components/ui/Loading";
 import CookieManager from "@utils/cookieManager";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
-import useActive from "@hooks/useActive";
 
 export default function AuthTemplate({
   children,
@@ -16,9 +16,9 @@ export default function AuthTemplate({
   children: React.ReactNode;
 }) {
   const { push } = useRouter();
-  const { isIdle } = useActive(300000); //5mins
+  const isIdle = useActive(20); //20mins
   const cid = CookieManager.getCookie("cid");
-  const { setUser, logout } = useAuthStore();
+  const { setUser, logout, isLoggedIn } = useAuthStore();
   const { openNotification } = useNotification();
   const [isIdleLoading, setIsIdleLoading] = useState(false);
 
@@ -42,7 +42,7 @@ export default function AuthTemplate({
         ? (error as unknown as any).data
         : "An error occurred";
       openNotification("error", errMessage, "Please login to proceed.");
-      logout();
+      cid && logout();
       push("/login");
     }
   }, [error]);
@@ -51,14 +51,14 @@ export default function AuthTemplate({
     // handles user inactivity
     if (isIdle) {
       setIsIdleLoading(true);
-      logout();
+      cid && logout();
       setTimeout(() => {
         return push("/login");
       }, 10000); //10000 = 10sec
     }
   }, [isIdle]);
 
-  if (isLoading) {
+  if (isLoading && !isIdleLoading) {
     return <Loading size="fullscreen" description="Authenticating..." />;
   }
 

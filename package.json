@@ -27,6 +27,7 @@
     "eslint-config-next": "13.5.1",
     "format-money-js": "^1.6.3",
     "formik": "^2.4.5",
+    "framer-motion": "^10.16.16",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3",
     "next": "13.5.1",

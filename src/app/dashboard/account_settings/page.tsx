@@ -25,16 +25,17 @@ import dayjs from "dayjs";
 const ClientSettings = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const user = useAuthStore((state) => state.user!);
+  const { user, isLoggedIn } = useAuthStore((state) => state);
   const { openNotification } = useNotification();
   const { data, isSuccess } = useQuery({
     queryKey: ["clientDetails", { id: user?.id }],
-    queryFn: async () => await userService.getClientAccountInfo(user.cid),
+    queryFn: async () =>
+      await userService.getClientAccountInfo(user?.cid || ""),
     enabled: !!user?.cid,
   });
 
   useEffect(() => {
-    if (user?.role !== "admin") {
+    if (isLoggedIn && user && user.role !== "admin") {
       router.push("/dashboard");
     }
   }, []);
