@@ -10,7 +10,7 @@ interface AuthState {
   isLoggedIn: boolean;
   user?: ICurrentUser | null;
   setUser: (user: ICurrentUser | null) => void;
-  logout: () => void;
+  logout: (sendRequest?: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -26,8 +26,11 @@ export const useAuthStore = create<AuthState>()(
             isLoggedIn: !!data,
           };
         }),
-      logout: async () => {
+      logout: async (sendRequest = false) => {
         try {
+          if (sendRequest) {
+            await authService.logout(CookieManager.getCookie("cid"));
+          }
           set((state) => {
             // clear saved cookie
             CookieManager.removeCookie("cid");

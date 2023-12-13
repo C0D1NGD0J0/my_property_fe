@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import userService from "@services/user";
 import useActive from "@hooks/useActive";
-import Loading from "@components/ui/Loading";
+import Loading from "@components/UI/Loading";
 import CookieManager from "@utils/cookieManager";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
@@ -16,7 +16,7 @@ export default function AuthTemplate({
   children: React.ReactNode;
 }) {
   const { push } = useRouter();
-  const isIdle = useActive(20); //20mins
+  const isIdle = useActive(2); //20mins
   const cid = CookieManager.getCookie("cid");
   const { setUser, logout, isLoggedIn } = useAuthStore();
   const { openNotification } = useNotification();
@@ -42,33 +42,31 @@ export default function AuthTemplate({
         ? (error as unknown as any).data
         : "An error occurred";
       openNotification("error", errMessage, "Please login to proceed.");
-      cid && logout();
+      logout();
       push("/login");
     }
   }, [error]);
 
   useEffect(() => {
     // handles user inactivity
-    if (isIdle) {
+    if (isIdle || !cid) {
       setIsIdleLoading(true);
-      cid && logout();
+      logout(true);
       setTimeout(() => {
         return push("/login");
-      }, 10000); //10000 = 10sec
+      }, 8000); //10000 = 10sec
     }
-  }, [isIdle]);
+  }, [isIdle, cid]);
 
   if (isLoading && !isIdleLoading) {
     return <Loading size="fullscreen" description="Authenticating..." />;
   }
 
   if (isIdleLoading) {
-    return (
-      <Loading
-        size="fullscreen"
-        description="Signed out due to inactivity..."
-      />
-    );
+    let msg = !cid
+      ? "Unauthorized access, please login."
+      : "Signed out due to inactivity...";
+    return <Loading size="fullscreen" description={msg} />;
   }
 
   return <>{children}</>;

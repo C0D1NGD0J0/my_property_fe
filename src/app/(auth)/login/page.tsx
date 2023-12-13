@@ -37,8 +37,9 @@ export default function Login() {
         setIsSuccess(true);
         openNotification("success", "Success", res.data);
       }
-    } catch (e: any) {
-      return openNotification("error", "Login Error", e.data);
+    } catch (e: unknown) {
+      const err = e as Error & { data: any };
+      return openNotification("error", "Login Error", err.data);
     }
   };
 

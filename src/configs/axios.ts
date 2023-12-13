@@ -78,7 +78,8 @@ class AxioService implements IAxiosService {
     try {
       const response = await this._axios.get<T>(url, { params });
       return response.data;
-    } catch (error) {
+    } catch (error: unknown) {
+      error = error as Error & { data: any };
       throw error;
     }
   };

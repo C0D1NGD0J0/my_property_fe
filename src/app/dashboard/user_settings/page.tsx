@@ -15,7 +15,7 @@ import {
 } from "@components/FormElements";
 import { stripeSupportedCountries } from "@utils/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Loading from "@components/ui/Loading";
+import Loading from "@components/UI/Loading";
 import userValidation from "@validations/user.validation";
 import { IEditUser } from "@interfaces/user.interface";
 import { useAuthStore } from "@store/auth.store";

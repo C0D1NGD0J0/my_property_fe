@@ -1,21 +1,16 @@
-.custom_loading_style {
+.loading_regular {
   display: flex;
   height: 100%;
-  max-width: 30%;
-  position: relative;
   align-items: center;
   justify-content: center;
 }
 
-.custom_loading_style.fullscreen {
+.loading_fullscreen {
   top: 0;
-  left: 0;
   z-index: 99;
-  height: 100dvh;
-  position: fixed;
+  width: 100vw;
+  left: -26rem;
+  position: absolute;
+  border: 1px solid red;
   background-color: rgba(239, 239, 239, 1);
 }
-
-.custom_loading_style.regular {
-  /* height: 40rem; */
-};

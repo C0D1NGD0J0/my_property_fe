@@ -13,14 +13,13 @@ interface Test {
 const Loading = ({
   size = "regular",
   description,
-  type,
   onClose,
   isCloseable,
 }: Test) => {
   return (
     <div
-      className={`${style.custom_loading_style} ${
-        size === "regular" ? "regular" : "fullscreen"
+      className={`${style.loading_regular} ${
+        size === "fullscreen" && style.loading_fullscreen
       }`}
     >
       <Spin size={"small"}>

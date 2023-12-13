@@ -5,7 +5,7 @@ import { FormikValues, useFormik } from "formik";
 import { useRouter } from "next/navigation";
 
 import userService from "@services/user";
-import { Loading, Alert } from "@components/ui";
+import { Loading, Alert } from "@components/UI";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
 import { ContentHeader } from "@components/PageHeader";

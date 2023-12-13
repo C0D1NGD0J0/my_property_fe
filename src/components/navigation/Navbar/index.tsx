@@ -52,8 +52,7 @@ function Index() {
 
   const handleLogout = async () => {
     try {
-      logout();
-      await authService.logout();
+      logout(true);
       push("/login");
     } catch (error) {
       console.error(error);

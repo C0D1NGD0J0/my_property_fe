@@ -1,6 +1,5 @@
 import axios from "@configs/axios";
 import { IVerificationInitValues } from "@interfaces/user.interface";
-import { TSignupData } from "@validations/schema/auth.schema";
 
 class AuthService {
   private baseUrl;
@@ -37,9 +36,10 @@ class AuthService {
       throw error;
     }
   };
-  logout = async () => {
+  logout = async (cid: string | undefined) => {
     try {
-      const res = await axios.delete(`${this.baseUrl}/logout`);
+      if (!cid) return;
+      const res = await axios.delete(`${this.baseUrl}/${cid}/logout`);
       return res;
     } catch (error) {
       throw error;

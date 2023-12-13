@@ -7,7 +7,7 @@ import useSWR from "swr";
 
 import authService from "@services/auth";
 import { SWR_KEY } from "@utils/constants";
-import Loading from "@components/ui/Loading";
+import Loading from "@components/UI/Loading";
 import UserInfo from "@app/(auth)/signup/UserInfo";
 import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";
@@ -79,8 +79,9 @@ export default function Signup() {
         setCurrentStep(0);
       }
       return;
-    } catch (e: any) {
-      return openNotification("error", "Signup Error", e.data);
+    } catch (e: unknown) {
+      const err = e as Error & { data: any };
+      return openNotification("error", "Signup Error", err.data);
     }
   };
 

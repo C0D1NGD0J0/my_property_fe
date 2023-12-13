@@ -5,7 +5,7 @@ import { Button } from "antd";
 import Link from "next/link";
 
 import authService from "@services/auth";
-import Loading from "@components/ui/Loading";
+import Loading from "@components/UI/Loading";
 import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";
 import FormInput from "@components/FormElements/FormInput";
@@ -23,8 +23,9 @@ export default function ForgotPassword() {
         formik.setSubmitting(false);
         return openNotification("success", "Password Reset", res.data);
       }
-    } catch (e: any) {
-      return openNotification("error", "Password Reset Error", e.data);
+    } catch (e: unknown) {
+      const err = e as Error & { data: any };
+      return openNotification("error", "Password Reset Error", err.data);
     }
   };
 

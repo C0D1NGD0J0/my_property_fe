@@ -1,6 +1,6 @@
 "use client";
 import React, { FC } from "react";
-import PricingCard from "@components/ui/Cards/Pricing";
+import PricingCard from "@components/UI/Cards/Pricing";
 import { PricingCardProps } from "@interfaces/user.interface";
 
 const PlanSelection = (props: any) => {

@@ -6,7 +6,7 @@ import { useFormik, FormikValues } from "formik";
 import { useSearchParams, useParams } from "next/navigation";
 
 import authService from "@services/auth";
-import Loading from "@components/ui/Loading";
+import Loading from "@components/UI/Loading";
 import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";
 import FormField from "@components/FormElements/FormField";
@@ -38,29 +38,43 @@ export default function AccountActivation() {
       );
       setIsSuccess(true);
       formik.setSubmitting(false);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const error = e as Error & { data: any };
       if (
         params.cid &&
         token &&
-        (e.data.includes("expired") || e.data.includes("Invalid"))
+        (error.data.includes("expired") || error.data.includes("Invalid"))
       ) {
-        return openNotification("open", "Account verification Error", e.data, {
-          btnText: "Resend activation token email",
-          onClose: async () => {
-            try {
-              await authService.resendActivationLink(
-                params.cid as string,
-                token,
-              );
-              formik.setSubmitting(false);
-            } catch (e) {
-              return openNotification("error", "Activation Error", e.data);
-            }
+        return openNotification(
+          "open",
+          "Account verification Error",
+          error.data,
+          {
+            btnText: "Resend activation token email",
+            onClose: async () => {
+              try {
+                await authService.resendActivationLink(
+                  params.cid as string,
+                  token,
+                );
+                formik.setSubmitting(false);
+              } catch (e) {
+                return openNotification(
+                  "error",
+                  "Activation Error",
+                  error.data,
+                );
+              }
+            },
           },
-        });
+        );
       }
 
-      return openNotification("error", "Account verification Error", e.data);
+      return openNotification(
+        "error",
+        "Account verification Error",
+        error.data,
+      );
     }
   };
 

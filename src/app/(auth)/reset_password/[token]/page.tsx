@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "antd";
 
 import authService from "@services/auth";
-import Loading from "@components/ui/Loading";
+import Loading from "@components/UI/Loading";
 import { hex64Regex } from "@utils/helperFN";
 import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";
@@ -43,9 +43,10 @@ export default function ResetPassword() {
         formik.setSubmitting(false);
         return openNotification("success", "Password Reset", res.data);
       }
-    } catch (e: any) {
-      if (e.data.includes("generate a new token")) {
-        return openNotification("open", "Token expiration error", e.data, {
+    } catch (e: unknown) {
+      const err = e as Error & { data: any };
+      if (err.data.includes("generate a new token")) {
+        return openNotification("open", "Token expiration error", err.data, {
           btnText: "Resend password reset email.",
           onClose: async () => {
             router.push("/forgot_password");
@@ -53,7 +54,7 @@ export default function ResetPassword() {
           },
         });
       }
-      return openNotification("error", "Account verification Error", e.data);
+      return openNotification("error", "Account verification Error", err.data);
     }
   };
 
