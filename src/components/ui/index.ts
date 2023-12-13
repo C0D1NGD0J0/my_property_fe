@@ -1,4 +1,4 @@
 import Loading from "@components/UI/Loading";
-import Alert from "./Alert";
+import Alert from "@components/UI/Alert";
 
 export { Loading, Alert };

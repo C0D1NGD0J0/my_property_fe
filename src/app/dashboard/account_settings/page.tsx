@@ -1,8 +1,8 @@
 "use client";
-import React, { ReactNode, useState, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { FormikValues, useFormik } from "formik";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { FormikValues, useFormik } from "formik";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import userService from "@services/user";
 import { Loading, Alert } from "@components/UI";
@@ -54,7 +54,7 @@ const ClientSettings = () => {
     },
     onSuccess(data) {
       queryClient.setQueryData(
-        ["clientDetails", { id: user.id }],
+        ["clientDetails", { id: user?.id }],
         data.clientInfo,
       );
     },
@@ -63,18 +63,18 @@ const ClientSettings = () => {
   const handleSubmit = async (values: FormikValues) => {
     try {
       const res = await mutation.mutateAsync({
-        cid: user.cid,
+        cid: user?.cid || "",
         formData: objectToFormData(values),
       });
 
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: ["clientDetails", { id: user.id }],
+          queryKey: ["clientDetails", { id: user?.id }],
         });
       }
-    } catch (e: any) {
-      console.log(e, "---e----");
-      return openNotification("error", "Update error", e.data);
+    } catch (e: unknown) {
+      const err = e as Error & { data: any };
+      return openNotification("error", "Update error", err.data);
     }
   };
 

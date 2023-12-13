@@ -2,10 +2,8 @@
 import React, { useState } from "react";
 import { FormikValues, useFormik } from "formik";
 import { Button } from "antd";
-import Link from "next/link";
 
 import authService from "@services/auth";
-import Loading from "@components/UI/Loading";
 import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";
 import FormInput from "@components/FormElements/FormInput";

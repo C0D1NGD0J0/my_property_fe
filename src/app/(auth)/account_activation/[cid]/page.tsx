@@ -6,7 +6,7 @@ import { useFormik, FormikValues } from "formik";
 import { useSearchParams, useParams } from "next/navigation";
 
 import authService from "@services/auth";
-import Loading from "@components/UI/Loading";
+import { Loading } from "@components/UI";
 import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";
 import FormField from "@components/FormElements/FormField";

@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "antd";
 
 import authService from "@services/auth";
-import Loading from "@components/UI/Loading";
+import { Loading } from "@components/UI";
 import { hex64Regex } from "@utils/helperFN";
 import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";

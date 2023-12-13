@@ -7,7 +7,7 @@ import useSWR from "swr";
 
 import authService from "@services/auth";
 import { SWR_KEY } from "@utils/constants";
-import Loading from "@components/UI/Loading";
+import { Loading } from "@components/UI";
 import UserInfo from "@app/(auth)/signup/UserInfo";
 import { useNotification } from "@hooks/useNotification";
 import authValidation from "@validations/auth.validation";

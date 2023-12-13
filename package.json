@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "format": "prettier --write \"**/*.{ts,tsx,json,js,jsx,html,yml,md}\" \"!**/dist/**\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,js,jsx,html,yml,md}\" \"!**/dist/**\"",
+    "typewatch": "tsc --noEmit --watch",
+    "lint:check": "eslint --config .eslintrc.json --cache --ext .ts,.tsx,.js,.jsx src/",
+    "lint:fix": "eslint \"./src/**/*.{js,jsx,ts,tsx}\" --fix"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^1.17.0",
