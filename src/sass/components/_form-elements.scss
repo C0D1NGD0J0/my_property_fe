@@ -248,7 +248,7 @@ textarea {
       transition: $transition;
     }
     &.untouched {
-      border-bottom: 2px solid initial; /* or any default color */
+      border-bottom: 2px solid rgba(115, 115, 115, 0.2); /* or any default color */
     }
     &.touched:valid {
       transition: all 0.2s ease-in-out;

@@ -37,13 +37,13 @@
 
 .auth-page {
   z-index: 20;
-  max-width: 70rem;
   display: flex;
   overflow: hidden;
+  max-width: 65rem;
   position: relative;
   margin-inline: auto;
   border-radius: 0.8rem;
-  height: clamp(45rem, 45rem, 60rem);
+  height: clamp(45rem, 50rem, 60rem);
   border: 1px solid hsl(0, 0%, 77%);
   box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.2);
 

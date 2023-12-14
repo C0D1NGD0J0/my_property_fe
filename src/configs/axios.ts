@@ -13,7 +13,6 @@ class AxioService implements IAxiosService {
   private _axios: AxiosInstance;
 
   constructor() {
-    console.log("API------> ", process.env.NEXT_PUBLIC_BASE_URL);
     this._axios = axios.create({
       baseURL: process.env.NEXT_PUBLIC_BASE_URL,
       withCredentials: true,
