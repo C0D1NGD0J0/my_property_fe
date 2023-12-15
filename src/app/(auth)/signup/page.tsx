@@ -80,6 +80,7 @@ export default function Signup() {
       }
       return;
     } catch (e: unknown) {
+      console.log(e);
       const err = e as Error & { data: any };
       return openNotification("error", "Signup Error", err.data);
     }

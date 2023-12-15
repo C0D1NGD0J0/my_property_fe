@@ -30,7 +30,9 @@ export default class APIError extends Error {
       // Handle Axios error
       const { response } = error;
       if (response && response.data) {
-        return this.parseApiError(response.data);
+        const res = this.parseApiError(response.data);
+        console.log(res, "----RES");
+        return res;
       }
     } else if (error instanceof Error) {
       // Handle generic JavaScript Error
@@ -53,14 +55,22 @@ export default class APIError extends Error {
     if (errorObj.type === "validationError") {
       const data = errorObj.error.data;
 
-      if (Array.isArray(data)) {
-        const valuesArray = (data as ApiErrorObject[]).flatMap((obj) =>
-          Object.values(obj),
-        );
-        return {
-          success: false,
-          data: valuesArray,
-        };
+      const _data = Array.isArray(data) ? data : JSON.parse(data);
+      if (Array.isArray(_data)) {
+        if (typeof _data[0] === "string") {
+          return {
+            success: false,
+            data: _data,
+          };
+        } else if (typeof _data[0] === "object") {
+          const valuesArray = (_data as ApiErrorObject[]).flatMap((obj) =>
+            Object.values(obj),
+          );
+          return {
+            success: false,
+            data: valuesArray,
+          };
+        }
       }
     }
 
