@@ -241,7 +241,7 @@ const UserSettings = () => {
                       disabled={!isEditMode || formik.isSubmitting}
                       value={formik.values.location}
                       placeholder="Select your location"
-                      className="form-input_dropdown"
+                      className="select"
                       onChange={(name: string, value: any) => {
                         formik.setFieldTouched(name);
                         formik.setFieldValue(name, value);

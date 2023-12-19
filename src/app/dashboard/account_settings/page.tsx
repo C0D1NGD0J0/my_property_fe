@@ -246,7 +246,7 @@ const ClientSettings = () => {
                     value={formik.values.identification?.idType}
                     name="identification.idType"
                     placeholder="Select ID type"
-                    className="form-input_dropdown"
+                    className="form-input_select"
                     onChange={(name: string, value: any) => {
                       formik.setFieldTouched(name);
                       formik.setFieldValue(name, value);

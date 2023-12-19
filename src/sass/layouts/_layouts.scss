@@ -28,8 +28,11 @@
 
 .main-content {
   grid-area: content; /* Assigns the content area */
-  overflow-y: hidden;
+  overflow-y: auto;
   grid-row: 1fr;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.7rem;
 }
 
 aside {

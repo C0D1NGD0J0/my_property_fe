@@ -16,9 +16,9 @@ export default function AuthTemplate({
   children: React.ReactNode;
 }) {
   const { push } = useRouter();
-  const isIdle = useActive(2); //20mins
+  const isIdle = useActive(45); //20mins
   const cid = CookieManager.getCookie("cid");
-  const { setUser, logout, isLoggedIn } = useAuthStore();
+  const { setUser, logout, isLoggedIn, user } = useAuthStore();
   const { openNotification } = useNotification();
   const [isIdleLoading, setIsIdleLoading] = useState(false);
 

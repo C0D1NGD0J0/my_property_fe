@@ -1,10 +1,3 @@
-$border-color: #000;
-$border-color-alt: #ccc;
-$option-bg-color: #f0f0f0;
-$form-input-bg: #f9f9f9;
-$hover-bg-color: #fff;
-$icon-margin-right: 8px;
-
 .form-fields {
   width: 100%;
   display: flex;
@@ -83,73 +76,8 @@ textarea {
     }
   }
 
-  &_dropdown {
-    width: 100%; /* Assuming 1rem padding on each side, adjust as necessary */
-    font-weight: 400;
-    position: relative;
-    border-radius: 2px;
-    color: hsl($grey-color...);
-    border: 1px solid #cccccc; /* Add a light grey border */
-    background-color: $form-input-bg; /* Match the input field's background color */
-
-    .selected-option {
-      cursor: pointer;
-      position: relative;
-      padding: 3.5px 10px; /* Add horizontal padding to align with the input field */
-      line-height: 1.5; /* Adjust line height to vertically center the text */
-      display: flex; /* Use flexbox for horizontal alignment */
-      align-items: center; /* Align items vertically */
-      justify-content: space-between; /* Space between the selected option and chevron */
-    }
-
-    .selected-value {
-      font-size: $fs-md;
-      color: hsl($primary-color...);
-    }
-
-    .selected-chevron {
-      font-size: $fs-lg;
-      top: 0.25rem;
-      position: relative; /* Position it relative to the selected-option */
-      margin-left: auto; /* Push it to the right */
-    }
-
-    .options-list {
-      z-index: 2;
-      width: 100%;
-      max-height: 150px; /* Adjust height as needed */
-      overflow-y: auto;
-      list-style: none;
-      position: absolute;
-      top: 100%; /* Align it directly below the selected-option */
-      left: 0;
-      border: 1px solid #cccccc; /* Border to match the dropdown */
-      border-top: none; /* Remove top border to blend with the selected-option */
-      border-radius: 0 0 4px 4px; /* Only round the bottom corners */
-      background-color: hsl(
-        $white-color...
-      ); /* Background to match the dropdown */
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for depth */
-
-      .option-item {
-        padding: 10px;
-        cursor: pointer;
-        font-size: $fs-md;
-        text-transform: lowercase;
-        background-color: hsl(
-          $white-color...
-        ); /* Background to match the dropdown */
-        &:hover {
-          font-weight: bold;
-          background-color: #f2f2f2; /* A light grey for hover state */
-          color: hsl($primary-color...);
-        }
-
-        .option-icon {
-          margin-right: $icon-margin-right;
-        }
-      }
-    }
+  &_select {
+    @include custom-dropdown;
   }
 
   &::placeholder {
@@ -271,50 +199,7 @@ textarea {
   }
 
   & .custom-dropdown {
-    color: #40414a;
-    font-weight: 400;
-    position: relative;
-    margin-bottom: 0.5rem;
-    width: clamp(200px, 100%, 100%);
-
-    .selected-option {
-      cursor: pointer;
-      position: relative;
-      padding: 3px 0px 2px 0px;
-      border-bottom: 2px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .selected-chevron {
-      position: absolute;
-      right: 2px;
-      top: 3px;
-    }
-
-    .options-list {
-      z-index: 1;
-      width: 100%;
-      height: 150px;
-      overflow-y: auto;
-      list-style: none;
-      border-top: none;
-      position: absolute;
-      border: 1px solid #f9f9f9;
-
-      .option-item {
-        padding: 10px;
-        cursor: pointer;
-        font-weight: 300;
-        background-color: $option-bg-color;
-
-        &:hover {
-          background-color: $hover-bg-color;
-        }
-
-        .option-icon {
-          margin-right: $icon-margin-right;
-        }
-      }
-    }
+    @include custom-dropdown;
   }
 }
 

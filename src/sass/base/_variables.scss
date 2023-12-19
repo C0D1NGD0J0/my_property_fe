@@ -15,16 +15,16 @@ $border-radius-xs: 0.5rem;
 $border-radius-md: 1.5rem;
 $border-radius-sm: 1rem;
 $border-radius-lg: 2rem;
-  
-$padding-xs: 0.5rem;
-$padding-md: 1.5rem;
-$padding-sm: 1rem;
-$padding-lg: 2rem;
 
-$gap-xsm: .5rem;
+$padding-xs: 0.5rem;
+$padding-sm: 0.8rem;
+$padding-md: 1.2rem;
+$padding-lg: 1.8rem;
+
+$gap-xsm: 0.5rem;
 $gap-sm: 1rem;
 $gap-lg: 2rem;
-$gap-xs: .5rem;
+$gap-xs: 0.5rem;
 $gap-md: 1.5rem;
 $flow-space: 1.5rem;
 
@@ -32,15 +32,24 @@ $fs-sm: 1.2rem;
 $fs-lg: 2rem;
 $fs-xlg: 2.4rem;
 $fs-md: 1.4rem;
-$fs-xsm: .9rem;
+$fs-xsm: 0.9rem;
 $fs-base: 1.6rem;
 
 $fw-200: 200;
 $fw-400: 400;
 $fw-600: 600;
 
-$ff-roboto: 'Roboto', sans-serif;
-$ff-source-sans: 'Source Sans 3', sans-serif;
+$ff-roboto: "Roboto", sans-serif;
+$ff-source-sans: "Source Sans 3", sans-serif;
 
 $transition: all 0.3s ease-in-out;
-$box-shadow: 0 .2rem .3rem $border-color;
+$box-shadow: 0 0.2rem 0.3rem $border-color;
+$box-shadow-alt: 0px 5px 4px -5px rgba(0, 0, 0, 0.3);
+
+// used for form styling
+$border-color: #000;
+$border-color-alt: #ccc;
+$option-bg-color: #f0f0f0;
+$form-input-bg: #f9f9f9;
+$hover-bg-color: #fff;
+$icon-margin-right: 8px;

@@ -27,3 +27,32 @@ body {
   text-rendering: optimizeLegibility;
   background: hsl($background-color...);
 }
+
+::-webkit-scrollbar {
+  width: 1rem; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: hsl($white-color...); /* Background color of the track */
+  border-radius: 0.8rem; /* Optional: Add rounded corners */
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl($primary-color...); /* Color of the kontainer thumb */
+  border-radius: 0.8rem; /* Optional: Add rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl($grey-color...); /* Color when the thumb is hovered */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01m !important;
+    transition-duration: 0.1m !important;
+    animation-iteration-count: 1 !important;
+  }
+}
