@@ -1,19 +1,26 @@
-export interface TableRowData {
-  id: number;
-  [key: string]: any; // Other dynamic keys
-}
+import { TableRowProps } from "@interfaces/tableComponent.interface";
 
-const TableRow: React.FC<{ row: TableRowData }> = ({ row }) => {
+const TableRow: React.FC<TableRowProps> = ({
+  row,
+  columns,
+  isSelected,
+  onRowClick,
+}) => {
   return (
-    <tr>
-      <td>{row.id}</td>
-      <td>{row.property}</td>
-      <td>{row.status}</td>
-      <td>{row.rent}</td>
-      <td>{row.rentalType}</td>
-      <td className="status primary">
-        {/* Actions like view, edit can be added here */}
-      </td>
+    <tr
+      onClick={() => onRowClick && onRowClick(row)}
+      className={isSelected ? "selected" : ""}
+    >
+      {columns.map((col) => (
+        <td
+          key={`${row.id}-${col.dataIndex}`}
+          className={col.title === "Action" ? "status primary" : ""}
+        >
+          {col.render
+            ? col.render(row[col.dataIndex], row, row.id)
+            : row[col.dataIndex]}
+        </td>
+      ))}
     </tr>
   );
 };

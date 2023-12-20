@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const ClientSide = ({ children }: { children: React.ReactNode }) => {
+const useClientSide = ({ children }: { children: React.ReactNode }) => {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
@@ -15,4 +15,4 @@ const ClientSide = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-export default ClientSide;
+export default useClientSide;

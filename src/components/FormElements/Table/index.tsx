@@ -1,32 +1,24 @@
 import React, { useState, useMemo } from "react";
-import TableRow, { TableRowData } from "./Row";
+import TableRow from "./Row";
 import TableHeader from "./Header";
-
-interface TableComponentProps {
-  data: TableRowData[];
-  columns: TableColumn[];
-  showCheckbox?: boolean;
-  onRowClick?: (rowData: TableRowData) => void;
-}
-
-export interface TableColumn {
-  title: string;
-  icon?: boolean;
-  dataIndex: string;
-  render?: (text: any, record: TableRowData, index: number) => React.ReactNode;
-  sorter?: (a: TableRowData, b: TableRowData) => number;
-}
+import {
+  TableColumn,
+  TableComponentProps,
+  TableRowData,
+} from "@interfaces/tableComponent.interface";
 
 // TableComponent
 const TableComponent: React.FC<TableComponentProps> = ({
   data,
   columns,
   onRowClick,
+  customFilter,
+  filterOptions,
   showCheckbox = false,
+  displayHeaderSection = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
-  const [displayHeader, setDisplayHeader] = useState<boolean>(false);
   const [filter, setFilter] = useState("all");
   const [sortConfig, setSortConfig] = useState<{
     key: string;
@@ -46,25 +38,26 @@ const TableComponent: React.FC<TableComponentProps> = ({
       filtered = filtered.filter((row) => row.status === filter);
     }
 
+    if (customFilter) {
+      filtered = filtered.filter(customFilter);
+    }
+
     if (sortConfig) {
-      const sorter = columns.find((col) => col.dataIndex === sortConfig.key)
-        ?.sorter;
-      if (sorter) {
-        filtered = [...filtered].sort(sorter);
-      } else {
-        // Fallback to basic sorting if no sorter function is provided
-        filtered = [...filtered].sort((a, b) => {
+      const column = columns.find((col) => col.dataIndex === sortConfig.key);
+      const sorter =
+        column?.columSorter ||
+        ((a, b) => {
           if (a[sortConfig.key] < b[sortConfig.key])
             return sortConfig.direction === "ascending" ? -1 : 1;
           if (a[sortConfig.key] > b[sortConfig.key])
             return sortConfig.direction === "ascending" ? 1 : -1;
           return 0;
         });
-      }
+      filtered = [...filtered].sort(sorter);
     }
 
     return filtered;
-  }, [data, searchQuery, filter, sortConfig]);
+  }, [data, searchQuery, filter, sortConfig?.direction, customFilter, columns]);
 
   const handleSort = (key: string) => {
     let direction: "ascending" | "descending" = "ascending";
@@ -99,7 +92,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     }
   };
 
-  const dir = sortConfig?.direction === "ascending" ? "up" : "down";
+  const direction = sortConfig?.direction === "ascending" ? "up" : "down";
   const modifiedColumns: TableColumn[] = showCheckbox
     ? [
         {
@@ -119,8 +112,14 @@ const TableComponent: React.FC<TableComponentProps> = ({
 
   return (
     <div className="table-container">
-      {displayHeader && (
-        <TableHeader onSearch={setSearchQuery} onFilterChange={setFilter} />
+      {displayHeaderSection && (
+        <TableHeader
+          filterValue={filter}
+          searchQuery={searchQuery}
+          onFilterChange={setFilter}
+          filterOptions={filterOptions}
+          setSearchQuery={setSearchQuery}
+        />
       )}
       <table className="table">
         <thead>
@@ -129,6 +128,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
               <th key="selection">
                 <input
                   type="checkbox"
+                  name="selectAll"
                   onChange={handleSelectAll}
                   checked={
                     selectedRows.size === filteredData.length &&
@@ -142,13 +142,14 @@ const TableComponent: React.FC<TableComponentProps> = ({
               <th key={col.dataIndex}>
                 <div className="th-content-box">
                   {col.title}
-                  {col.icon && (
+
+                  {col.showSorterIcon && (
                     <span
                       role="button"
                       className="filter-icon"
                       onClick={() => handleSort(col.dataIndex)}
                     >
-                      <i className={`bx bx-caret-${dir}`}></i>
+                      <i className={`bx bx-caret-${direction}`}></i>
                     </span>
                   )}
                 </div>
@@ -159,21 +160,14 @@ const TableComponent: React.FC<TableComponentProps> = ({
         <tbody>
           {filteredData.map((row, rowIndex) => {
             return (
-              <tr
+              <TableRow
+                row={row}
                 key={row.id}
-                onClick={() => onRowClick && onRowClick(row)}
-                className={selectedRows.has(row.id) ? "selected" : ""}
-              >
-                {modifiedColumns.map((col) => {
-                  return (
-                    <td key={col.dataIndex}>
-                      {col.render
-                        ? col.render(row[col.dataIndex], row, rowIndex)
-                        : row[col.dataIndex]}
-                    </td>
-                  );
-                })}
-              </tr>
+                rowIndex={rowIndex}
+                onRowClick={onRowClick}
+                columns={modifiedColumns}
+                isSelected={selectedRows.has(row.id)}
+              />
             );
           })}
         </tbody>

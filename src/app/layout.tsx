@@ -5,7 +5,7 @@ import { NotificationProvider } from "@hooks/useNotification";
 import { RQProvider } from "@hooks/useReactQuery";
 import "./preload-resources";
 import { motion, AnimatePresence } from "framer-motion";
-import ClientSide from "@utils/ClientSide";
+import ClientSide from "@hooks/useClientSide";
 
 const metadata: Metadata = {
   title: "My Property",
