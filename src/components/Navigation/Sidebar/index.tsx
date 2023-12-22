@@ -33,8 +33,8 @@ const Index = () => {
           </li>
           <li className="navbar-item">
             <Link
-              href="/dashboard/properties"
-              className={urlPath === "/dashboard/properties" ? "active" : ""}
+              href="/properties"
+              className={urlPath === "/properties" ? "active" : ""}
             >
               <i className="bx bx-building-house"></i>
               <span>Properties</span>
@@ -43,8 +43,8 @@ const Index = () => {
 
           <li className="navbar-item">
             <Link
-              href="/dashboard/leases"
-              className={urlPath === "/dashboard/leases" ? "active" : ""}
+              href="/leases"
+              className={urlPath === "/leases" ? "active" : ""}
             >
               <i className="bx bxs-report icon"></i>
               <span>Leases</span>
@@ -52,10 +52,8 @@ const Index = () => {
           </li>
           <li className="navbar-item">
             <Link
-              href="/dashboard/service_requests"
-              className={
-                urlPath === "/dashboard/service_requests" ? "active" : ""
-              }
+              href="/service_requests"
+              className={urlPath === "/service_requests" ? "active" : ""}
             >
               <i className="bx bx-wrench"></i>
               <span>Maintenance</span>
@@ -63,8 +61,8 @@ const Index = () => {
           </li>
           <li className="navbar-item">
             <Link
-              href="/dashboard/tenants"
-              className={urlPath === "/dashboard/tenants" ? "active" : ""}
+              href="/tenants"
+              className={urlPath === "/tenants" ? "active" : ""}
             >
               <i className="bx bx-user-plus"></i>
               <span>Tenants</span>
@@ -72,10 +70,8 @@ const Index = () => {
           </li>
           <li className="navbar-item">
             <Link
-              href="/dashboard/account_settings"
-              className={
-                urlPath === "/dashboard/account_settings" ? "active" : ""
-              }
+              href="/account_settings"
+              className={urlPath === "/account_settings" ? "active" : ""}
             >
               <i className="bx bx-cog"></i>
               <span>Account</span>
@@ -83,8 +79,8 @@ const Index = () => {
           </li>
           <li className="navbar-item">
             <Link
-              href="/dashboard/wallet"
-              className={urlPath === "/dashboard/wallet" ? "active" : ""}
+              href="/wallet"
+              className={urlPath === "/wallet" ? "active" : ""}
             >
               <i className="bx bx-wallet icon"></i>
               <span>Wallet</span>
@@ -92,10 +88,8 @@ const Index = () => {
           </li>
           <li className="navbar-item">
             <Link
-              href="/dashboard/schedule_viewing"
-              className={
-                urlPath === "/dashboard/schedule_viewing" ? "active" : ""
-              }
+              href="/schedule_viewing"
+              className={urlPath === "/schedule_viewing" ? "active" : ""}
             >
               <i className="bx bx-glasses icon"></i>
               <span>Viewings</span>

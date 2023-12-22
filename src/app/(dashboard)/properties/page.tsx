@@ -1,9 +1,14 @@
 "use client";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { Table } from "@components/FormElements/";
 import { ContentHeader } from "@components/PageHeader";
 import { TableColumn } from "@interfaces/tableComponent.interface";
 
-function MyProperties() {
+const Properties = () => {
+  const router = useRouter();
+
   const columns: TableColumn[] = [
     {
       title: "#",
@@ -79,12 +84,13 @@ function MyProperties() {
         showBtn={true}
         pageTitle="My Properties"
         btnConfig={{
-          onClick: () => "",
+          onClick: () => router.push("/properties/new"),
           label: `Add property`,
           icon: <i className="bx bx-plus-circle"></i>,
           className: "btn-outline",
         }}
       />
+
       <section className="myproperties">
         <Table
           columns={columns}
@@ -99,6 +105,6 @@ function MyProperties() {
       </section>
     </>
   );
-}
+};
 
-export default MyProperties;
+export default Properties;

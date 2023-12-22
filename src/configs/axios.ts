@@ -1,6 +1,7 @@
 import APIError from "@utils/errorHandler";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import AuthService from "@services/auth";
+import CookieManager from "@utils/cookieManager";
 
 interface IAxiosService {
   get<T = any>(url: string, params?: object): Promise<T>;
@@ -61,7 +62,9 @@ class AxioService implements IAxiosService {
           originalRequest.url == "/api/v1/auth/refresh_token" &&
           error.response.status === 401
         ) {
+          console.log("fire----");
           // handle errror if refresh-token is also expired
+          CookieManager.removeCookie("cid");
         }
         // Handle errors
         const apiError = new APIError().init(error);

@@ -14,6 +14,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
   onRowClick,
   customFilter,
   filterOptions,
+  style,
   showCheckbox = false,
   displayHeaderSection = false,
 }) => {
@@ -121,7 +122,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
           setSearchQuery={setSearchQuery}
         />
       )}
-      <table className="table">
+      <table className="table" style={style}>
         <thead>
           <tr>
             {showCheckbox && ( // Conditionally render checkbox column header

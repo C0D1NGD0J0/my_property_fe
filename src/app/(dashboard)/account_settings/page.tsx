@@ -74,6 +74,7 @@ const ClientSettings = () => {
       }
     } catch (e: unknown) {
       const err = e as Error & { data: any };
+      console.log(err);
       return openNotification("error", "Update error", err.data);
     }
   };

@@ -1,5 +1,8 @@
+import { CSSProperties } from "react";
+
 export interface TableComponentProps {
   data: TableRowData[];
+  style?: CSSProperties;
   columns: TableColumn[];
   showCheckbox?: boolean;
   displayHeaderSection: boolean;
