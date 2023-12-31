@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FormikValues, useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -68,8 +68,14 @@ const propertyValidation = new PropertyValidation();
 
 const AddProperty = () => {
   const { user, isLoggedIn } = useAuthStore((state) => state);
+  const [formErrors, setFormErrors] = useState<string[]>([]);
   const { openNotification } = useNotification();
 
+  useEffect(() => {
+    if (formErrors.length) {
+      openNotification("error", "Error", formErrors.join(",\n\n "));
+    }
+  }, [formErrors]);
   const mutation = useMutation({
     mutationFn: async ({
       cid,
@@ -115,6 +121,10 @@ const AddProperty = () => {
     initialValues: initialValues,
     validate: async (values) => {
       const res = propertyValidation.newProperty(values);
+      if (!res.isValid && res.errors) {
+        const err = Object.values(res.errors);
+        setFormErrors(err);
+      }
       return res.isValid ? {} : res.errors;
     },
   });
