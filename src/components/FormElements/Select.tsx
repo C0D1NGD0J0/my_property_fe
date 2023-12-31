@@ -5,6 +5,7 @@ import React, {
   KeyboardEvent,
   useCallback,
   useEffect,
+  useRef,
 } from "react";
 import { debounce } from "@utils/helperFN";
 
@@ -40,7 +41,27 @@ const SelectInput: FC<FormSelectProps> = ({
   ariaLabel,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef<HTMLDivElement>(null);
   const [focusedOptionIndex, setFocusedOptionIndex] = useState(0);
+
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false); // Close the dropdown if the click is outside
+      }
+    },
+    [selectRef],
+  );
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
 
   const handleOptionClick = (optionValue: any) => {
     onChange(name, optionValue);
@@ -54,10 +75,17 @@ const SelectInput: FC<FormSelectProps> = ({
     }
   };
 
+  let _value: any;
+  if (value && typeof value === "string") {
+    _value = options.find((item) => {
+      return item.value.toLowerCase() === value.toLowerCase() ? item : null;
+    });
+  }
   return (
     <div
-      tabIndex={0}
       style={styles}
+      tabIndex={0}
+      ref={selectRef} // Attach the ref
       onKeyDown={debounce(handleKeyDown, 800)}
       id={id ? id : className}
       className={`${className ? className : ""}`}
@@ -68,29 +96,31 @@ const SelectInput: FC<FormSelectProps> = ({
         aria-labelledby={ariaLabel ? ariaLabel : name}
       >
         <span className="selected-value">
-          {value || placeholder || "Select an option"}
+          {_value?.label || placeholder || "Select an option"}
         </span>
         <span className="selected-chevron">
-          <i className="bx bxs-chevron-down"></i>
+          <i className={`bx bxs-chevron-${isOpen ? "down" : "up"}`}></i>
         </span>
       </div>
       {isOpen && (
         <ul className="options-list">
-          {options.map((option, index) => (
-            <li
-              key={index}
-              className="option-item"
-              aria-selected={index === focusedOptionIndex}
-              onClick={() => {
-                handleOptionClick(option.value);
-              }}
-            >
-              {option.icon && (
-                <span className="option-icon">{option.icon}</span>
-              )}
-              {option.label}
-            </li>
-          ))}
+          {options.map((option, index) => {
+            return (
+              <li
+                key={index}
+                className="option-item"
+                aria-selected={index === focusedOptionIndex}
+                onClick={() => {
+                  handleOptionClick(option.value);
+                }}
+              >
+                {option.icon && (
+                  <span className="option-icon">{option.icon}</span>
+                )}
+                {option.label}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

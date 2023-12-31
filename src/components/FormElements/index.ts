@@ -1,3 +1,4 @@
+import Toggle from "@components/FormElements/Toggle";
 import Form from "@components/FormElements/Form";
 import Table from "@components/FormElements/Table";
 import Select from "@components/FormElements/Select";
@@ -16,4 +17,5 @@ export {
   FormLabel,
   FormField,
   Table,
+  Toggle,
 };

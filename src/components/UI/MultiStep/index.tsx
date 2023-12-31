@@ -1,75 +1,119 @@
-import React, { useState } from "react";
-import { Steps, Button } from "antd";
+import React, { useState, useCallback, useEffect } from "react";
+import { Steps } from "antd";
+import { Button } from "@components/FormElements";
 
 const { Step } = Steps;
 
 interface StepType {
   title: string;
+  hidden: boolean;
   content: React.ReactNode;
 }
 
 interface MultiStepWrapperProps {
   steps: StepType[];
-  displayFooter?: boolean;
-  displayStepsBar?: boolean;
+  displayStepsBar: boolean;
+  initialStep?: number;
+  onComplete?: () => void;
+  onStepChange?: (currentStep: number) => void;
+  customFooter?: (stepControls: {
+    isLastStep: boolean;
+    isFirstStep: boolean;
+    nextStep: () => void;
+    prevStep: () => void;
+  }) => React.ReactNode;
 }
 
 const MultiStepWrapper: React.FC<MultiStepWrapperProps> = ({
   steps,
-  displayFooter = true,
-  displayStepsBar = false,
+  displayStepsBar,
+  initialStep = 0,
+  onStepChange,
+  customFooter,
+  onComplete,
 }) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const totalSteps = steps.length;
+  const [currentStep, setCurrentStep] = useState(initialStep);
 
-  const nextStep = () => {
-    if (currentStep < totalSteps - 1) {
-      setCurrentStep(currentStep + 1);
+  useEffect(() => {
+    setCurrentStep(initialStep);
+  }, [initialStep]);
+
+  const nextStep = useCallback(() => {
+    if (currentStep < steps.length - 1) {
+      const next = currentStep + 1;
+      setCurrentStep(next);
+      onStepChange?.(next);
     }
-  };
+  }, [currentStep, steps.length, onStepChange]);
 
-  const prevStep = () => {
+  const prevStep = useCallback(() => {
     if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+      const prev = currentStep - 1;
+      setCurrentStep(prev);
+      onStepChange?.(prev);
     }
-  };
+  }, [currentStep, onStepChange]);
+
+  const DefaultFooter = () => (
+    <div className="steps-action">
+      {currentStep > 0 && (
+        <Button
+          label="Back"
+          onClick={prevStep}
+          className="btn btn-outline-ghost"
+        />
+      )}
+      {currentStep < steps.length - 1 && (
+        <Button label="Next" onClick={nextStep} className="btn btn-outline" />
+      )}
+      {currentStep === steps.length - 1 && (
+        <Button
+          label="Submit"
+          onClick={onComplete}
+          className="btn btn-outline"
+        />
+      )}
+    </div>
+  );
 
   return (
-    <div>
+    <div className="steps">
       {displayStepsBar ? (
-        <Steps size="small" current={currentStep}>
-          {steps.map((step, index) => (
-            <Step key={index} title={step.title} />
-          ))}
-        </Steps>
+        <div className="steps-header">
+          <Steps
+            size="small"
+            current={currentStep}
+            progressDot
+            onChange={(newStep) => {
+              setCurrentStep(newStep);
+              if (onStepChange) {
+                onStepChange(newStep);
+              }
+            }}
+          >
+            {steps.map((step, index) => {
+              if (!step.hidden) {
+                return <Step key={index} title={step.title} />;
+              }
+            })}
+          </Steps>
+        </div>
       ) : null}
 
       <div className="steps-content">{steps[currentStep].content}</div>
 
-      {steps.length && displayFooter ? (
-        <div className="steps-action">
-          {currentStep < totalSteps - 1 && (
-            <Button type="primary" onClick={nextStep}>
-              Next
-            </Button>
-          )}
-          {currentStep === totalSteps - 1 && (
-            <Button
-              type="primary"
-              onClick={() => alert("Processing complete!")}
-            >
-              Done
-            </Button>
-          )}
-          {currentStep > 0 && (
-            <Button style={{ margin: "0 8px" }} onClick={prevStep}>
-              Previous
-            </Button>
-          )}
-        </div>
-      ) : null}
+      {customFooter ? (
+        customFooter({
+          isLastStep: currentStep === steps.length - 1,
+          isFirstStep: currentStep === 0,
+          nextStep,
+          prevStep,
+        })
+      ) : (
+        <DefaultFooter />
+      )}
     </div>
   );
 };
 
-export default MultiStepWrapper;
+export default React.memo(MultiStepWrapper);

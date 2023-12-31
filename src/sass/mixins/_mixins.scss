@@ -54,7 +54,7 @@
       padding: 10px;
       cursor: pointer;
       font-size: $fs-md;
-      text-transform: lowercase;
+      // text-transform: lowercase;
       background-color: $bg-color; /* Background to match the dropdown */
       &:hover {
         font-weight: bold;

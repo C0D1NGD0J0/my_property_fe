@@ -2,14 +2,15 @@ import React, { CSSProperties } from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   ariaLabel?: string;
+  disabled?: boolean;
   style?: CSSProperties;
   icon?: React.ReactNode;
-  renderChildren: boolean;
+  renderChildren?: boolean;
   iconPosition?: "left" | "right";
-  type: "button" | "submit" | "reset";
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -17,6 +18,7 @@ const Button: React.FC<ButtonProps> = ({
   label,
   style,
   onClick,
+  disabled = false,
   children,
   className,
   ariaLabel,
@@ -28,6 +30,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type={type}
       style={style}
+      disabled={disabled}
       onClick={onClick}
       aria-label={ariaLabel || label}
       className={`btn ${className ? className : ""}`}

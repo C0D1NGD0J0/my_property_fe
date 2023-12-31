@@ -8,7 +8,7 @@ import { ICurrentUser } from "@interfaces/user.interface";
 
 interface AuthState {
   isLoggedIn: boolean;
-  user?: ICurrentUser | null;
+  user: ICurrentUser | null;
   setUser: (user: ICurrentUser | null) => void;
   logout: (sendRequest?: boolean) => void;
 }

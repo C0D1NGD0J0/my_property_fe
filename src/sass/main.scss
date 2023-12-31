@@ -11,11 +11,13 @@
 
 @import "components/button";
 @import "components/table";
+@import "components/multiStep";
 @import "components/form-elements";
 @import "components/pageHeader";
 
 @import "pages/auth/pricing";
 @import "pages/auth/auth";
 @import "pages/account/settings";
+@import "pages/property/add-property";
 
 @import "media-query/layout";

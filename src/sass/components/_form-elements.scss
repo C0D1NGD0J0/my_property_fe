@@ -1,6 +1,7 @@
 .form-fields {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   column-gap: 1rem;
   padding: 0.4rem 0;
   align-items: center;
@@ -11,14 +12,29 @@
   flex: 1;
   width: 100%;
   position: relative;
+
+  &.form-field_inline {
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+    > label,
+    .form-input_select,
+    input {
+      width: 50%;
+    }
+  }
 }
 
 .form-field-error {
   display: flex;
   flex-wrap: wrap;
+  font-weight: bold;
   position: absolute;
   color: hsl($danger-color...);
-  font-size: clamp($fs-xsm, 10px, $fs-sm);
+  font-size: clamp($fs-xsm, 12px, $fs-sm);
 }
 
 textarea {
@@ -106,7 +122,6 @@ textarea {
 .form-label {
   display: block;
   color: hsla($grey-color...);
-  // text-transform: capitalize;
   font-size: clamp($fs-sm, 10vw, $fs-md);
 }
 
@@ -261,16 +276,6 @@ textarea {
   & input[type="file"] {
     display: none;
   }
-
-  // &.add-property {
-  //   border: 1px solid red;
-
-  //   & .form-fields {
-  //     padding: 0.5rem 0;
-  //     column-gap: 1rem;
-  //     margin-bottom: 1rem;
-  //   }
-  // }
 }
 
 .checkbox-wrapper {
@@ -293,4 +298,74 @@ textarea {
       color: hsl($grey-color...);
     }
   }
+}
+
+/* Container for the toggle, providing necessary spacing */
+.toggle-container {
+  padding: 10px;
+}
+
+/* Style for the actual toggle and its variations */
+.toggle {
+  width: 50px; // Width of the toggle
+  height: 25px; // Height of the toggle
+  border-radius: 25px; // Round edges
+  background-color: hsl(
+    $grey-color...
+  ); // Background of the toggle when it's off
+  position: relative; // For absolute positioning of the toggle handle
+  cursor: pointer; // Change mouse icon to indicate this is clickable
+  transition: background-color 0.3s; // Smooth transition for color change
+
+  // Nested style when the toggle is active/on
+  &.toggled {
+    background-color: hsl(
+      $primary-color...
+    ); // Background of the toggle when it's on
+    // Adjust the handle position when toggled/on
+    .toggle-handle {
+      left: 27.5px; // Move the handle to the right when toggled
+    }
+  }
+
+  /* Style for the handle of the toggle */
+  .toggle-handle {
+    width: 20px; // Width of the handle
+    height: 20px; // Height of the handle
+    background-color: hsl($white-color...); // Background of the handle
+    border-radius: 50%; // Round shape of the handle
+    position: absolute; // Position it within the toggle
+    top: 2.5px; // Spacing from the top to center it
+    left: 2.5px; // Spacing from the left to start at the beginning
+    transition: left 0.3s; // Smooth transition for movement
+  }
+}
+
+.list-container {
+  width: 100%;
+  column-gap: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.left-list,
+.right-list {
+  width: 50%;
+}
+
+.single-list {
+  width: 100%;
+}
+
+.left-list,
+.right-list,
+.single-list {
+  list-style: none;
+  padding: 0;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }

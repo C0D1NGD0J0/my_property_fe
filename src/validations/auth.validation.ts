@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { IInitialValues } from "@interfaces/user.interface";
 import { SignupValidationSchema } from "@validations/schema/auth.schema";
+import BaseValidation from "./base.validation";
 
-class AuthValidation {
+class AuthValidation extends BaseValidation {
   signup = async (signupData: IInitialValues) => {
     const result = SignupValidationSchema.safeParse(signupData);
 
@@ -99,19 +100,6 @@ class AuthValidation {
     // Data is valid, proceed with logic
     return { isValid: true };
   };
-
-  // Private TSignupData to parse Zod error issues
-  private parseZodError(errors: Array<any>): { [key: string]: string } {
-    const parsedErrors: { [key: string]: string } = {};
-
-    errors.forEach((issue) => {
-      const key = issue.path[0];
-      const message = issue.message;
-      parsedErrors[key] = message;
-    });
-
-    return parsedErrors;
-  }
 }
 
 export default new AuthValidation();

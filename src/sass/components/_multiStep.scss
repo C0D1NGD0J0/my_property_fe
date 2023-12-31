@@ -1,0 +1,13 @@
+.steps {
+  &-header {
+    // width: 90%;
+    padding: 2rem;
+    margin: 0 auto;
+  }
+  &-action {
+    display: flex;
+    align-items: center;
+    column-gap: 2rem;
+    justify-content: flex-end;
+  }
+}

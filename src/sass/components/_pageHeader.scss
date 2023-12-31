@@ -7,16 +7,17 @@
 
   .section-title {
     padding: 2.5rem 0 0 0;
-  }
 
-  .section-title h2 {
-    font-weight: 300;
-    line-height: 2rem;
-    margin-bottom: 0.8rem;
+    & h1 {
+      font-weight: 300;
+      // line-height: 2rem;
+      font-size: $fs-lg;
+      margin-bottom: 0.4rem;
+    }
   }
 
   .section-actions {
     position: relative;
-    /* padding-right: 2rem; */
+    // padding-right: 2rem;
   }
 }

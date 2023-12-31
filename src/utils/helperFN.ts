@@ -54,3 +54,29 @@ export const throttle = <T extends any[]>(
     }
   };
 };
+
+export const formatErrors = (
+  errorObject:
+    | {
+        isValid: boolean;
+        errors?: {
+          [key: string]: any;
+        };
+      }
+    | undefined,
+) => {
+  // Initialize an array to hold formatted error messages
+  let errorMessages = [];
+  if (errorObject && errorObject.errors) {
+    // Iterate over the keys of the errors object
+    for (const key in errorObject.errors) {
+      if (errorObject.errors.hasOwnProperty(key)) {
+        // Construct the error message and add it to the array
+        errorMessages.push(`${key}: ${errorObject.errors[key]}`);
+      }
+    }
+  }
+
+  // Join the array of error messages into a single string with each message on a new line
+  return errorMessages.join("\n");
+};
