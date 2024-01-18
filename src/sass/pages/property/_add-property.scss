@@ -1,0 +1,26 @@
+.add-property {
+  gap: 2rem;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 25rem; /* Adjust sizes as needed */
+  grid-template-areas: "content sidebar";
+
+  &_content {
+    width: 100%;
+    overflow: hidden;
+    grid-area: content;
+  }
+
+  &_sidebar {
+    grid-area: sidebar;
+    // border: 1px solid red;
+  }
+
+  &:has(.form) {
+    .form-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      color: hsla($grey-color...);
+    }
+  }
+}

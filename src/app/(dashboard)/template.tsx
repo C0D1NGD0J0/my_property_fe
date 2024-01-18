@@ -9,16 +9,17 @@ import Loading from "@components/UI/Loading";
 import CookieManager from "@utils/cookieManager";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
+import PageTransition from "@utils/PageTransition";
 
 export default function AuthTemplate({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { push } = useRouter();
-  const isIdle = useActive(2); //20mins
+  const { push, refresh } = useRouter();
+  const isIdle = useActive(45); //20mins
   const cid = CookieManager.getCookie("cid");
-  const { setUser, logout, isLoggedIn } = useAuthStore();
+  const { setUser, logout, isLoggedIn, user } = useAuthStore();
   const { openNotification } = useNotification();
   const [isIdleLoading, setIsIdleLoading] = useState(false);
 
@@ -43,7 +44,8 @@ export default function AuthTemplate({
         : "An error occurred";
       openNotification("error", errMessage, "Please login to proceed.");
       logout();
-      push("/login");
+      refresh();
+      return push("/login");
     }
   }, [error]);
 
@@ -53,6 +55,7 @@ export default function AuthTemplate({
       setIsIdleLoading(true);
       logout(true);
       setTimeout(() => {
+        refresh();
         return push("/login");
       }, 8000); //10000 = 10sec
     }
@@ -63,9 +66,7 @@ export default function AuthTemplate({
   }
 
   if (isIdleLoading) {
-    let msg = !cid
-      ? "Unauthorized access, please login."
-      : "Signed out due to inactivity...";
+    let msg = !cid ? "Signing out..." : "Signed out due to inactivity...";
     return <Loading size="fullscreen" description={msg} />;
   }
 

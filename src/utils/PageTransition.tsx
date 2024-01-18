@@ -5,10 +5,10 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
   return (
     <AnimatePresence>
       <motion.div
+        exit={{ opacity: 0 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ delay: 0.5, ease: "easeOut" }}
+        transition={{ delay: 0.75, ease: "linear" }}
       >
         {children}
       </motion.div>

@@ -1,11 +1,11 @@
 .container {
-  gap: $gap-sm;
+  width: 100%;
+  gap: $gap-md;
   display: grid;
   margin: 0 auto;
-  height: 100vh;
-  height: 100svh;
   max-width: 100%;
-  overflow: hidden;
+  height: 100%;
+  min-height: 100vh;
   position: relative;
   grid-template-rows: auto;
   grid-template-columns: 250px auto;
@@ -14,28 +14,30 @@
 
 .main {
   width: 100%;
+  height: 100%;
   display: grid;
-  height: 100vh;
-  height: 100svh;
+  padding-bottom: 2rem;
   grid-area: main;
   position: relative;
-  padding-bottom: 2rem;
   grid-template-rows: auto 1fr;
   grid-template-areas:
     "navbar"
     "content";
-}
 
-.main-content {
-  grid-area: content; /* Assigns the content area */
-  overflow-y: hidden;
-  grid-row: 1fr;
+  &-content {
+    grid-row: 1fr;
+    display: flex;
+    padding: 1rem;
+    grid-area: content; /* Assigns the content area */
+    flex-direction: column;
+  }
 }
 
 aside {
-  width: 100%;
+  top: 0;
+  bottom: 0;
   min-height: 100%;
-  position: absolute;
+  position: sticky;
   grid-area: sidebar;
   background: hsl($primary-color...);
 }

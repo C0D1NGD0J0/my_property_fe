@@ -1,6 +1,7 @@
 import APIError from "@utils/errorHandler";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import AuthService from "@services/auth";
+import CookieManager from "@utils/cookieManager";
 
 interface IAxiosService {
   get<T = any>(url: string, params?: object): Promise<T>;
@@ -38,14 +39,12 @@ class AxioService implements IAxiosService {
     this._axios.interceptors.response.use(
       async (response: AxiosResponse) => {
         // format response data to be uniform
-        if (response.data.hasOwnProperty("msg")) {
-          response.data = {
-            ...response.data,
-            data: response.data.msg,
-          };
-          delete response.data.msg;
-        }
-
+        response.data = {
+          ...response.data,
+          ...(response.data.data ? { data: response.data.data } : null),
+          success: response.data.success,
+          msg: response.data?.msg ? response.data.msg : "",
+        };
         return response;
       },
       async (error) => {
@@ -62,6 +61,7 @@ class AxioService implements IAxiosService {
           error.response.status === 401
         ) {
           // handle errror if refresh-token is also expired
+          CookieManager.removeCookie("cid");
         }
         // Handle errors
         const apiError = new APIError().init(error);

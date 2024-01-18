@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { IEditClient, IEditUser } from "@interfaces/user.interface";
+import BaseValidation from "./base.validation";
 
-class UserValidation {
+class UserValidation extends BaseValidation {
   editUser = async (userData: IEditUser) => {
     const userSchema = z.object({
       email: z.string().email(),
@@ -63,19 +64,6 @@ class UserValidation {
       return { isValid: false, errors };
     }
   };
-
-  // Private TSignupData to parse Zod error issues
-  private parseZodError(errors: Array<any>): { [key: string]: string } {
-    const parsedErrors: { [key: string]: string } = {};
-
-    errors.forEach((issue) => {
-      const key = issue.path[0];
-      const message = issue.message;
-      parsedErrors[key] = message;
-    });
-
-    return parsedErrors;
-  }
 }
 
 export default new UserValidation();

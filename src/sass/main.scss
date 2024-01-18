@@ -1,19 +1,24 @@
-@import 'base/variables';
-@import 'base/base';
-@import 'base/typography';
+@import "base/variables";
+@import "base/base";
+@import "base/typography";
 
-@import 'layouts/navbar';
-@import 'layouts/footer';
-@import 'layouts/layouts';
+@import "layouts/navbar";
+@import "layouts/footer";
+@import "layouts/layouts";
 
-@import 'utils/utils';
+@import "utils/utils";
+@import "mixins/mixins";
 
-@import 'components/button';
-@import 'components/form-elements';
-@import 'components/pageHeader';
+@import "components/button";
+@import "components/table";
+@import "components/multiStep";
+@import "components/form-elements";
+@import "components/pageHeader";
+@import "components/imgGallery";
 
-@import 'pages/auth/pricing';
-@import 'pages/auth/auth';
-@import 'pages/account/settings';
+@import "pages/auth/pricing";
+@import "pages/auth/auth";
+@import "pages/account/settings";
+@import "pages/property/add-property";
 
-@import 'media-query/layout';
+@import "media-query/layout";

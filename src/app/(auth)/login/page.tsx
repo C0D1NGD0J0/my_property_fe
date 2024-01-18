@@ -35,7 +35,7 @@ export default function Login() {
         setAccounts(res.linkedAccounts);
 
         setIsSuccess(true);
-        openNotification("success", "Success", res.data);
+        openNotification("success", "Success", res.msg);
       }
     } catch (e: unknown) {
       const err = e as Error & { data: any };
@@ -68,7 +68,7 @@ export default function Login() {
                       key={item.name}
                       onClick={() => {
                         CookieManager.setCookie("cid", item.cid);
-                        push("/dashboard");
+                        setTimeout(() => push("/dashboard"), 500);
                       }}
                       style={{ padding: ".8rem", cursor: "pointer" }}
                     >

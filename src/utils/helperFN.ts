@@ -29,12 +29,17 @@ export const objectToFormData = (
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
     const formKey = namespace ? `${namespace}[${key}]` : key;
+
     if (value instanceof Date) {
       form.append(formKey, value.toISOString());
-    } else if (value && typeof value === "object") {
+    } else if (formKey === "photos" && value.length) {
+      for (let i = 0; i < value.length; i++) {
+        form.append("photos", value[i]);
+      }
+    } else if (value && typeof value === "object" && key !== "photo") {
       objectToFormData(value, form, formKey);
     } else {
-      form.append(formKey, String(value));
+      form.append(formKey, value);
     }
   });
   return form;
@@ -53,4 +58,30 @@ export const throttle = <T extends any[]>(
       setTimeout(() => (inThrottle = false), limit); // Reset throttle flag after limit
     }
   };
+};
+
+export const formatErrors = (
+  errorObject:
+    | {
+        isValid: boolean;
+        errors?: {
+          [key: string]: any;
+        };
+      }
+    | undefined,
+) => {
+  // Initialize an array to hold formatted error messages
+  let errorMessages = [];
+  if (errorObject && errorObject.errors) {
+    // Iterate over the keys of the errors object
+    for (const key in errorObject.errors) {
+      if (errorObject.errors.hasOwnProperty(key)) {
+        // Construct the error message and add it to the array
+        errorMessages.push(`${key}: ${errorObject.errors[key]}`);
+      }
+    }
+  }
+
+  // Join the array of error messages into a single string with each message on a new line
+  return errorMessages.join("\n");
 };

@@ -31,7 +31,6 @@ export default class APIError extends Error {
       const { response } = error;
       if (response && response.data) {
         const res = this.parseApiError(response.data);
-        console.log(res, "----RES");
         return res;
       }
     } else if (error instanceof Error) {
