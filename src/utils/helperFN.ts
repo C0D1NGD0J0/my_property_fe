@@ -29,12 +29,17 @@ export const objectToFormData = (
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
     const formKey = namespace ? `${namespace}[${key}]` : key;
+
     if (value instanceof Date) {
       form.append(formKey, value.toISOString());
-    } else if (value && typeof value === "object") {
+    } else if (formKey === "photos" && value.length) {
+      for (let i = 0; i < value.length; i++) {
+        form.append("photos", value[i]);
+      }
+    } else if (value && typeof value === "object" && key !== "photo") {
       objectToFormData(value, form, formKey);
     } else {
-      form.append(formKey, String(value));
+      form.append(formKey, value);
     }
   });
   return form;

@@ -7,6 +7,7 @@ import Checkbox from "@components/FormElements/Checkbox";
 import FormInput from "@components/FormElements/FormInput";
 import FormLabel from "@components/FormElements/FormLabel";
 import FormField from "@components/FormElements/FormField";
+import FileInput from "@components/FormElements/FileInput";
 
 export {
   Form,
@@ -18,4 +19,5 @@ export {
   FormField,
   Table,
   Toggle,
+  FileInput,
 };

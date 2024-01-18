@@ -60,11 +60,11 @@ function Index() {
   };
 
   return (
-    <header className="header">
+    <header className="header-navbar">
       <ul className="header-menu">
         <li className="header-menu_item search">
           <input
-            type="text"
+            type="search"
             className="search-field"
             id="search"
             placeholder="Seach Here"
@@ -102,18 +102,16 @@ function Index() {
               })}
               <li>
                 <Link
-                  href="/dashboard/profile"
-                  className={urlPath === "/dashboard/profile" ? "active" : ""}
+                  href="/profile"
+                  className={urlPath === "/profile" ? "active" : ""}
                 >
                   <i className="bx bx-user"></i>Profile
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/user_settings"
-                  className={
-                    urlPath === "/dashboard/user_settings" ? "active" : ""
-                  }
+                  href="/user_settings"
+                  className={urlPath === "/user_settings" ? "active" : ""}
                 >
                   <i className="bx bx-cog"></i>Settings
                 </Link>

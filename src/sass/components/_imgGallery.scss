@@ -1,0 +1,88 @@
+.gallery-container {
+  width: 90%;
+  // margin-inline: auto;
+
+  .gallery {
+    gap: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+
+    &-header {
+      width: fit-content;
+      display: block;
+    }
+
+    .image {
+      &-card {
+        width: 20rem;
+        height: 20rem;
+        position: relative;
+        transition: display 5s linear;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          transition: transform 0.3s ease;
+        }
+
+        .delete-button {
+          position: absolute;
+          top: 0;
+          right: 1rem;
+          border: none;
+          color: red;
+          display: none;
+          font-size: 3rem;
+          cursor: pointer;
+          background: white;
+        }
+
+        .overlay {
+          position: absolute;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+          color: #ffffff;
+          width: 100%;
+          padding: 10px;
+          box-sizing: border-box;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        &:hover .delete-button {
+          display: initial;
+          transition: display 5s linear;
+        }
+      }
+
+      &-size {
+        font-size: $fs-sm;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.status-bar {
+  width: 25rem;
+  margin: 10px 0;
+  padding: 1.5rem 1rem 1rem 0;
+  color: hsl($primary-color...);
+
+  span {
+    font-weight: 700;
+  }
+  &-progress {
+    height: 1rem;
+    border-radius: 1rem;
+    width: 66.6%; /* Adjust according to the progress */
+    background-color: hsl($primary-color...);
+  }
+}

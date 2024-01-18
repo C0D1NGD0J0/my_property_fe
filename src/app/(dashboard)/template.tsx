@@ -9,6 +9,7 @@ import Loading from "@components/UI/Loading";
 import CookieManager from "@utils/cookieManager";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
+import PageTransition from "@utils/PageTransition";
 
 export default function AuthTemplate({
   children,

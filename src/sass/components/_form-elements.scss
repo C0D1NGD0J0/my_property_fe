@@ -20,10 +20,15 @@
     align-items: center;
     justify-content: space-between;
 
-    > label,
+    .form-label,
     .form-input_select,
     input {
       width: 50%;
+    }
+
+    .form-field-error {
+      bottom: -1rem;
+      position: relative;
     }
   }
 }
@@ -34,7 +39,7 @@
   font-weight: bold;
   position: absolute;
   color: hsl($danger-color...);
-  font-size: clamp($fs-xsm, 12px, $fs-sm);
+  font-size: clamp($fs-sm, 12px, $fs-md);
 }
 
 textarea {
@@ -116,6 +121,23 @@ textarea {
   &:focus.untouched:invalid {
     transition: all 0.2s ease-in-out;
     border-bottom: 2px solid red;
+  }
+}
+
+.file-input {
+  gap: 1.2rem;
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  justify-content: space-between;
+  border: 1px solid hsl($grey-color...);
+
+  &:hover {
+    cursor: pointer;
+    transition: all 0.2s linear;
+    background-color: #f9f9f9;
+    box-shadow: $box-shadow-alt;
   }
 }
 

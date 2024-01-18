@@ -7,6 +7,7 @@ type FormVariant = "auth" | "basic" | "custom";
 interface FormProps {
   children: ReactNode;
   id?: string;
+  encType?: string;
   onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
   className?: string;
   style?: CSSProperties;
@@ -16,11 +17,13 @@ const Form: React.FC<FormProps> = ({
   children,
   onSubmit,
   id,
+  encType,
   className,
   style,
 }) => {
   return (
     <form
+      encType={encType}
       className={`${className ?? ""}`}
       style={style}
       onSubmit={onSubmit}

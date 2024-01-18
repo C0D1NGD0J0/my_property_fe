@@ -39,14 +39,12 @@ class AxioService implements IAxiosService {
     this._axios.interceptors.response.use(
       async (response: AxiosResponse) => {
         // format response data to be uniform
-        if (response.data.hasOwnProperty("msg")) {
-          response.data = {
-            ...response.data,
-            data: response.data.msg,
-          };
-          delete response.data.msg;
-        }
-
+        response.data = {
+          ...response.data,
+          ...(response.data.data ? { data: response.data.data } : null),
+          success: response.data.success,
+          msg: response.data?.msg ? response.data.msg : "",
+        };
         return response;
       },
       async (error) => {
@@ -62,7 +60,6 @@ class AxioService implements IAxiosService {
           originalRequest.url == "/api/v1/auth/refresh_token" &&
           error.response.status === 401
         ) {
-          console.log("fire----");
           // handle errror if refresh-token is also expired
           CookieManager.removeCookie("cid");
         }

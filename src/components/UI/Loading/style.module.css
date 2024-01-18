@@ -11,6 +11,6 @@
   width: 100vw;
   left: -26rem;
   position: absolute;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   background-color: rgba(239, 239, 239, 1);
 }

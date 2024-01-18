@@ -7,6 +7,7 @@ const { Step } = Steps;
 interface StepType {
   title: string;
   hidden: boolean;
+  hasError: boolean;
   content: React.ReactNode;
 }
 
@@ -92,8 +93,18 @@ const MultiStepWrapper: React.FC<MultiStepWrapperProps> = ({
             }}
           >
             {steps.map((step, index) => {
+              const { hasError } = step;
               if (!step.hidden) {
-                return <Step key={index} title={step.title} />;
+                return (
+                  <Step
+                    key={index}
+                    title={
+                      <span className={hasError ? "step-error" : ""}>
+                        {step.title}
+                      </span>
+                    }
+                  />
+                );
               }
             })}
           </Steps>

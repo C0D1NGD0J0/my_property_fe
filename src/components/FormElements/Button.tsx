@@ -33,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       onClick={onClick}
       aria-label={ariaLabel || label}
-      className={`btn ${className ? className : ""}`}
+      className={`${className ? className : ""}`}
     >
       {renderChildren ? (
         children
@@ -42,7 +42,7 @@ const Button: React.FC<ButtonProps> = ({
           {icon && iconPosition === "left" && (
             <span className="btn-icon">{icon}</span>
           )}
-          <span className="btn-label">{label}</span>
+          {label}
           {icon && iconPosition === "right" && (
             <span className="btn-icon">{icon}</span>
           )}

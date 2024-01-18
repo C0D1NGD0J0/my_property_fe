@@ -24,7 +24,9 @@ class PropertyService implements IPropertyService {
         success: boolean;
         data: any;
         msg: string;
-      }>(`${this.baseUrl}/${cid}/`, data);
+      }>(`${this.baseUrl}/${cid}/`, data, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
       return res;
     } catch (error) {
       throw error;

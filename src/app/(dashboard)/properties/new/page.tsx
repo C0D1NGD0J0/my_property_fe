@@ -1,6 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FormikValues, useFormik } from "formik";
+import { Upload, UploadProps, message } from "antd";
+import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import {
   Form,
@@ -10,72 +12,74 @@ import {
   FormLabel,
   Button,
   Toggle,
+  FileInput,
 } from "@components/FormElements";
 import DynamicList from "@components/UI/List";
 import { IProperty } from "@interfaces/property.interface";
-import { MultiStepWrapper } from "@components/UI";
-import { Loading, Alert } from "@components/UI";
+import { ImageGallery, MultiStepWrapper } from "@components/UI";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
 import { ContentHeader } from "@components/PageHeader";
 import TextEditor from "@components/TextEditor";
 import PropertyValidation from "@validations/property.validation";
 import propertyService from "@services/property";
-import { formatErrors, objectToFormData } from "@utils/helperFN";
+import { objectToFormData } from "@utils/helperFN";
+import { FileWithPreview } from "@interfaces/utils.interface";
 
 const initialValues: IProperty = {
-  title: "Beautiful Family Home",
+  title: "Charming Urban Apartment",
   description: {
-    text: "A spacious and modern family home located in a serene neighborhood.",
-    html: "",
+    text: "A cozy, modern apartment located in the heart of the city. Features two bedrooms, a fully-equipped kitchen, and a spacious living room with a great view of the downtown skyline.",
+    html: "<p>A cozy, modern apartment located in the heart of the city. Features two bedrooms, a fully-equipped kitchen, and a spacious living room with a great view of the downtown skyline.</p>",
   },
-  propertyType: "singleFamily",
+  propertyType: "apartments",
   status: "vacant",
   managedBy: "",
-  propertySize: 3500,
+  propertySize: 1200, // size in square feet or square meters
   features: {
-    floors: 2,
-    bedroom: 5,
-    bathroom: 3,
-    maxCapacity: 10,
-    availableParking: 4,
+    floors: 0,
+    bedroom: 0,
+    bathroom: 0,
+    maxCapacity: 0,
+    availableParking: 0,
   },
   extras: {
-    has_tv: true,
+    has_tv: false,
     has_kitchen: true,
     has_ac: true,
-    has_heating: true,
+    has_heating: false,
     has_internet: true,
-    has_gym: false,
+    has_gym: true,
     has_parking: true,
     has_swimmingpool: true,
     has_laundry: true,
     petsAllowed: true,
   },
-  category: "residential",
-  address: "1234 Maple Street, Anytown, USA",
+  category: "",
+  address: "39 Alfred Rewane Road Ikoyi Lagos, Ikoyi, Lagos, Nigeria",
   fees: {
     includeTax: true,
-    taxAmount: 7.5,
-    rentalAmount: 2500.0,
-    managementFees: 150.0,
+    taxAmount: 7.5, // percentage
+    rentalAmount: 1500.0, // rental amount in dollars
+    managementFees: 100.0, // management fees in dollars
     currency: "USD",
   },
   photos: [],
-  totalUnits: 0,
+  totalUnits: 10, // total number of units in the property
 };
+
 const propertyValidation = new PropertyValidation();
 
 const AddProperty = () => {
+  const MAX_IMAGES = 6;
+  const router = useRouter();
+  const [filesWithPreviews, setFilesWithPreviews] = useState<FileWithPreview[]>(
+    [],
+  );
   const { user, isLoggedIn } = useAuthStore((state) => state);
-  const [formErrors, setFormErrors] = useState<string[]>([]);
+  const [stepErrors, setStepErrors] = useState<string[]>([]);
   const { openNotification } = useNotification();
 
-  useEffect(() => {
-    if (formErrors.length) {
-      openNotification("error", "Error", formErrors.join(",\n\n "));
-    }
-  }, [formErrors]);
   const mutation = useMutation({
     mutationFn: async ({
       cid,
@@ -86,32 +90,28 @@ const AddProperty = () => {
     }) => {
       return await propertyService.addProperty(cid, formData);
     },
-    onSuccess(data) {
-      console.log(data, "----onSuccess-----");
-      // queryClient.setQueryData(
-      //   ["newProperty", { id: data?.id }],
-      //   data.clientInfo,
-      // );
-    },
   });
 
   const handleSubmit = async (values: FormikValues) => {
     try {
-      console.log(values, "------REzzz-----");
+      const editedValues = {
+        ...values,
+        photos: values.photos.map(
+          (f: { file: File; previewUrl?: string }) => f.file,
+        ),
+      };
+
       const res = await mutation.mutateAsync({
         cid: user?.cid || "",
-        formData: objectToFormData(values),
+        formData: objectToFormData(editedValues),
       });
-
-      console.log(res, "------RES-----");
-      // if (res.success) {
-      //   queryClient.invalidateQueries({
-      //     queryKey: ["clientDetails", { id: user?.id }],
-      //   });
-      // }
+      if (res.success) {
+        openNotification("success", "New property listing added.", res.msg);
+        router.push("/properties");
+        formik.resetForm();
+      }
     } catch (e: unknown) {
       const err = e as Error & { data: any };
-      console.log(err, "-----ERR-----");
       return openNotification("error", "Error", err.data);
     }
   };
@@ -121,10 +121,57 @@ const AddProperty = () => {
     initialValues: initialValues,
     validate: async (values) => {
       const res = propertyValidation.newProperty(values);
-      if (!res.isValid && res.errors) {
-        const err = Object.values(res.errors);
-        setFormErrors(err);
-      }
+      const stepFields = {
+        description: [
+          "title",
+          "address",
+          "managedBy",
+          "propertyType",
+          "category",
+          "status",
+          "description",
+        ],
+        features: [
+          "features.floors",
+          "features.bedroom",
+          "features.bathroom",
+          "features.maxCapacity",
+          "propertySize",
+          "totalUnits",
+          "extras.has_parking",
+          "features.availableParking",
+        ],
+        financial: [
+          "fees.rentalAmount",
+          "fees.managementFees",
+          "fees.currency",
+          "fees.includeTax",
+          "fees.taxAmount",
+        ],
+        amenities: Object.keys(formik.values.extras).map(
+          (extraKey) => `extras.${extraKey}`,
+        ),
+        gallery: ["photos"],
+        // Add more steps as needed
+      };
+
+      const newStepErrors: string[] = [];
+
+      Object.entries(stepFields).forEach(([stepName, fields]) => {
+        // Check if any of the fields for this step have an error
+        const hasError = fields.some((field) => {
+          if (res.errors) {
+            return Object.keys(res?.errors).includes(field);
+          }
+        });
+
+        if (hasError) {
+          newStepErrors.push(stepName);
+        }
+      });
+
+      // Update the stepErrors state
+      setStepErrors(newStepErrors);
       return res.isValid ? {} : res.errors;
     },
   });
@@ -170,9 +217,49 @@ const AddProperty = () => {
     });
   };
 
+  const handleFilesSelected = (fileList: FileList | null) => {
+    if (!fileList) return;
+
+    const newFileObjects = Array.from(fileList).map((file) => ({
+      file,
+      previewUrl: URL.createObjectURL(file),
+    }));
+
+    setFilesWithPreviews((prevFiles) => {
+      // Combine the current files with the new files
+      const combinedFiles = [...prevFiles, ...newFileObjects];
+
+      // If the total number of files exceeds the maximum, trim the array
+      const updatedFiles =
+        combinedFiles.length > MAX_IMAGES
+          ? combinedFiles.slice(0, MAX_IMAGES)
+          : combinedFiles;
+
+      // Update Formik's photos field with the new list of files
+      formik.setFieldValue("photos", updatedFiles);
+      return updatedFiles;
+    });
+  };
+
+  const handleFileDeletion = useCallback(
+    (fileToDelete: FileWithPreview) => {
+      // Remove the file from filesWithPreviews state
+      const updatedFilesWithPreviews = filesWithPreviews.filter(
+        (file) => file.previewUrl !== fileToDelete.previewUrl,
+      );
+      setFilesWithPreviews(updatedFilesWithPreviews);
+
+      // Update Formik's photos field value
+      const updatedFileList = updatedFilesWithPreviews.map((f) => f.file);
+      formik.setFieldValue("photos", updatedFileList);
+    },
+    [filesWithPreviews, formik],
+  );
+
   const steps = [
     {
       hidden: false,
+      hasError: stepErrors.includes("Description".toLowerCase()),
       title: "Description",
       content: (
         <div className="form-section">
@@ -195,9 +282,10 @@ const AddProperty = () => {
                 type="text"
                 name="title"
                 className="form-input"
-                onChange={formik.handleChange}
                 value={formik.values.title}
                 disabled={formik.isSubmitting}
+                onChange={formik.handleChange}
+                placeholder="Enter property name/title"
               />
             </FormField>
           </div>
@@ -220,9 +308,10 @@ const AddProperty = () => {
                 type="text"
                 name="address"
                 className="form-input"
-                onChange={formik.handleChange}
                 value={formik.values.address}
+                onChange={formik.handleChange}
                 disabled={formik.isSubmitting}
+                placeholder="Enter property address"
               />
             </FormField>
           </div>
@@ -270,7 +359,7 @@ const AddProperty = () => {
               <Select
                 value={formik.values.propertyType}
                 name="propertyType"
-                placeholder="Select property type"
+                placeholder="Building type"
                 className="form-input_select"
                 onChange={(name, value) => {
                   formik.setFieldTouched(name);
@@ -307,7 +396,7 @@ const AddProperty = () => {
               <Select
                 value={formik.values.category}
                 name="category"
-                placeholder="Select property category"
+                placeholder="Property category"
                 className="form-input_select"
                 onChange={(name, value) => {
                   formik.setFieldTouched(name);
@@ -370,6 +459,7 @@ const AddProperty = () => {
                   formik.setFieldValue("description.html", content);
                   formik.setFieldValue("description.text", editor.getText());
                 }}
+                placeholder="Enter property description"
                 disabled={formik.isSubmitting}
               />
             </FormField>
@@ -381,6 +471,7 @@ const AddProperty = () => {
     {
       hidden: false,
       title: "Features",
+      hasError: stepErrors.includes("Features".toLowerCase()),
       content: (
         <div className="form-section">
           {/* Section 2: Property Features */}
@@ -403,8 +494,12 @@ const AddProperty = () => {
                 name="features.floors"
                 className="form-input"
                 onChange={formik.handleChange}
+                disabled={
+                  formik.isSubmitting ||
+                  formik.values.propertyType !== "singleFamily"
+                }
+                placeholder="Building floors"
                 value={formik.values.features.floors}
-                disabled={formik.isSubmitting}
               />
             </FormField>
 
@@ -426,8 +521,12 @@ const AddProperty = () => {
                 name="features.bedroom"
                 className="form-input"
                 onChange={formik.handleChange}
+                disabled={
+                  formik.isSubmitting ||
+                  formik.values.propertyType !== "singleFamily"
+                }
+                placeholder="Total bedrooms"
                 value={formik.values.features.bedroom}
-                disabled={formik.isSubmitting}
               />
             </FormField>
 
@@ -444,13 +543,17 @@ const AddProperty = () => {
                 label="Total bathrooms"
               />
               <FormInput
-                required={false}
                 type="number"
-                name="features.bathroom"
+                required={false}
                 className="form-input"
+                name="features.bathroom"
                 onChange={formik.handleChange}
+                disabled={
+                  formik.isSubmitting ||
+                  formik.values.propertyType !== "singleFamily"
+                }
+                placeholder="Total bathrooms"
                 value={formik.values.features.bathroom}
-                disabled={formik.isSubmitting}
               />
             </FormField>
           </div>
@@ -475,7 +578,10 @@ const AddProperty = () => {
                 className="form-input"
                 onChange={formik.handleChange}
                 value={formik.values.features.maxCapacity}
-                disabled={formik.isSubmitting}
+                disabled={
+                  formik.isSubmitting ||
+                  formik.values.propertyType !== "singleFamily"
+                }
               />
             </FormField>
 
@@ -520,7 +626,11 @@ const AddProperty = () => {
                 name="totalUnits"
                 className="form-input"
                 onChange={formik.handleChange}
-                value={formik.values.totalUnits}
+                value={
+                  formik.values.propertyType !== "singleFamily"
+                    ? formik.values.totalUnits
+                    : 0
+                }
                 disabled={
                   formik.isSubmitting ||
                   formik.values.propertyType == "singleFamily"
@@ -572,7 +682,11 @@ const AddProperty = () => {
                 disabled={
                   formik.isSubmitting || !formik.values.extras.has_parking
                 }
-                value={formik.values.features.availableParking}
+                value={
+                  formik.values.extras.has_parking
+                    ? formik.values.features.availableParking
+                    : 0
+                }
               />
             </FormField>
           </div>
@@ -583,6 +697,7 @@ const AddProperty = () => {
     {
       hidden: false,
       title: "Financial",
+      hasError: stepErrors.includes("Financial".toLowerCase()),
       content: (
         <div className="form-section">
           {/* Section 3: Finances */}
@@ -726,6 +841,7 @@ const AddProperty = () => {
     {
       hidden: false,
       title: "Amenities",
+      hasError: stepErrors.includes("Amenities".toLowerCase()),
       content: (
         <div className="form-section">
           {/* Section 4: Amenities */}
@@ -735,6 +851,45 @@ const AddProperty = () => {
               listMode="single"
             />
           </div>
+        </div>
+      ),
+    },
+
+    {
+      hidden: false,
+      title: "Gallery",
+      hasError: stepErrors.includes("Gallery".toLowerCase()),
+      content: (
+        <div className="form-section">
+          <div className="form-fields">
+            <FormField
+              className="form-field_inline"
+              error={{
+                msg: formik.errors.photos,
+                touched: !!formik.touched.photos,
+              }}
+            >
+              <FormLabel
+                className="form-label"
+                htmlFor="photos"
+                label="Property images"
+              />
+              <FileInput
+                id="file-input"
+                name="photos"
+                onChange={handleFilesSelected}
+                multiple
+                disabled={filesWithPreviews.length === MAX_IMAGES}
+                accept="image/*"
+              />
+            </FormField>
+          </div>
+
+          <ImageGallery
+            maxImages={MAX_IMAGES}
+            initialImages={filesWithPreviews}
+            onFileDelete={handleFileDeletion}
+          />
         </div>
       ),
     },
@@ -750,28 +905,36 @@ const AddProperty = () => {
     isFirstStep: any;
     nextStep: any;
     prevStep: any;
-  }) => (
-    <div className="steps-action">
-      {!isFirstStep && (
-        <Button
-          label="Back"
-          onClick={prevStep}
-          className="btn btn-outline-ghost"
-        />
-      )}
-      {!isLastStep && (
-        <Button label="Next" onClick={nextStep} className="btn btn-outline" />
-      )}
-      {isLastStep && (
-        <Button
-          type="submit"
-          className="btn btn-outline"
-          disabled={formik.isSubmitting}
-          label={formik.isSubmitting ? "processing...." : "Submit"}
-        />
-      )}
-    </div>
-  );
+  }) => {
+    return (
+      <div className="steps-action">
+        {!isFirstStep && (
+          <Button
+            label="Back"
+            onClick={prevStep}
+            disabled={formik.isSubmitting}
+            className="btn btn-outline-ghost btn-md"
+          />
+        )}
+        {!isLastStep && (
+          <Button
+            label="Next"
+            onClick={nextStep}
+            disabled={formik.isSubmitting}
+            className="btn btn-outline btn-md"
+          />
+        )}
+        {isLastStep && (
+          <Button
+            type="submit"
+            className="btn btn-outline btn-md"
+            disabled={formik.isSubmitting || stepErrors.length > 0}
+            label={formik.isSubmitting ? "Processing...." : "Submit"}
+          />
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -779,6 +942,7 @@ const AddProperty = () => {
       <div className="add-property">
         <div className="add-property_content">
           <Form
+            encType="multipart/form-data"
             id="add-property-form"
             className="form"
             onSubmit={(e) => {
