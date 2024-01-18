@@ -57,11 +57,13 @@ const SelectInput: FC<FormSelectProps> = ({
   );
 
   useEffect(() => {
-    if (typeof window === "object") {
+    if (typeof window !== "undefined") {
       document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      if (typeof window !== "undefined") {
+        document.removeEventListener("mousedown", handleClickOutside);
+      }
     };
   }, [handleClickOutside]);
 
