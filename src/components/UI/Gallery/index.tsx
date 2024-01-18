@@ -58,7 +58,7 @@ const Gallery: React.FC<GalleryProps> = ({
         {objectURLs.map((src, index) => (
           <div key={`selected-${index}`} className="image-card">
             <a href={src.previewUrl} target="_blank" rel="noopener noreferrer">
-              <Image src={src.previewUrl} alt={`Image ${index + 1}`} />
+              <img src={src.previewUrl} alt={`Image ${index + 1}`} />
             </a>
             <button
               type="button"
