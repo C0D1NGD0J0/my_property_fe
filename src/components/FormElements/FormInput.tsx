@@ -3,7 +3,7 @@ import React, { ChangeEvent, FC, useEffect, useState } from "react";
 
 interface FormInputProps {
   id?: string;
-  type?: "text" | "number";
+  type?: "text" | "number" | "email";
   name: string;
   ariaLabel?: string;
   disabled?: boolean;
