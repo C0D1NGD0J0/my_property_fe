@@ -14,6 +14,12 @@ const Select = dynamic(
   () => import("@components/FormElements/Select"),
   { ssr: false }, // <-- not including this component on server-side
 );
+
+const TextEditor = dynamic(
+  () => import("@components/TextEditor"),
+  { ssr: false }, // <-- not including this component on server-side
+);
+
 export {
   Form,
   Select,
@@ -24,5 +30,6 @@ export {
   FormField,
   Table,
   Toggle,
+  TextEditor,
   FileInput,
 };

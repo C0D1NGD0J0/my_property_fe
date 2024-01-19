@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import {
   Form,
-  Select,
   FormField,
   FormInput,
   FormLabel,
   Button,
+  Select,
+  TextEditor,
   Toggle,
   FileInput,
 } from "@components/FormElements";
@@ -19,7 +20,6 @@ import { ImageGallery, MultiStepWrapper } from "@components/UI";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
 import { ContentHeader } from "@components/PageHeader";
-import TextEditor from "@components/TextEditor";
 import PropertyValidation from "@validations/property.validation";
 import propertyService from "@services/property";
 import { objectToFormData } from "@utils/helperFN";
