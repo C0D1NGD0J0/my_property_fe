@@ -102,4 +102,5 @@ class AuthValidation extends BaseValidation {
   };
 }
 
-export default new AuthValidation();
+const authValidation = new AuthValidation();
+export default authValidation;

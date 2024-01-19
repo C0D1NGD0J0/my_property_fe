@@ -65,5 +65,5 @@ class UserValidation extends BaseValidation {
     }
   };
 }
-
-export default new UserValidation();
+const userValidation = new UserValidation();
+export default userValidation;

@@ -1,16 +1,16 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { FormikValues, useFormik } from "formik";
-import { Upload, UploadProps, message } from "antd";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import {
   Form,
-  Select,
   FormField,
   FormInput,
   FormLabel,
   Button,
+  Select,
+  TextEditor,
   Toggle,
   FileInput,
 } from "@components/FormElements";
@@ -20,22 +20,21 @@ import { ImageGallery, MultiStepWrapper } from "@components/UI";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
 import { ContentHeader } from "@components/PageHeader";
-import TextEditor from "@components/TextEditor";
 import PropertyValidation from "@validations/property.validation";
 import propertyService from "@services/property";
 import { objectToFormData } from "@utils/helperFN";
 import { FileWithPreview } from "@interfaces/utils.interface";
 
 const initialValues: IProperty = {
-  title: "Charming Urban Apartment",
+  title: "",
   description: {
-    text: "A cozy, modern apartment located in the heart of the city. Features two bedrooms, a fully-equipped kitchen, and a spacious living room with a great view of the downtown skyline.",
-    html: "<p>A cozy, modern apartment located in the heart of the city. Features two bedrooms, a fully-equipped kitchen, and a spacious living room with a great view of the downtown skyline.</p>",
+    text: "",
+    html: "",
   },
-  propertyType: "apartments",
-  status: "vacant",
+  propertyType: "",
+  status: "",
   managedBy: "",
-  propertySize: 1200, // size in square feet or square meters
+  propertySize: 0, // size in square feet or square meters
   features: {
     floors: 0,
     bedroom: 0,
@@ -45,27 +44,27 @@ const initialValues: IProperty = {
   },
   extras: {
     has_tv: false,
-    has_kitchen: true,
-    has_ac: true,
+    has_kitchen: false,
+    has_ac: false,
     has_heating: false,
-    has_internet: true,
-    has_gym: true,
-    has_parking: true,
-    has_swimmingpool: true,
-    has_laundry: true,
-    petsAllowed: true,
+    has_internet: false,
+    has_gym: false,
+    has_parking: false,
+    has_swimmingpool: false,
+    has_laundry: false,
+    petsAllowed: false,
   },
   category: "",
-  address: "39 Alfred Rewane Road Ikoyi Lagos, Ikoyi, Lagos, Nigeria",
+  address: "",
   fees: {
-    includeTax: true,
-    taxAmount: 7.5, // percentage
-    rentalAmount: 1500.0, // rental amount in dollars
-    managementFees: 100.0, // management fees in dollars
+    includeTax: false,
+    taxAmount: 0.0,
+    rentalAmount: 0.0,
+    managementFees: 0.0,
     currency: "USD",
   },
   photos: [],
-  totalUnits: 10, // total number of units in the property
+  totalUnits: 0,
 };
 
 const propertyValidation = new PropertyValidation();
@@ -76,7 +75,7 @@ const AddProperty = () => {
   const [filesWithPreviews, setFilesWithPreviews] = useState<FileWithPreview[]>(
     [],
   );
-  const { user, isLoggedIn } = useAuthStore((state) => state);
+  const { user } = useAuthStore((state) => state);
   const [stepErrors, setStepErrors] = useState<string[]>([]);
   const { openNotification } = useNotification();
 

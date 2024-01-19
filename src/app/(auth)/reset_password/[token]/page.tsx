@@ -14,8 +14,10 @@ import FormInput from "@components/FormElements/FormInput";
 import FormLabel from "@components/FormElements/FormLabel";
 import FormField from "@components/FormElements/FormField";
 
+type InputType = "number" | "text" | "email" | "password";
+
 export default function ResetPassword() {
-  const [inputType, setInputType] = useState("password");
+  const [inputType, setInputType] = useState<InputType>("password");
   const [isLoading, setIsLoading] = useState(true);
   const { openNotification } = useNotification();
   const router = useRouter();

@@ -108,4 +108,5 @@ class AxioService implements IAxiosService {
   };
 }
 
-export default new AxioService();
+const axiosService = new AxioService();
+export default axiosService;

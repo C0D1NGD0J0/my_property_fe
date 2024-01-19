@@ -79,7 +79,7 @@ const Properties = () => {
   ];
 
   return (
-    <>
+    <div>
       <ContentHeader
         showBtn={true}
         pageTitle="My Properties"
@@ -103,7 +103,7 @@ const Properties = () => {
           displayHeaderSection
         />
       </section>
-    </>
+    </div>
   );
 };
 
