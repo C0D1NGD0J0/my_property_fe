@@ -32,6 +32,22 @@ class PropertyService implements IPropertyService {
       throw error;
     }
   };
+
+  getUserProperties = async (cid: string | undefined) => {
+    try {
+      if (!cid) {
+        throw new Error("cid is required");
+      }
+      const res = await axios.get<{
+        success: boolean;
+        data: any;
+        msg: string;
+      }>(`${this.baseUrl}/${cid}/user_properties`);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 export default new PropertyService();

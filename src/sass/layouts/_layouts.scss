@@ -25,11 +25,16 @@
     "content";
 
   &-content {
-    grid-row: 1fr;
+    grid-template-rows: auto;
     display: flex;
     padding: 1rem;
+    // overflow: hidden;
     grid-area: content; /* Assigns the content area */
     flex-direction: column;
+    > div {
+      width: fit-content;
+      height: max-content;
+    }
   }
 }
 

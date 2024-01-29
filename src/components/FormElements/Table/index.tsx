@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import TableRow from "./Row";
 import TableHeader from "./Header";
 import {
@@ -6,6 +6,7 @@ import {
   TableComponentProps,
   TableRowData,
 } from "@interfaces/tableComponent.interface";
+import Pagination from "@components/FormElements/Table/Pagination";
 
 // TableComponent
 const TableComponent: React.FC<TableComponentProps> = ({
@@ -15,16 +16,21 @@ const TableComponent: React.FC<TableComponentProps> = ({
   customFilter,
   filterOptions,
   style,
+  pagination,
   showCheckbox = false,
   displayHeaderSection = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [filter, setFilter] = useState("all");
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "ascending" | "descending";
   } | null>(null);
+
+  useEffect(() => {
+    console.log(data, "----daata");
+  }, [data]);
 
   const filteredData = useMemo<TableRowData[]>(() => {
     let filtered = data;
@@ -72,7 +78,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setSortConfig({ key, direction });
   };
 
-  const handleRowSelect = (id: number) => {
+  const handleRowSelect = (id: string) => {
     setSelectedRows((prevSelectedRows) => {
       const newSelectedRows = new Set(prevSelectedRows);
       if (newSelectedRows.has(id)) {
@@ -94,22 +100,29 @@ const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   const direction = sortConfig?.direction === "ascending" ? "up" : "down";
-  const modifiedColumns: TableColumn[] = showCheckbox
-    ? [
-        {
-          title: "Select",
-          dataIndex: "selection",
-          render: (_, record) => (
-            <input
-              type="checkbox"
-              checked={selectedRows.has(record.id)}
-              onChange={() => handleRowSelect(record.id)}
-            />
-          ),
-        },
-        ...columns, // Include other columns
-      ]
-    : columns;
+
+  const visibleColumns = useMemo(() => {
+    return columns.filter((col) => !col.hidden);
+  }, [columns]);
+
+  const modifiedColumns: TableColumn[] = useMemo(() => {
+    return showCheckbox
+      ? [
+          {
+            title: "Select",
+            dataIndex: "selection",
+            render: (_, record) => (
+              <input
+                type="checkbox"
+                checked={selectedRows.has(record.id)}
+                onChange={() => handleRowSelect(record.id)}
+              />
+            ),
+          },
+          ...visibleColumns, // Include other columns
+        ]
+      : visibleColumns;
+  }, [visibleColumns]);
 
   return (
     <div className="table-container">
@@ -125,6 +138,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
       <table className="table" style={style}>
         <thead>
           <tr>
+            <th>#</th>
             {showCheckbox && ( // Conditionally render checkbox column header
               <th key="selection">
                 <input
@@ -139,23 +153,24 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 />
               </th>
             )}
-            {columns.map((col) => (
-              <th key={col.dataIndex}>
-                <div className="th-content-box">
-                  {col.title}
-
-                  {col.showSorterIcon && (
-                    <span
-                      role="button"
-                      className="filter-icon"
-                      onClick={() => handleSort(col.dataIndex)}
-                    >
-                      <i className={`bx bx-caret-${direction}`}></i>
-                    </span>
-                  )}
-                </div>
-              </th>
-            ))}
+            {columns.map((col) => {
+              return !col.hidden ? (
+                <th key={col.dataIndex}>
+                  <div className="th-content-box">
+                    {col.title}
+                    {col.showSorterIcon && (
+                      <span
+                        role="button"
+                        className="filter-icon"
+                        onClick={() => handleSort(col.dataIndex)}
+                      >
+                        <i className={`bx bx-caret-${direction}`}></i>
+                      </span>
+                    )}
+                  </div>
+                </th>
+              ) : null;
+            })}
           </tr>
         </thead>
         <tbody>
@@ -173,6 +188,14 @@ const TableComponent: React.FC<TableComponentProps> = ({
           })}
         </tbody>
       </table>
+      <div className="table-footer">
+        <Pagination
+          onPageChange={pagination?.onPageChange}
+          currentPage={pagination?.currentPage || 1}
+          totalPages={pagination?.totalPages}
+          hasMoreResource={pagination?.hasMoreResource || false}
+        />
+      </div>
     </div>
   );
 };

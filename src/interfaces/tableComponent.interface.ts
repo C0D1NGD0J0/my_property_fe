@@ -1,11 +1,13 @@
+import { PaginationProps } from "@components/FormElements/Table/Pagination";
 import { CSSProperties } from "react";
 
 export interface TableComponentProps {
-  data: TableRowData[];
+  data: TableRowData[] | [];
   style?: CSSProperties;
   columns: TableColumn[];
   showCheckbox?: boolean;
   displayHeaderSection: boolean;
+  pagination: PaginationProps | undefined;
   onRowClick?: (rowData: TableRowData) => void;
   customFilter?: (row: TableRowData) => boolean;
   filterOptions: { label: string; value: string }[] | [];
@@ -14,6 +16,7 @@ export interface TableComponentProps {
 export interface TableColumn {
   title: string;
   dataIndex: string;
+  hidden?: boolean;
   showSorterIcon?: boolean;
   sorter?: (a: TableRowData, b: TableRowData) => number;
   columSorter?: (a: TableRowData, b: TableRowData) => number;
@@ -29,7 +32,7 @@ export interface TableHeaderProps {
 }
 
 export interface TableRowData {
-  id: number;
+  id: string;
   [key: string]: any; // Other dynamic keys
 }
 

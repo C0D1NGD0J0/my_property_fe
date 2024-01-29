@@ -57,6 +57,24 @@ export interface IProperty {
     rentalAmount: number | string;
     managementFees: number | string;
   };
+  leaseType: "short-term" | "long-term" | "daily";
   photos: IPropertyImages[] | [];
   totalUnits: number;
+}
+
+export type IPropertyDocument = IProperty & {
+  puid: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: number;
+};
+export interface IPropertyResponse {
+  properties: IPropertyDocument[] | [];
+  pagination: {
+    total: number;
+    perPage: number;
+    currentPage: number;
+    totalPages: number;
+    hasMoreResource: boolean;
+  };
 }
