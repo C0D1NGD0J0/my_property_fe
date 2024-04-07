@@ -1,10 +1,11 @@
 /* TABLE */
-table {
+.table {
   width: 100%;
   height: inherit;
   text-align: left;
+  overflow-x: scroll;
   position: relative;
-  table-layout: auto;
+  table-layout: fixed;
   border-radius: 0.6rem;
   box-shadow: $box-shadow;
   border-collapse: collapse;
@@ -16,7 +17,7 @@ table {
   -o-border-radius: 0.6rem;
 
   thead {
-    box-shadow: $box-shadow-alt;
+    // box-shadow: $box-shadow-alt;
     th {
       padding: 1rem;
       font-weight: 300;
@@ -24,11 +25,12 @@ table {
       letter-spacing: 0.1rem;
       text-overflow: ellipsis;
       text-transform: capitalize;
-      border-right: 1px solid lightgray;
+      border-collapse: collapse;
+      border: 1px solid lightgray;
 
-      &:last-child {
-        border-right: none;
-      }
+      // &:last-child {
+      //   border-right: none;
+      // }
 
       .th-content-box {
         display: flex;
@@ -46,8 +48,6 @@ table {
   tbody {
     tr {
       padding: 2rem 0;
-      word-wrap: break-word;
-      text-overflow: ellipsis;
       border-bottom: 1px solid lightgray;
 
       &:hover {
@@ -60,7 +60,8 @@ table {
       }
 
       td {
-        padding: 1.5rem 1rem;
+        word-wrap: balance;
+        padding: 0.8rem 1rem;
         overflow-wrap: break-word;
         font-size: clamp(1.4rem, 1vw, 1.8rem);
 
@@ -71,6 +72,23 @@ table {
       }
     }
   }
+
+  /* To target the first column in the header */
+  thead th:first-child, 
+  /* To target the first column in each row of the body */
+  tbody td:first-child {
+    width: 100px; /* Replace with the fixed width you want for the first column */
+  }
+
+  /* To target the rest of the columns */
+  thead th:not(:first-child),
+  tbody td:not(:first-child) {
+    width: 100%; /* They will automatically adjust their width */
+  }
+}
+
+.table-footer {
+  width: 100%;
 }
 
 /* TABLE SEACHBAR */

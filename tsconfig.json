@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,21 +24,56 @@
       }
     ],
     "paths": {
-      "@store/*": ["src/store/*"],
-      "@services/*": ["./src/services/*"],
-      "@interfaces/*": ["src/interfaces/*"],
-      "@components/*": ["src/components/*"],
-      "@configs/*": ["src/configs/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@utils/*": ["src/utils/*"],
-      "@contexts/*": ["src/contexts/*"],
-      "@sass/*": ["src/sass/*"],
-      "@validations/*": ["src/validations/*"],
-      "@app/*": ["./src/app/*"],
-      "@root/*": ["./*"],
+      "@store/*": [
+        "src/store/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@interfaces/*": [
+        "src/interfaces/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@configs/*": [
+        "src/configs/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@contexts/*": [
+        "src/contexts/*"
+      ],
+      "@sass/*": [
+        "src/sass/*"
+      ],
+      "@validations/*": [
+        "src/validations/*"
+      ],
+      "@app/*": [
+        "./src/app/*"
+      ],
+      "@root/*": [
+        "./*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
-  "types": ["node", "jest", "@testing-library/jest-dom"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "types": [
+    "node",
+    "jest",
+    "@testing-library/jest-dom"
+  ]
 }

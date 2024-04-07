@@ -1,9 +1,15 @@
 import APIError from "@utils/errorHandler";
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import _axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosStatic,
+} from "axios";
 import AuthService from "@services/auth";
 import CookieManager from "@utils/cookieManager";
 
 interface IAxiosService {
+  axios: AxiosInstance;
   get<T = any>(url: string, params?: object): Promise<T>;
   post<T = any>(url: string, data?: object): Promise<T>;
   put<T = any>(url: string, data?: object): Promise<T>;
@@ -11,10 +17,10 @@ interface IAxiosService {
 }
 
 class AxioService implements IAxiosService {
-  private _axios: AxiosInstance;
+  public axios: AxiosInstance;
 
   constructor() {
-    this._axios = axios.create({
+    this.axios = _axios.create({
       baseURL: process.env.NEXT_PUBLIC_BASE_URL,
       withCredentials: true,
       headers: {
@@ -26,7 +32,7 @@ class AxioService implements IAxiosService {
   }
 
   private setupInterceptors() {
-    this._axios.interceptors.request.use(
+    this.axios.interceptors.request.use(
       (config: any) => {
         // Add custom logic here, like setting authorization headers
         return config;
@@ -36,14 +42,14 @@ class AxioService implements IAxiosService {
       },
     );
 
-    this._axios.interceptors.response.use(
+    this.axios.interceptors.response.use(
       async (response: AxiosResponse) => {
         // format response data to be uniform
         response.data = {
           ...response.data,
           ...(response.data.data ? { data: response.data.data } : null),
           success: response.data.success,
-          msg: response.data?.msg ? response.data.msg : "",
+          ...(response.data?.msg ? { msg: response.data.msg } : null),
         };
         return response;
       },
@@ -54,7 +60,7 @@ class AxioService implements IAxiosService {
           if (originalRequest.url !== "/api/v1/auth/refresh_token") {
             const res = await AuthService.refreshToken();
 
-            return Promise.resolve(this._axios(originalRequest));
+            return Promise.resolve(this.axios(originalRequest));
           }
         } else if (
           originalRequest.url == "/api/v1/auth/refresh_token" &&
@@ -76,7 +82,7 @@ class AxioService implements IAxiosService {
     config?: AxiosRequestConfig,
   ): Promise<T> => {
     try {
-      const response = await this._axios.get<T>(url, { params });
+      const response = await this.axios.get<T>(url, { params });
       return response.data;
     } catch (error: unknown) {
       error = error as Error & { data: any };
@@ -89,7 +95,7 @@ class AxioService implements IAxiosService {
     data?: object,
     config?: AxiosRequestConfig,
   ): Promise<T> => {
-    const response = await this._axios.post<T>(url, data, config);
+    const response = await this.axios.post<T>(url, data, config);
     return response.data;
   };
 
@@ -98,13 +104,17 @@ class AxioService implements IAxiosService {
     data?: object,
     config?: AxiosRequestConfig,
   ): Promise<T> => {
-    const response = await this._axios.put<T>(url, data, config);
+    const response = await this.axios.put<T>(url, data, config);
     return response.data;
   };
 
   delete = async <T = any>(url: string, params?: object): Promise<T> => {
-    const response = await this._axios.delete<T>(url, { params });
+    const response = await this.axios.delete<T>(url, { params });
     return response.data;
+  };
+
+  getAxiosInstance = () => {
+    return this.axios;
   };
 }
 

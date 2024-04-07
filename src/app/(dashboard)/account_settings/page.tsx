@@ -513,10 +513,10 @@ const ClientSettings = () => {
             </div>
 
             <div className="form-actions">
-              <button className="btn" type="reset">
+              <button className="btn btn-md" type="reset">
                 Cancel
               </button>
-              <button className="btn btn-outline" type="submit">
+              <button className="btn btn-outline btn-md" type="submit">
                 {formik.isSubmitting ? "processing...." : "Submit"}
               </button>
             </div>

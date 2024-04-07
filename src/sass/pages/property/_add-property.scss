@@ -24,3 +24,70 @@
     }
   }
 }
+
+.upload-modal {
+  .description {
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    margin: 1rem 0;
+    padding: 1rem;
+    height: auto;
+
+    h3 {
+      color: #333;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .csv-analysis {
+      list-style-type: dis;
+      padding: 0;
+
+      li {
+        padding: 0.5rem;
+        font-weight: 400;
+        border-radius: 3px;
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+        span {
+          margin-left: 0.4rem;
+          font-weight: bold;
+        }
+
+        .csv-error-list {
+          list-style: georgian;
+          margin-top: 0.5rem;
+          padding-left: 1rem;
+          font-size: 1rem;
+
+          li {
+            span {
+              display: inline-block;
+              font-size: 1.2rem;
+              color: hsla($danger-color...);
+
+              border-radius: 2px;
+              padding: 0.2rem 0.5rem;
+              margin-right: 0.5rem;
+
+              &:last-child {
+                margin-right: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .actions {
+    gap: 2rem;
+    display: flex;
+    padding: 1.2rem 0;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

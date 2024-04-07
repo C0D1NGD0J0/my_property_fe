@@ -31,11 +31,21 @@ a:active {
   font-size: $fs-sm;
   align-items: center;
   text-decoration: none;
-  padding: 1.2rem 2.5rem;
   text-transform: uppercase;
   transition: all 0.3s ease-in;
   border: 1px solid hsl($primary-color...);
 
+  &.btn-sm {
+    padding: 0.8rem 1.8rem;
+  }
+
+  &.btn-md {
+    padding: 1.2rem 2.5rem;
+  }
+
+  &.btn-lg {
+    padding: 1.6rem 2.5rem;
+  }
   &:hover {
     color: hsl($secondary-color...);
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
@@ -57,22 +67,20 @@ a:active {
     cursor: not-allowed;
     pointer-events: none;
   }
-}
 
-// Outline button variants
-.btn.btn-outline {
-  background-color: hsl($primary-color...);
-  color: hsl($white-color...);
-}
-
-.btn.btn-outline-ghost {
-  background-color: transparent;
-  color: hsl($primary-color...);
-}
-
-.btn.btn-outline-warning {
-  background-color: hsl($warning-color...);
-  color: hsl($primary-color...);
+  // Outline button variant
+  &.btn-outline {
+    background-color: hsl($primary-color...);
+    color: hsl($white-color...);
+  }
+  &.btn-outline-ghost {
+    background-color: transparent;
+    color: hsl($primary-color...);
+  }
+  &.btn-outline-warning {
+    background-color: hsl($warning-color...);
+    color: hsl($primary-color...);
+  }
 }
 
 // Text button variant

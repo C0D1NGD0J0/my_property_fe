@@ -85,3 +85,21 @@ export const formatErrors = (
   // Join the array of error messages into a single string with each message on a new line
   return errorMessages.join("\n");
 };
+
+export const truncateSentence = (
+  words: string,
+  maxlength: number,
+  ellipsis: string = "…",
+): string => {
+  if (typeof words !== "string") {
+    throw new Error("Input must be a string");
+  }
+
+  const trimmedWords = words.trim();
+
+  if (trimmedWords.length <= maxlength || maxlength < 0) {
+    return trimmedWords;
+  }
+
+  return `${trimmedWords.slice(0, maxlength)}${ellipsis}`;
+};

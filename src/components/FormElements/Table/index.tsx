@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import TableRow from "./Row";
 import TableHeader from "./Header";
 import {
@@ -6,6 +6,7 @@ import {
   TableComponentProps,
   TableRowData,
 } from "@interfaces/tableComponent.interface";
+import Pagination from "@components/FormElements/Table/Pagination";
 
 // TableComponent
 const TableComponent: React.FC<TableComponentProps> = ({
@@ -15,11 +16,12 @@ const TableComponent: React.FC<TableComponentProps> = ({
   customFilter,
   filterOptions,
   style,
+  pagination,
   showCheckbox = false,
   displayHeaderSection = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [filter, setFilter] = useState("all");
   const [sortConfig, setSortConfig] = useState<{
     key: string;
@@ -30,13 +32,17 @@ const TableComponent: React.FC<TableComponentProps> = ({
     let filtered = data;
 
     if (searchQuery) {
-      filtered = filtered.filter((row) =>
-        row.property.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
+      filtered = filtered.filter((row) => {
+        return row.data.property
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+      });
     }
 
     if (filter !== "all") {
-      filtered = filtered.filter((row) => row.status === filter);
+      filtered = filtered.filter((row) => {
+        return row.data.status.value === filter;
+      });
     }
 
     if (customFilter) {
@@ -48,9 +54,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
       const sorter =
         column?.columSorter ||
         ((a, b) => {
-          if (a[sortConfig.key] < b[sortConfig.key])
+          if (a.data[sortConfig.key] < b.data[sortConfig.key])
             return sortConfig.direction === "ascending" ? -1 : 1;
-          if (a[sortConfig.key] > b[sortConfig.key])
+          if (a.data[sortConfig.key] > b.data[sortConfig.key])
             return sortConfig.direction === "ascending" ? 1 : -1;
           return 0;
         });
@@ -72,7 +78,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     setSortConfig({ key, direction });
   };
 
-  const handleRowSelect = (id: number) => {
+  const handleRowSelect = (id: string) => {
     setSelectedRows((prevSelectedRows) => {
       const newSelectedRows = new Set(prevSelectedRows);
       if (newSelectedRows.has(id)) {
@@ -94,22 +100,31 @@ const TableComponent: React.FC<TableComponentProps> = ({
   };
 
   const direction = sortConfig?.direction === "ascending" ? "up" : "down";
-  const modifiedColumns: TableColumn[] = showCheckbox
-    ? [
-        {
-          title: "Select",
-          dataIndex: "selection",
-          render: (_, record) => (
-            <input
-              type="checkbox"
-              checked={selectedRows.has(record.id)}
-              onChange={() => handleRowSelect(record.id)}
-            />
-          ),
-        },
-        ...columns, // Include other columns
-      ]
-    : columns;
+
+  const visibleColumns = useMemo(() => {
+    return columns.filter((col) => {
+      return !col.hidden;
+    });
+  }, [columns]);
+
+  const modifiedColumns: TableColumn[] = useMemo(() => {
+    return showCheckbox
+      ? [
+          {
+            title: "Select",
+            dataIndex: "selection",
+            render: (_, record) => (
+              <input
+                type="checkbox"
+                checked={selectedRows.has(record.id)}
+                onChange={() => handleRowSelect(record.id)}
+              />
+            ),
+          },
+          ...visibleColumns, // Include other columns
+        ]
+      : visibleColumns;
+  }, [visibleColumns]);
 
   return (
     <div className="table-container">
@@ -125,6 +140,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
       <table className="table" style={style}>
         <thead>
           <tr>
+            <th>#</th>
             {showCheckbox && ( // Conditionally render checkbox column header
               <th key="selection">
                 <input
@@ -139,40 +155,50 @@ const TableComponent: React.FC<TableComponentProps> = ({
                 />
               </th>
             )}
-            {columns.map((col) => (
-              <th key={col.dataIndex}>
-                <div className="th-content-box">
-                  {col.title}
-
-                  {col.showSorterIcon && (
-                    <span
-                      role="button"
-                      className="filter-icon"
-                      onClick={() => handleSort(col.dataIndex)}
-                    >
-                      <i className={`bx bx-caret-${direction}`}></i>
-                    </span>
-                  )}
-                </div>
-              </th>
-            ))}
+            {columns.map((col) => {
+              return !col.hidden ? (
+                <th key={col.dataIndex}>
+                  <div className="th-content-box">
+                    {col.title}
+                    {col.showSorterIcon && (
+                      <span
+                        role="button"
+                        className="filter-icon"
+                        onClick={() => handleSort(col.dataIndex)}
+                      >
+                        <i className={`bx bx-caret-${direction}`}></i>
+                      </span>
+                    )}
+                  </div>
+                </th>
+              ) : null;
+            })}
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((row, rowIndex) => {
-            return (
-              <TableRow
-                row={row}
-                key={row.id}
-                rowIndex={rowIndex}
-                onRowClick={onRowClick}
-                columns={modifiedColumns}
-                isSelected={selectedRows.has(row.id)}
-              />
-            );
-          })}
+          {filteredData &&
+            filteredData.map((row, rowIndex) => {
+              return (
+                <TableRow
+                  row={row}
+                  key={row.id}
+                  rowIndex={rowIndex}
+                  onRowClick={onRowClick}
+                  columns={modifiedColumns}
+                  isSelected={selectedRows.has(row.id)}
+                />
+              );
+            })}
         </tbody>
       </table>
+      <div className="table-footer">
+        <Pagination
+          onPageChange={pagination?.onPageChange}
+          currentPage={pagination?.currentPage || 1}
+          totalPages={pagination?.totalPages}
+          hasMoreResource={pagination?.hasMoreResource || false}
+        />
+      </div>
     </div>
   );
 };
