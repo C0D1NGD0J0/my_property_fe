@@ -3,6 +3,11 @@ import { IProperty } from "@interfaces/property.interface";
 import BaseValidation from "./base.validation";
 import { formatErrors } from "@utils/helperFN";
 
+interface CsvBulkInsertResult {
+  successCount: number;
+  failureCount: number;
+  errors: Array<{ row: number; issues: z.ZodIssue[] }> | [];
+}
 class PropertyValidation extends BaseValidation {
   newProperty = (propertyData: IProperty) => {
     const MAX_FILE_SIZE = 5000000;
@@ -128,6 +133,60 @@ class PropertyValidation extends BaseValidation {
       // const formattedError = formatErrors({ isValid: false, errors });
       return { isValid: false, errors };
     }
+  };
+
+  csvBulkInsert = (csvData: IProperty[]): CsvBulkInsertResult => {
+    let successCount = 0;
+    let failureCount = 0;
+    let errors: any[] = [];
+
+    csvData.forEach((propertyData, index) => {
+      // propertyData = {
+      //   ...propertyData,
+      //   propertySize: parseInt(propertyData.propertySize, 10),
+      //   features: {
+      //     floors: parseInt(propertyData.features.floors, 10),
+      //     bedroom: parseInt(propertyData.features.bedroom, 10),
+      //     bathroom: parseInt(propertyData.features.bathroom, 10),
+      //     maxCapacity: parseInt(propertyData.features.maxCapacity, 10),
+      //     availableParking: parseInt(
+      //       propertyData.features.availableParking,
+      //       10
+      //     ),
+      //   },
+      //   extras: {
+      //     has_tv: propertyData.extras.has_tv === "true",
+      //     has_kitchen: propertyData.extras.has_kitchen === "true",
+      //     has_ac: propertyData.extras.has_ac === "true",
+      //     has_heating: propertyData.extras.has_heating === "true",
+      //     has_internet: propertyData.extras.has_internet === "true",
+      //     has_gym: propertyData.extras.has_gym === "true",
+      //     has_parking: propertyData.extras.has_parking === "true",
+      //     has_swimmingpool: propertyData.extras.has_swimmingpool === "true",
+      //     has_laundry: propertyData.extras.has_laundry === "true",
+      //     petsAllowed: propertyData.extras.petsAllowed === "true",
+      //   },
+      //   fees: {
+      //     currency: propertyData.fees_currency,
+      //     includeTax: propertyData.fees_includeTax === "true",
+      //     taxAmount: parseFloat(propertyData.fees_taxAmount),
+      //     rentalAmount: parseFloat(propertyData.fees_rentalAmount),
+      //     managementFees: parseFloat(propertyData.fees_managementFees),
+      //   },
+      //   totalUnits: parseInt(propertyData.totalUnits, 10),
+      // };
+      console.log(propertyData);
+      const result = this.newProperty(propertyData); // Validate each property using your existing function
+      if (result.isValid) {
+        successCount++;
+        // Here you would insert the valid property data into your database or another destination
+      } else {
+        failureCount++;
+        errors.push({ row: index + 1, issues: result.errors });
+      }
+    });
+
+    return { successCount, failureCount, errors };
   };
 }
 

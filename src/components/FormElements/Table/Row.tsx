@@ -14,18 +14,19 @@ const TableRow: React.FC<TableRowProps> = ({
       className={isSelected ? "selected" : ""}
     >
       <td>{rowIndex + 1}</td>
-      {columns.map((col) => (
-        <>
+      {columns.map((col) => {
+        return (
           <td
             key={`${row.id}-${col.dataIndex}`}
             className={col.title === "Action" ? "status primary" : ""}
           >
             {col.render
-              ? col.render(row[col.dataIndex], row, parseInt(row.id))
-              : row[col.dataIndex]}
+              ? col.render(row.data[col.dataIndex], row, parseInt(row.id))
+              : row.data[col.dataIndex].element ||
+                row.data[col.dataIndex].value}
           </td>
-        </>
-      ))}
+        );
+      })}
     </tr>
   );
 };

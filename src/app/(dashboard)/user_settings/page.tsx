@@ -98,7 +98,7 @@ const UserSettings = () => {
           onClick: () => setEditMode(!isEditMode),
           label: `${isEditMode ? "Disable edit mode" : "Enable edit mode"}`,
           icon: <i className="bx bx-pencil"></i>,
-          className: "btn-outline-warning",
+          className: "btn-outline-warning btn-md",
         }}
       />
 
@@ -241,7 +241,7 @@ const UserSettings = () => {
                       disabled={!isEditMode || formik.isSubmitting}
                       value={formik.values.location}
                       placeholder="Select your location"
-                      className="select"
+                      className="form-input_select"
                       onChange={(name: string, value: any) => {
                         formik.setFieldTouched(name);
                         formik.setFieldValue(name, value);
@@ -349,10 +349,10 @@ const UserSettings = () => {
 
               {isEditMode ? (
                 <div className="form-actions">
-                  <button className="btn" type="reset">
+                  <button className="btn btn-md" type="reset">
                     Cancel
                   </button>
-                  <button className="btn btn-outline" type="submit">
+                  <button className="btn btn-outline btn-md" type="submit">
                     Submit
                   </button>
                 </div>

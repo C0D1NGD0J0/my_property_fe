@@ -57,7 +57,7 @@ export interface IProperty {
     rentalAmount: number | string;
     managementFees: number | string;
   };
-  leaseType: "short-term" | "long-term" | "daily";
+  leaseType: "short-term" | "long-term" | "daily" | "";
   photos: IPropertyImages[] | [];
   totalUnits: number;
 }

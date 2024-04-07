@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Tooltip } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   useQuery,
@@ -20,6 +21,7 @@ import {
   IPropertyResponse,
 } from "@interfaces/property.interface";
 import { truncateSentence } from "@utils/helperFN";
+import { Loading } from "@components/UI";
 
 const fm = new FormatMoney({
   decimals: 2,
@@ -33,7 +35,8 @@ const Properties = () => {
     null,
   );
   const { openNotification } = useNotification();
-  const { data, isSuccess } = useQuery({
+
+  const { data, isSuccess, isLoading } = useQuery({
     queryKey: ["userProperties", { id: user?.id, cid: user?.cid }],
     queryFn: async () => await propertyService.getUserProperties(user?.cid),
     enabled: !!user?.cid,
@@ -64,12 +67,15 @@ const Properties = () => {
       dataIndex: "rent",
       hidden: false,
       // You might want to format the rent value, e.g., as currency
-      render: (text) => {
-        const currencyAndValue = text.split(" ");
-        const value = fm.from(parseInt(currencyAndValue[1]));
-        const currency = currencyAndValue[0];
+      render: (data) => {
+        if (data.value) {
+          const currencyAndValue = data.value.split(" ");
+          const value = fm.from(parseInt(currencyAndValue[1]));
+          const currency = currencyAndValue[0];
+          return `${currency}${value}`;
+        }
 
-        return `${currency}${value}`;
+        return "";
       },
     },
     {
@@ -83,14 +89,18 @@ const Properties = () => {
       dataIndex: "action",
       hidden: false,
       // Custom render function for action buttons/links
-      render: (_, record) => (
-        <>
-          <a href={`admin-property.html?id=${record.id}`}>
-            <i className="bx bx-glasses"></i>
-          </a>
-          <i className="bx bx-edit"></i>
-        </>
-      ),
+      render: (_, record) => {
+        return (
+          <>
+            <Link href={`/properties/${record.id}`}>
+              <i className="bx bx-glasses"></i>
+            </Link>
+            <Link href={`/properties/edit/${record.id}`}>
+              <i className="bx bx-edit"></i>
+            </Link>
+          </>
+        );
+      },
     },
   ];
 
@@ -110,20 +120,29 @@ const Properties = () => {
     return properties.map((item, idx) => {
       return {
         id: item.puid,
-        status: item.status,
-        property: (
-          <Tooltip title={item.address}>
-            {truncateSentence(item.address, 15)}
-          </Tooltip>
-        ),
-        rent: `${getCurrencySymbol(item.fees.currency)} ${
-          item.fees.rentalAmount
-        }`,
-        rentalType: item.leaseType,
-        action: {
-          link: `/properties/${item.puid}`,
-          icons: ["bx bx-glasses", "bx bx-edit"],
+        data: {
+          status: { value: item.status, element: null },
+          property: {
+            value: item.address,
+            element: (
+              <Tooltip title={item.address}>
+                {truncateSentence(item.address, 15)}
+              </Tooltip>
+            ),
+          },
+          rent: {
+            value: `${getCurrencySymbol(item.fees.currency)} ${
+              item.fees.rentalAmount
+            }`,
+            element: null,
+          },
+          rentalType: { value: item.leaseType, element: null },
         },
+      } as {
+        id: string;
+        data: {
+          [key: string]: { value: string; element: React.ReactNode | null };
+        };
       };
     });
   };
@@ -139,6 +158,10 @@ const Properties = () => {
 
   const TableDataRow = propertyData && formatRowData(propertyData.properties);
 
+  if (isLoading) {
+    return <Loading description="Fetching user data..." />;
+  }
+
   return (
     <div>
       <ContentHeader
@@ -148,7 +171,7 @@ const Properties = () => {
           onClick: () => router.push("/properties/new"),
           label: `Add property`,
           icon: <i className="bx bx-plus-circle"></i>,
-          className: "btn-outline",
+          className: "btn-outline btn-md",
         }}
       />
 
@@ -160,6 +183,7 @@ const Properties = () => {
             { label: "Vacant", value: "vacant" },
             { label: "Occupied", value: "occupied" },
           ]}
+          showCheckbox
           data={TableDataRow || []}
           pagination={propertyData?.pagination}
           displayHeaderSection

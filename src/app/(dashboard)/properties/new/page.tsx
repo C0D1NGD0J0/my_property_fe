@@ -2,6 +2,8 @@
 import React, { useCallback, useState } from "react";
 import { FormikValues, useFormik } from "formik";
 import { useRouter } from "next/navigation";
+import { Modal } from "antd";
+import Papa from "papaparse";
 import { useMutation } from "@tanstack/react-query";
 import {
   Form,
@@ -16,7 +18,7 @@ import {
 } from "@components/FormElements";
 import DynamicList from "@components/UI/List";
 import { IProperty } from "@interfaces/property.interface";
-import { ImageGallery, MultiStepWrapper } from "@components/UI";
+import { ImageGallery, Loading, MultiStepWrapper } from "@components/UI";
 import { useAuthStore } from "@store/auth.store";
 import { useNotification } from "@hooks/useNotification";
 import { ContentHeader } from "@components/PageHeader";
@@ -34,7 +36,7 @@ const initialValues: IProperty = {
   propertyType: "",
   status: "",
   managedBy: "",
-  propertySize: 0, // size in square feet or square meters
+  propertySize: 0,
   features: {
     floors: 0,
     bedroom: 0,
@@ -65,8 +67,10 @@ const initialValues: IProperty = {
   },
   photos: [],
   totalUnits: 0,
+  leaseType: "",
 };
-
+const csvExcelFileTypes =
+  ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel";
 const propertyValidation = new PropertyValidation();
 
 const AddProperty = () => {
@@ -75,9 +79,15 @@ const AddProperty = () => {
   const [filesWithPreviews, setFilesWithPreviews] = useState<FileWithPreview[]>(
     [],
   );
-  const { user } = useAuthStore((state) => state);
-  const [stepErrors, setStepErrors] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const { openNotification } = useNotification();
+  const { user } = useAuthStore((state) => state);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [stepErrors, setStepErrors] = useState<string[]>([]);
+  const [csvUploadResponse, setCsvUploadResponse] = useState<{
+    data: any;
+    error: Error | null;
+  } | null>(null);
 
   const mutation = useMutation({
     mutationFn: async ({
@@ -88,6 +98,12 @@ const AddProperty = () => {
       formData: FormData;
     }) => {
       return await propertyService.addProperty(cid, formData);
+    },
+  });
+
+  const csvMutation = useMutation({
+    mutationFn: async ({ cid, formData }: { cid: string; formData: any }) => {
+      return await propertyService.saveUploadedCSV(cid, formData);
     },
   });
 
@@ -128,6 +144,7 @@ const AddProperty = () => {
           "propertyType",
           "category",
           "status",
+          "leaseType",
           "description",
         ],
         features: [
@@ -255,6 +272,42 @@ const AddProperty = () => {
     [filesWithPreviews, formik],
   );
 
+  const handleSaveUploadedCsv = async (saveAsIs: boolean) => {
+    try {
+      if (csvUploadResponse?.data.fileName) {
+        setIsLoading(true);
+        const res = await csvMutation.mutateAsync({
+          cid: user!.cid,
+          formData: { saveAsIs, fileName: csvUploadResponse?.data.fileName },
+        });
+
+        if (res.success) {
+          setCsvUploadResponse(null);
+          setIsModalOpen(!isModalOpen);
+          openNotification("success", "", "New listings have been added.");
+          router.push("/properties");
+          setIsLoading(false);
+        }
+      }
+    } catch (e: unknown) {
+      const err = e as Error & { data: any };
+      return openNotification(
+        "error",
+        "Error",
+        err?.data || "Something went wrong, please try again.",
+      );
+    }
+    setIsLoading(false);
+  };
+
+  const handleCsvUpload = (files: any) => {
+    // send request to delete previously uploaded csv if csvUploadResponse not null
+    if (csvUploadResponse && csvUploadResponse.data.fileName) {
+      handleSaveUploadedCsv(false);
+      setCsvUploadResponse(null);
+    }
+  };
+
   const steps = [
     {
       hidden: false,
@@ -341,41 +394,6 @@ const AddProperty = () => {
                 options={[{ label: user?.fullname || "", value: user?.id }]}
               />
             </FormField>
-
-            {/* Building Type */}
-            <FormField
-              className="form-field_inline"
-              error={{
-                msg: formik.errors.propertyType,
-                touched: !!formik.touched.propertyType,
-              }}
-            >
-              <FormLabel
-                className="form-label"
-                htmlFor="propertyType"
-                label="Building type"
-              />
-              <Select
-                value={formik.values.propertyType}
-                name="propertyType"
-                placeholder="Building type"
-                className="form-input_select"
-                onChange={(name, value) => {
-                  formik.setFieldTouched(name);
-                  formik.setFieldValue(name, value);
-                }}
-                options={[
-                  { label: "Family home", value: "singleFamily" },
-                  { label: "Mixed units", value: "multiUnits" },
-                  { label: "Office units", value: "officeUnits" },
-                  {
-                    label: "Apartments",
-                    value: "apartments",
-                  },
-                  { label: "Others", value: "others" },
-                ]}
-              />
-            </FormField>
           </div>
 
           <div className="form-fields">
@@ -395,7 +413,7 @@ const AddProperty = () => {
               <Select
                 value={formik.values.category}
                 name="category"
-                placeholder="Property category"
+                placeholder="Select category"
                 className="form-input_select"
                 onChange={(name, value) => {
                   formik.setFieldTouched(name);
@@ -435,6 +453,72 @@ const AddProperty = () => {
                   { label: "Vacant", value: "vacant" },
                   { label: "Occupied", value: "occupied" },
                   { label: "Unavailable", value: "unavailable" },
+                ]}
+              />
+            </FormField>
+          </div>
+
+          <div className="form-fields">
+            {/* Property Lease type */}
+            <FormField
+              className="form-field_inline"
+              error={{
+                msg: formik.errors.leaseType,
+                touched: !!formik.touched.leaseType,
+              }}
+            >
+              <FormLabel
+                className="form-label"
+                htmlFor="leaseType"
+                label="Lease type"
+              />
+              <Select
+                value={formik.values.leaseType}
+                name="leaseType"
+                placeholder="Lease type"
+                className="form-input_select"
+                onChange={(name, value) => {
+                  formik.setFieldTouched(name);
+                  formik.setFieldValue(name, value);
+                }}
+                options={[
+                  { label: "Short-term", value: "short-term" },
+                  { label: "Long-term", value: "long-term" },
+                  { label: "Daily", value: "daily" },
+                ]}
+              />
+            </FormField>
+            {/* Building Type */}
+            <FormField
+              className="form-field_inline"
+              error={{
+                msg: formik.errors.propertyType,
+                touched: !!formik.touched.propertyType,
+              }}
+            >
+              <FormLabel
+                className="form-label"
+                htmlFor="propertyType"
+                label="Building type"
+              />
+              <Select
+                value={formik.values.propertyType}
+                name="propertyType"
+                placeholder="Building type"
+                className="form-input_select"
+                onChange={(name, value) => {
+                  formik.setFieldTouched(name);
+                  formik.setFieldValue(name, value);
+                }}
+                options={[
+                  { label: "Family home", value: "singleFamily" },
+                  { label: "Mixed units", value: "multiUnits" },
+                  { label: "Office units", value: "officeUnits" },
+                  {
+                    label: "Apartments",
+                    value: "apartments",
+                  },
+                  { label: "Others", value: "others" },
                 ]}
               />
             </FormField>
@@ -935,9 +1019,22 @@ const AddProperty = () => {
     );
   };
 
+  if (isLoading) {
+    return <Loading description="Loading data..." />;
+  }
+
   return (
     <>
-      <ContentHeader showBtn={false} pageTitle="Add Property" />
+      <ContentHeader
+        showBtn={true}
+        pageTitle="Add Property"
+        btnConfig={{
+          onClick: () => setIsModalOpen(true),
+          label: `Upload csv file`,
+          icon: <i className="bx bx-upload"></i>,
+          className: "btn-outline btn-md",
+        }}
+      />
       <div className="add-property">
         <div className="add-property_content">
           <Form
@@ -957,6 +1054,95 @@ const AddProperty = () => {
           </Form>
         </div>
       </div>
+
+      <Modal
+        destroyOnClose
+        onCancel={() => {
+          setIsModalOpen(!isModalOpen);
+          handleSaveUploadedCsv(false);
+          setCsvUploadResponse(null);
+        }}
+        title="Upload CSV"
+        className="upload-modal"
+        footer={false}
+        open={isModalOpen}
+      >
+        <div className="form-section">
+          <div className="form-fields">
+            <FileInput
+              name="csvData"
+              id="csv-file-input"
+              accept={csvExcelFileTypes}
+              action={`/api/v1/properties/${user?.cid}/validate_csv`}
+              onChange={handleCsvUpload}
+              handleActionResponse={(data, err) => {
+                if (err) {
+                  return setCsvUploadResponse({ data: null, error: err });
+                }
+                setCsvUploadResponse({ data, error: null });
+              }}
+              disabled={filesWithPreviews.length === MAX_IMAGES}
+            />
+          </div>
+
+          {csvUploadResponse && (
+            <div className="description">
+              <>
+                <ul className="csv-analysis">
+                  <li key={"valid-data"}>
+                    <span>
+                      {csvUploadResponse?.data?.validProperties || 0}{" "}
+                    </span>
+                    valid entries processed.
+                  </li>
+                  <li key="invalid-data">
+                    <span>{csvUploadResponse?.data?.errors.length || 0} </span>
+                    invalid entries found:
+                    <ul className="csv-error-list">
+                      {csvUploadResponse?.data?.errors.map((item: any) => {
+                        return (
+                          <li key={item.address}>
+                            <p>{item.address}</p>
+                            {item.errors.map((err: string, idx: number) => (
+                              <span key={idx}>{err} </span>
+                            ))}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                </ul>
+              </>
+            </div>
+          )}
+        </div>
+
+        {csvUploadResponse && (
+          <div className="actions">
+            <Button
+              label="Cancel"
+              onClick={() => {
+                setIsModalOpen(!isModalOpen);
+                handleSaveUploadedCsv(false);
+                setCsvUploadResponse(null);
+              }}
+              disabled={false}
+              className="btn btn-outline-ghost btn-sm"
+            />
+
+            <Button
+              label={`Save ${
+                csvUploadResponse?.data?.validProperties || 0
+              } records`}
+              onClick={() => {
+                handleSaveUploadedCsv(true);
+              }}
+              disabled={false}
+              className="btn btn-outline btn-sm"
+            />
+          </div>
+        )}
+      </Modal>
     </>
   );
 };

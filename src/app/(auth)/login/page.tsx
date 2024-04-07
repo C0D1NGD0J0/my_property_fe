@@ -68,7 +68,7 @@ export default function Login() {
                       key={item.name}
                       onClick={() => {
                         CookieManager.setCookie("cid", item.cid);
-                        setTimeout(() => push("/dashboard"), 500);
+                        setTimeout(() => push("/dashboard"), 3000);
                       }}
                       style={{ padding: ".8rem", cursor: "pointer" }}
                     >

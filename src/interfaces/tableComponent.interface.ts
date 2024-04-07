@@ -31,9 +31,14 @@ export interface TableHeaderProps {
   filterOptions: { label: string; value: string }[] | [];
 }
 
-export interface TableRowData {
+export interface DefaultRowData {
+  // Define a default structure for row data
+  [key: string]: any; // Or a more specific type if applicable
+}
+
+export interface TableRowData<T = DefaultRowData> {
   id: string;
-  [key: string]: any; // Other dynamic keys
+  data: T;
 }
 
 export interface TableRowProps {

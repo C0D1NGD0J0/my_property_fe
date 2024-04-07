@@ -28,21 +28,21 @@ const TableComponent: React.FC<TableComponentProps> = ({
     direction: "ascending" | "descending";
   } | null>(null);
 
-  useEffect(() => {
-    console.log(data, "----daata");
-  }, [data]);
-
   const filteredData = useMemo<TableRowData[]>(() => {
     let filtered = data;
 
     if (searchQuery) {
-      filtered = filtered.filter((row) =>
-        row.property.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
+      filtered = filtered.filter((row) => {
+        return row.data.property
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+      });
     }
 
     if (filter !== "all") {
-      filtered = filtered.filter((row) => row.status === filter);
+      filtered = filtered.filter((row) => {
+        return row.data.status.value === filter;
+      });
     }
 
     if (customFilter) {
@@ -54,9 +54,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
       const sorter =
         column?.columSorter ||
         ((a, b) => {
-          if (a[sortConfig.key] < b[sortConfig.key])
+          if (a.data[sortConfig.key] < b.data[sortConfig.key])
             return sortConfig.direction === "ascending" ? -1 : 1;
-          if (a[sortConfig.key] > b[sortConfig.key])
+          if (a.data[sortConfig.key] > b.data[sortConfig.key])
             return sortConfig.direction === "ascending" ? 1 : -1;
           return 0;
         });
@@ -102,7 +102,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
   const direction = sortConfig?.direction === "ascending" ? "up" : "down";
 
   const visibleColumns = useMemo(() => {
-    return columns.filter((col) => !col.hidden);
+    return columns.filter((col) => {
+      return !col.hidden;
+    });
   }, [columns]);
 
   const modifiedColumns: TableColumn[] = useMemo(() => {
@@ -174,18 +176,19 @@ const TableComponent: React.FC<TableComponentProps> = ({
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((row, rowIndex) => {
-            return (
-              <TableRow
-                row={row}
-                key={row.id}
-                rowIndex={rowIndex}
-                onRowClick={onRowClick}
-                columns={modifiedColumns}
-                isSelected={selectedRows.has(row.id)}
-              />
-            );
-          })}
+          {filteredData &&
+            filteredData.map((row, rowIndex) => {
+              return (
+                <TableRow
+                  row={row}
+                  key={row.id}
+                  rowIndex={rowIndex}
+                  onRowClick={onRowClick}
+                  columns={modifiedColumns}
+                  isSelected={selectedRows.has(row.id)}
+                />
+              );
+            })}
         </tbody>
       </table>
       <div className="table-footer">
