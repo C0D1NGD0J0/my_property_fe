@@ -5,12 +5,14 @@ export interface TableComponentProps {
   data: TableRowData[] | [];
   style?: CSSProperties;
   columns: TableColumn[];
+  showNumbering?: boolean;
+  headerTitle?: TableHeaderProps["headerTitle"];
   showCheckbox?: boolean;
   displayHeaderSection: boolean;
   pagination: PaginationProps | undefined;
   onRowClick?: (rowData: TableRowData) => void;
   customFilter?: (row: TableRowData) => boolean;
-  filterOptions: { label: string; value: string }[] | [];
+  filterOptions?: { label: string; value: string }[] | [];
 }
 
 export interface TableColumn {
@@ -18,7 +20,7 @@ export interface TableColumn {
   dataIndex: string;
   hidden?: boolean;
   showSorterIcon?: boolean;
-  sorter?: (a: TableRowData, b: TableRowData) => number;
+  handleSort?: (key: string) => void;
   columSorter?: (a: TableRowData, b: TableRowData) => number;
   render?: (text: any, record: TableRowData, index: number) => React.ReactNode;
 }
@@ -26,9 +28,10 @@ export interface TableColumn {
 export interface TableHeaderProps {
   searchQuery: string;
   filterValue: string;
+  headerTitle?: string;
   setSearchQuery: (query: string) => void;
   onFilterChange: (filter: string) => void;
-  filterOptions: { label: string; value: string }[] | [];
+  filterOptions?: { label: string; value: string }[] | [];
 }
 
 export interface DefaultRowData {
