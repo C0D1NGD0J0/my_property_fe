@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import TableRow from "./Row";
 import TableHeader from "./Header";
 import {
@@ -16,6 +16,8 @@ const TableComponent: React.FC<TableComponentProps> = ({
   customFilter,
   filterOptions,
   style,
+  showNumbering = true,
+  headerTitle,
   pagination,
   showCheckbox = false,
   displayHeaderSection = false,
@@ -50,7 +52,9 @@ const TableComponent: React.FC<TableComponentProps> = ({
     }
 
     if (sortConfig) {
-      const column = columns.find((col) => col.dataIndex === sortConfig.key);
+      const column = columns.find((col) => {
+        return col.dataIndex === sortConfig.key;
+      });
       const sorter =
         column?.columSorter ||
         ((a, b) => {
@@ -61,36 +65,36 @@ const TableComponent: React.FC<TableComponentProps> = ({
           return 0;
         });
       filtered = [...filtered].sort(sorter);
+      console.log(filtered, "----filtered");
     }
 
     return filtered;
-  }, [data, searchQuery, filter, sortConfig?.direction, customFilter, columns]);
+  }, [data, searchQuery, filter, sortConfig?.direction, columns]);
 
   const handleSort = (key: string) => {
     let direction: "ascending" | "descending" = "ascending";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "ascending"
-    ) {
+    if (sortConfig?.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
     }
     setSortConfig({ key, direction });
   };
 
-  const handleRowSelect = (id: string) => {
-    setSelectedRows((prevSelectedRows) => {
-      const newSelectedRows = new Set(prevSelectedRows);
-      if (newSelectedRows.has(id)) {
-        newSelectedRows.delete(id);
-      } else {
-        newSelectedRows.add(id);
-      }
-      return newSelectedRows;
-    });
+  const handleRowSelect = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string,
+  ) => {
+    e.stopPropagation();
+    const newSelectedRows = new Set(selectedRows);
+    if (newSelectedRows.has(id)) {
+      newSelectedRows.delete(id);
+    } else {
+      newSelectedRows.add(id);
+    }
+    setSelectedRows(newSelectedRows);
   };
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     if (e.target.checked) {
       const allRowIds = new Set(filteredData.map((row) => row.id));
       setSelectedRows(allRowIds);
@@ -99,7 +103,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
     }
   };
 
-  const direction = sortConfig?.direction === "ascending" ? "up" : "down";
+  const direction = sortConfig?.direction === "ascending" ? "down" : "up";
 
   const visibleColumns = useMemo(() => {
     return columns.filter((col) => {
@@ -113,18 +117,20 @@ const TableComponent: React.FC<TableComponentProps> = ({
           {
             title: "Select",
             dataIndex: "selection",
-            render: (_, record) => (
-              <input
-                type="checkbox"
-                checked={selectedRows.has(record.id)}
-                onChange={() => handleRowSelect(record.id)}
-              />
-            ),
+            render: (_, record) => {
+              return (
+                <input
+                  type="checkbox"
+                  checked={selectedRows.has(record.id)}
+                  onChange={(e) => handleRowSelect(e, record.id)}
+                />
+              );
+            },
           },
           ...visibleColumns, // Include other columns
         ]
       : visibleColumns;
-  }, [visibleColumns]);
+  }, [visibleColumns, selectedRows]);
 
   return (
     <div className="table-container">
@@ -132,6 +138,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
         <TableHeader
           filterValue={filter}
           searchQuery={searchQuery}
+          headerTitle={headerTitle}
           onFilterChange={setFilter}
           filterOptions={filterOptions}
           setSearchQuery={setSearchQuery}
@@ -140,7 +147,7 @@ const TableComponent: React.FC<TableComponentProps> = ({
       <table className="table" style={style}>
         <thead>
           <tr>
-            <th>#</th>
+            {showNumbering && <th>#</th>}
             {showCheckbox && ( // Conditionally render checkbox column header
               <th key="selection">
                 <input

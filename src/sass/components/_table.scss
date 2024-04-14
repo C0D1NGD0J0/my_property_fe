@@ -3,9 +3,9 @@
   width: 100%;
   height: inherit;
   text-align: left;
-  overflow-x: scroll;
+  overflow-x: auto;
   position: relative;
-  table-layout: fixed;
+  table-layout: auto;
   border-radius: 0.6rem;
   box-shadow: $box-shadow;
   border-collapse: collapse;
@@ -27,10 +27,6 @@
       text-transform: capitalize;
       border-collapse: collapse;
       border: 1px solid lightgray;
-
-      // &:last-child {
-      //   border-right: none;
-      // }
 
       .th-content-box {
         display: flex;
@@ -74,17 +70,17 @@
   }
 
   /* To target the first column in the header */
-  thead th:first-child, 
-  /* To target the first column in each row of the body */
-  tbody td:first-child {
-    width: 100px; /* Replace with the fixed width you want for the first column */
-  }
+  // thead th:first-child,
+  // /* To target the first column in each row of the body */
+  // tbody td:first-child {
+  //   width: 100px; /* Replace with the fixed width you want for the first column */
+  // }
 
-  /* To target the rest of the columns */
-  thead th:not(:first-child),
-  tbody td:not(:first-child) {
-    width: 100%; /* They will automatically adjust their width */
-  }
+  // /* To target the rest of the columns */
+  // thead th:not(:first-child),
+  // tbody td:not(:first-child) {
+  //   width: 100%; /* They will automatically adjust their width */
+  // }
 }
 
 .table-footer {
@@ -104,14 +100,16 @@
 
     h4 {
       margin: 0;
-      font-weight: 400;
+      font-weight: bold;
     }
   }
 
   &_menu {
     gap: 1rem; /* Adds space between search bar and filter options */
-    display: flex; /* Aligns search bar and filter options horizontally */
+    flex: 1;
+    display: flex;
     align-items: center;
+    justify-content: flex-end;
   }
 }
 

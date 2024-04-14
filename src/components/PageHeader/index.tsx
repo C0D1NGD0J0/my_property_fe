@@ -6,6 +6,8 @@ import Button from "@components/FormElements/Button";
 
 interface ContentHeaderProps {
   showBtn: boolean;
+  displayBreadCrumbs?: boolean;
+  subtitle?: string;
   pageTitle: string;
   btnConfig?: {
     className: string;
@@ -15,7 +17,13 @@ interface ContentHeaderProps {
   };
 }
 
-export const ContentHeader: React.FC<ContentHeaderProps | null> = (props) => {
+export const ContentHeader = ({
+  showBtn,
+  displayBreadCrumbs = true,
+  subtitle,
+  pageTitle,
+  btnConfig,
+}: ContentHeaderProps) => {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const breadcrumbItems = pathSegments.map((segment, index) => ({
@@ -26,21 +34,20 @@ export const ContentHeader: React.FC<ContentHeaderProps | null> = (props) => {
   return (
     <div className="content-header">
       <div className="section-title">
-        <h1>{props?.pageTitle}</h1>
-        <Breadcrumb items={breadcrumbItems} />
+        <h1>{pageTitle}</h1>
+        {subtitle ? <small>{subtitle}</small> : null}
+        {displayBreadCrumbs ? <Breadcrumb items={breadcrumbItems} /> : null}
       </div>
-      {props?.showBtn ? (
+      {showBtn ? (
         <div className="section-actions">
           <Button
             type="button"
             iconPosition="left"
             renderChildren={false}
-            label={props.btnConfig?.label || ""}
-            icon={props.btnConfig?.icon || ""}
-            className={`btn ${props.btnConfig?.className}`}
-            onClick={
-              props.btnConfig?.onClick ? props.btnConfig.onClick : () => null
-            }
+            label={btnConfig?.label || ""}
+            icon={btnConfig?.icon || ""}
+            className={`btn ${btnConfig?.className}`}
+            onClick={btnConfig?.onClick ? btnConfig.onClick : () => null}
           />
         </div>
       ) : null}

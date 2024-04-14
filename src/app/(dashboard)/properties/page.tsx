@@ -20,7 +20,7 @@ import {
   IPropertyDocument,
   IPropertyResponse,
 } from "@interfaces/property.interface";
-import { truncateSentence } from "@utils/helperFN";
+import { customSorter, truncateSentence } from "@utils/helperFN";
 import { Loading } from "@components/UI";
 
 const fm = new FormatMoney({
@@ -53,6 +53,9 @@ const Properties = () => {
       title: "Property",
       showSorterIcon: true,
       dataIndex: "property",
+      columSorter: (a, b) => {
+        return b.data.property.value.localeCompare(a.data.property.value);
+      },
       hidden: false,
       // Assuming 'property' holds the address or property name
     },
@@ -64,7 +67,11 @@ const Properties = () => {
     },
     {
       title: "Rent",
+      showSorterIcon: true,
       dataIndex: "rent",
+      columSorter: (a, b) => {
+        return customSorter(a.data.rent.value, b.data.rent.value);
+      },
       hidden: false,
       // You might want to format the rent value, e.g., as currency
       render: (data) => {
@@ -126,7 +133,8 @@ const Properties = () => {
             value: item.address,
             element: (
               <Tooltip title={item.address}>
-                {truncateSentence(item.address, 15)}
+                {truncateSentence(item.address, 35)}
+                {/* {item.address} */}
               </Tooltip>
             ),
           },

@@ -9,6 +9,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   filterOptions,
   setSearchQuery,
   onFilterChange,
+  headerTitle,
 }) => {
   const [query, setQuery] = useState(searchQuery);
   const debouncedQuery = useDebounce(query, 500);
@@ -22,36 +23,43 @@ const TableHeader: React.FC<TableHeaderProps> = ({
 
   return (
     <div className="table-header">
-      <div className="search-bar">
-        <FormInput
-          required
-          value={query}
-          name="query"
-          type="search"
-          disabled={false}
-          placeholder="Search..."
-          className="search-input"
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button className="search-btn">
-          <i className="bx bx-search"></i>
-        </button>
-      </div>
-
-      {filterOptions?.length && (
-        <div className="filter-options">
-          <Select
-            name="filter"
-            value={filterValue}
-            placeholder="All"
-            className="filter-select"
-            onChange={(field, value) => {
-              onFilterChange(value);
-            }}
-            options={filterOptions}
-          />
+      {headerTitle ? (
+        <div className="table-header_title">
+          <h4>{headerTitle || ""}</h4>
         </div>
-      )}
+      ) : null}
+      <div className="table-header_menu">
+        <div className="search-bar">
+          <FormInput
+            required
+            value={query}
+            name="query"
+            type="search"
+            disabled={false}
+            placeholder="Search..."
+            className="search-input"
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className="search-btn">
+            <i className="bx bx-search"></i>
+          </button>
+        </div>
+
+        {filterOptions?.length && (
+          <div className="filter-options">
+            <Select
+              name="filter"
+              value={filterValue}
+              placeholder="All"
+              className="filter-select"
+              onChange={(field, value) => {
+                onFilterChange(value);
+              }}
+              options={filterOptions}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

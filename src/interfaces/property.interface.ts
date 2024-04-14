@@ -62,8 +62,19 @@ export interface IProperty {
   totalUnits: number;
 }
 
+export interface IPopulatedUser {
+  fullname: string;
+  firstName: string;
+  email: string;
+  lastName: string;
+  _id: string;
+  id: string;
+}
+
 export type IPropertyDocument = IProperty & {
   puid: string;
+  managedBy: string | IPopulatedUser;
+  apartmentUnits: [];
   createdAt?: Date;
   updatedAt?: Date;
   __v?: number;

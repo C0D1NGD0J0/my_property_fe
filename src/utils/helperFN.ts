@@ -103,3 +103,9 @@ export const truncateSentence = (
 
   return `${trimmedWords.slice(0, maxlength)}${ellipsis}`;
 };
+
+export const customSorter = (a: any, b: any): number => {
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
+};
