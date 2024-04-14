@@ -1,30 +1,52 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Tooltip } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { FormatMoney } from "format-money-js";
 
 import { useAuthStore } from "@store/auth.store";
 import propertyService from "@services/property";
 import { Table } from "@components/FormElements/";
 import { ContentHeader } from "@components/PageHeader";
-import { useNotification } from "@hooks/useNotification";
 import { TableColumn } from "@interfaces/tableComponent.interface";
 import {
+  IPopulatedUser,
   IPropertyDocument,
   IPropertyResponse,
 } from "@interfaces/property.interface";
-import { truncateSentence } from "@utils/helperFN";
 import { Loading } from "@components/UI";
+import IconBox from "@components/PageElements/PropertyIcon";
 
-const Property = () => {
+const fm = new FormatMoney({
+  decimals: 2,
+});
+
+const Property = ({ params }: { params: { puid: string } }) => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
   const { user, isLoggedIn } = useAuthStore((state) => state);
-  const [propertyData, setPropertyData] = useState<IPropertyResponse | null>(
-    null,
-  );
+
+  useEffect(() => {
+    if (isLoggedIn && user && user.role !== "admin") {
+      router.push("/dashboard");
+    }
+  }, []);
+
+  const {
+    data: property,
+    isSuccess,
+    isLoading,
+  } = useQuery({
+    queryKey: ["property", { puid: params?.puid, cid: user?.cid }],
+    queryFn: async () => {
+      const resp = await propertyService.getPropertyInfo(
+        user!.cid,
+        params.puid,
+      );
+      return resp.data as IPropertyDocument;
+    },
+    enabled: !!user?.cid && !!params.puid,
+  });
 
   const columns: TableColumn[] = [
     {
@@ -114,19 +136,28 @@ const Property = () => {
     },
   ];
 
-  if (!isLoading) {
+  if (isLoading || !property) {
     return <Loading description="Fetching property data..." />;
   }
+
+  const formatMoneyValue = (amount: string | number): string => {
+    const numericAmount =
+      typeof amount === "number" ? amount : parseInt(amount, 10);
+    let _amt = fm.from(numericAmount);
+    return `${_amt}`;
+  };
 
   return (
     <div className="admin-property-section">
       <ContentHeader
         showBtn={true}
-        pageTitle="My Properties"
+        subtitle={property.address}
+        displayBreadCrumbs={false}
+        pageTitle={property?.title}
         btnConfig={{
-          onClick: () => router.push("/properties/new"),
+          onClick: () => router.push(`/properties/edit/${property.puid}`),
           label: `Update details`,
-          icon: <i className="bx bx-plus-circle"></i>,
+          icon: <i className="bx bx-pencil"></i>,
           className: "btn-outline btn-md",
         }}
       />
@@ -134,68 +165,59 @@ const Property = () => {
       <div className="content-body">
         <div className="content-body_main">
           <div className="box property-info">
-            <h2>Description</h2>
+            <div className="form-section_header">
+              <h2 className="title">Property details</h2>
+              <hr className="titleBar-sm" />
+            </div>
 
             <div className="icons">
-              <div className="icon-box">
-                <div className="icon-box_icon">
-                  <i className="bx bx-bed"></i>
-                </div>
-                <div className="icon-box_text">
-                  <h3>Beds: </h3>
-                  <h4>2 Bedrooms</h4>
-                </div>
-              </div>
+              <IconBox
+                title="Beds"
+                icon={<i className="bx bx-bed"></i>}
+                subtitle={`${property.features?.bedroom} Bedroom(s)`}
+              />
 
-              <div className="icon-box">
-                <div className="icon-box_icon">
-                  <i className="bx bx-bath"></i>
-                </div>
-                <div className="icon-box_text">
-                  <h3>Baths: </h3>
-                  <h4>3 Bathrooms</h4>
-                </div>
-              </div>
+              <IconBox
+                title="Baths"
+                icon={<i className="bx bx-bath"></i>}
+                subtitle={`${property.features?.bathroom} Bathroom(s)`}
+              />
 
-              <div className="icon-box">
-                <div className="icon-box_icon">
-                  <i className="bx bx-car"></i>
-                </div>
-                <div className="icon-box_text">
-                  <h3>Garage: </h3>
-                  <h4>4 Cars</h4>
-                </div>
-              </div>
+              <IconBox
+                title="Garage"
+                icon={<i className="bx bx-car"></i>}
+                subtitle={`${property.features?.availableParking} Car(s)`}
+              />
 
-              <div className="icon-box">
-                <div className="icon-box_icon">
-                  <i className="bx bx-area"></i>
-                </div>
-                <div className="icon-box_text">
-                  <h3>Area: </h3>
-                  <h4>1270 sq ft</h4>
-                </div>
-              </div>
+              <IconBox
+                title="Area"
+                icon={<i className="bx bx-area"></i>}
+                subtitle={`${property.propertySize} sq-ft`}
+              />
 
-              <div className="icon-box">
-                <div className="icon-box_icon">
-                  <i className="bx bx-users"></i>
-                </div>
-                <div className="icon-box_text">
-                  <h3>Occupancy: </h3>
-                  <h4>5 occupants</h4>
-                </div>
-              </div>
+              <IconBox
+                title="Occupancy"
+                icon={<i className="bx bx-group"></i>}
+                subtitle={`${property.features?.maxCapacity} occupants`}
+              />
             </div>
 
             <div className="details">
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis
-                incidunt ipsa doloremque temporibus iure. Voluptatibus fugiat
-                ipsam excepturi minima asperiores a in dolore accusamus error
-                quod sunt deleniti temporibus doloribus aut non quos, provident
-                consequatur. Nihil nostrum sint aliquid explicabo.
-              </p>
+              <ul className="styled-list">
+                <li>
+                  Property type: <span>{property.propertyType} </span>
+                </li>
+                <li>
+                  Available lease: <span>{property.leaseType} </span>
+                </li>
+                <li>
+                  Property category: <span>{property.category} </span>
+                </li>
+                <li>
+                  Total apartments: <span>{property?.totalUnits} </span>
+                </li>
+              </ul>
+              <p>{property?.description?.text}</p>
             </div>
           </div>
 
@@ -206,7 +228,7 @@ const Property = () => {
                 columns={columns}
                 displayHeaderSection
                 headerTitle="Service requests"
-                pagination={propertyData?.pagination}
+                pagination={undefined}
               />
             </div>
           </div>
@@ -219,7 +241,7 @@ const Property = () => {
                 columns={columns2}
                 displayHeaderSection
                 headerTitle="Lease history"
-                pagination={propertyData?.pagination}
+                pagination={undefined}
               />
             </div>
           </div>
@@ -228,25 +250,87 @@ const Property = () => {
         <div className="content-body_sidebar">
           <div className="box">
             <div className="box-header">
-              <h2>Current tenant</h2>
+              <h2>Rental rate:</h2>
             </div>
             <div className="box-content">
-              <ul className="tenant-info">
-                <li className="tenant-info_item">
-                  <i className="bx bx-user"></i>
-                  Mrs Allen Poe
+              <ul className="styled-list">
+                <li>
+                  Rental amount:
+                  <span>{formatMoneyValue(property.fees.rentalAmount)}</span>
                 </li>
-                <li className="tenant-info_item">
-                  <i className="bx bx-envelope"></i>
-                  allenpoe@example.com
+                <li>
+                  Mgnt fees:
+                  <span>{formatMoneyValue(property.fees.managementFees)}</span>
                 </li>
-                <li className="tenant-info_item">
-                  <i className="bx bx-phone"></i>
-                  +1-416-555-6789
+                <li>
+                  Curreny: <span>{property.fees.currency}</span>
                 </li>
               </ul>
             </div>
           </div>
+
+          {property.propertyType !== "singleFamily" ? (
+            <div className="box">
+              <div className="box-header">
+                <h2>
+                  Apartments
+                  <span>
+                    / {property.apartmentUnits.length ? property.totalUnits : 0}
+                  </span>
+                </h2>
+                <button className="btn btn-xsm btn-outline-warning">
+                  <i className="bx bx-plus"></i> New
+                </button>
+              </div>
+
+              {property?.apartmentUnits.length ? (
+                <div className="box-content">
+                  <div className="apartment-box">
+                    <ul className="apartment-list">
+                      <li className="apartment-list_item">
+                        <a href="apartment.html">
+                          <h2>
+                            <span>#</span>101
+                          </h2>
+                          <h3>Vacant</h3>
+                        </a>
+                        <small className="mute">last updated: 1 hour ago</small>
+                      </li>
+                      <li className="apartment-list_item">
+                        <a href="apartment.html">
+                          <h2>
+                            <span>#</span>102
+                          </h2>
+                          <h3>Occupied</h3>
+                        </a>
+                        <small className="mute">
+                          last updated: 2 weeks ago
+                        </small>
+                      </li>
+                      <li className="apartment-list_item">
+                        <a href="apartment.html">
+                          <h2>
+                            <span>#</span>101
+                          </h2>
+                          <h3>Vacant</h3>
+                        </a>
+                        <small className="mute">last updated: 1 hour ago</small>
+                      </li>
+                      <li className="apartment-list_item">
+                        <a href="apartment.html">
+                          <h2>
+                            <span>#</span>101
+                          </h2>
+                          <h3>Vacant</h3>
+                        </a>
+                        <small className="mute">last updated: 1 hour ago</small>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="box">
             <div className="box-header">
@@ -268,55 +352,41 @@ const Property = () => {
 
           <div className="box">
             <div className="box-header">
-              <h2>
-                Apartments <span> / 12</span>
-              </h2>
-              <button className="btn btn-xsm btn-outline-warning">
-                <i className="bx bx-plus"></i> New
-              </button>
+              <h2>Managed by:</h2>
             </div>
-
             <div className="box-content">
-              <div className="apartment-box">
-                <ul className="apartment-list">
-                  <li className="apartment-list_item">
-                    <a href="apartment.html">
-                      <h2>
-                        <span>#</span>101
-                      </h2>
-                      <h3>Vacant</h3>
-                    </a>
-                    <small className="mute">last updated: 1 hour ago</small>
-                  </li>
-                  <li className="apartment-list_item">
-                    <a href="apartment.html">
-                      <h2>
-                        <span>#</span>102
-                      </h2>
-                      <h3>Occupied</h3>
-                    </a>
-                    <small className="mute">last updated: 2 weeks ago</small>
-                  </li>
-                  <li className="apartment-list_item">
-                    <a href="apartment.html">
-                      <h2>
-                        <span>#</span>101
-                      </h2>
-                      <h3>Vacant</h3>
-                    </a>
-                    <small className="mute">last updated: 1 hour ago</small>
-                  </li>
-                  <li className="apartment-list_item">
-                    <a href="apartment.html">
-                      <h2>
-                        <span>#</span>101
-                      </h2>
-                      <h3>Vacant</h3>
-                    </a>
-                    <small className="mute">last updated: 1 hour ago</small>
-                  </li>
-                </ul>
-              </div>
+              <ul className="styled-list">
+                <li>
+                  <i className="bx bx-user"></i>
+                  {(property.managedBy as IPopulatedUser).fullname}
+                </li>
+                <li>
+                  <i className="bx bx-envelope"></i>
+                  {(property.managedBy as IPopulatedUser).email}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="box">
+            <div className="box-header">
+              <h2>Current tenant</h2>
+            </div>
+            <div className="box-content">
+              <ul className="tenant-info">
+                <li className="tenant-info_item">
+                  <i className="bx bx-user"></i>
+                  Mrs Allen Poe
+                </li>
+                <li className="tenant-info_item">
+                  <i className="bx bx-envelope"></i>
+                  allenpoe@example.com
+                </li>
+                <li className="tenant-info_item">
+                  <i className="bx bx-phone"></i>
+                  +1-416-555-6789
+                </li>
+              </ul>
             </div>
           </div>
         </div>

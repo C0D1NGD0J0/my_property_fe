@@ -52,6 +52,22 @@ class PropertyService implements IPropertyService {
     }
   };
 
+  getPropertyInfo = async (cid: string, puid: string) => {
+    try {
+      if (!cid) {
+        throw new Error("cid is required");
+      }
+      const res = await axios.get<{
+        success: boolean;
+        data: any;
+        msg: string;
+      }>(`${this.baseUrl}/${cid}/info/${puid}`);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   saveUploadedCSV = async (
     cid: string,
     { fileName, saveAsIs }: { fileName: string; saveAsIs: boolean },

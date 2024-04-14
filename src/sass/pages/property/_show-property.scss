@@ -16,15 +16,34 @@
 }
 
 .property-info {
-  & .details p {
-    line-height: 1.9;
-    margin-top: 2.5rem;
+  .form-section_header {
+    margin-bottom: 3rem;
+    h2 {
+      font-size: 2rem;
+    }
   }
 
-  h2 {
-    font-size: 2rem;
-    padding-bottom: 1.4rem;
-    color: hsla($grey-color...);
+  & .details {
+    padding: 3rem 0 1.5rem;
+
+    p {
+      line-height: 1.9;
+      margin-top: 2.5rem;
+    }
+
+    .styled-list {
+      li {
+        padding-left: 2rem;
+        margin-bottom: 2rem;
+
+        &:before {
+          content: "–";
+          margin-left: -2rem;
+          padding-right: 0.5rem;
+          color: hsla($secondary-color...);
+        }
+      }
+    }
   }
 
   .icons {
@@ -152,11 +171,41 @@
   }
 
   &-content {
-    background: #f9f9f9;
+    // background: #f9f9f9;
 
     ul li {
       list-style: none;
       padding: 0.6rem;
+    }
+  }
+}
+
+.styled-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    display: flex;
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    align-items: center;
+    border-left: 3px solid hsla($primary-color...);
+
+    &:before {
+      content: "–";
+      margin-left: -0.8rem;
+      padding-right: 0.5rem;
+      color: hsla($secondary-color...);
+    }
+
+    span {
+      color: grey;
+      margin: 0 0.6rem;
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+
+    i {
     }
   }
 }
